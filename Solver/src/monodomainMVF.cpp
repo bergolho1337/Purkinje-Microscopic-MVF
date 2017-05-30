@@ -1,10 +1,5 @@
 #include "../include/monodomainMVF.h"
 
-FILE *velocityFile;
-int id_1, id_2;
-double t1, t2;
-double delta_x;
-
 // Construtor da estrutura MonodomainMVF
 MonodomainMVF* newMonodomainMVF (int argc, char *argv[])
 {
@@ -32,6 +27,9 @@ MonodomainMVF* newMonodomainMVF (int argc, char *argv[])
     monoMVF->nNew = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
     monoMVF->F = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
     monoMVF->dvdt = (Derivative*)malloc(monoMVF->g->total_nodes*sizeof(Derivative));
+    monoMVF->retro = (Retropropagation*)malloc(sizeof(Retropropagation));
+    monoMVF->vel = (Velocity*)malloc(sizeof(Velocity));
+    monoMVF->plot = (Plot*)malloc(sizeof(Plot));
     for (int i = 0; i < monoMVF->g->total_nodes; i++)
       monoMVF->dvdt[i].value = 0;
 
@@ -48,8 +46,19 @@ MonodomainMVF* newMonodomainMVF (int argc, char *argv[])
     LUDecomposition(monoMVF->K,monoMVF->g->total_nodes);
 
     // Atribuir pontos em que iremos calcular a velocidade
-    //setVelocityPoints(monoMVF->dx,58,258);   // 1cm
-    setVelocityPoints(monoMVF->dx,29,129);     // 0.5 cm
+    setVelocityPoints(monoMVF->vel,monoMVF->dx,58,258);       // 1cm
+    //setVelocityPoints(monoMVF->vel,monoMVF->dx,29,129);     // 0.5 cm
+    //setVelocityPoints(monoMVF->vel,monoMVF->dx,14,64);      // 0.25 cm
+
+    // Atribuir o ponto de referencia para a retropropagacao
+    setRetropropagation(monoMVF->retro,258);  // 1 cm
+    //setRetropropagation(monoMVF->retro,129);    // 0.5 cm
+    //setRetropropagation(monoMVF->retro,64);   // 0.25 cm
+
+    // Atribuir o ponto de referncia para o plot
+    setPlot(monoMVF->plot,258);                // 1 cm
+    //setPlot(monoMVF->plot,129);                // 0.5 cm
+    //setPlot(monoMVF->plot,64);                 // 0.25 cm
 
     //printInfoModel(monoMVF);
 
@@ -136,6 +145,9 @@ void solveMonodomain (MonodomainMVF *monoMVF)
         // Imprime o progresso da solucao
         printProgress2(i,M);
 
+        // Escrever o arquivo de plot
+        writePlotData(t,monoMVF->VOld,monoMVF->plot);
+
         // Escreve no .vtk
         if (i % 10 == 0)
           writeVTKFile(monoMVF->VOld,monoMVF->g,i);
@@ -154,6 +166,10 @@ void solveMonodomain (MonodomainMVF *monoMVF)
         // Calcular o valor da derivada maxima de cada ponto
         calcMaximumDerivative(monoMVF->dvdt,np,t,monoMVF->VOld,monoMVF->VNew);
 
+        // Calcular o valor da derivada espacial minima no ponto de referencia da retropropagacao
+        calcMinimumSpacialDerivative(monoMVF->retro,t,monoMVF->VOld[monoMVF->retro->id],monoMVF->VOld[monoMVF->retro->id_prev]);
+
+
         #ifdef DEBUG
         printVector("Vstar",monoMVF->Vstar,monoMVF->nPoints*2);
         printVector("VNew",monoMVF->VNew,monoMVF->nPoints*2);
@@ -166,10 +182,16 @@ void solveMonodomain (MonodomainMVF *monoMVF)
         memcpy(monoMVF->nOld,monoMVF->nNew,sizeof(double)*np);
     }
     printf("ok\n");
+    
     // Escrever em arquivo os valores das derivadas maximas de cada ponto
     writeMaximumDerivative(monoMVF->dvdt,np);
+    
     // Calcular a velocidade de propagacao nos pontos pre-definidos
-    calcVelocity(monoMVF->dvdt);
+    calcVelocity(monoMVF->vel,monoMVF->dvdt);
+
+    // Escrever em arquivo o valor da derivada minima do ponto de referencia
+    // Aonde houver mudanca na ordem de grandeza da derivada eh o ponto em que ocorre bloqueio
+    writeMinimumSpacialDerivative(monoMVF->retro);
 }
 
 // Constroi o vetor de termos independentes do sistema linear
@@ -222,15 +244,41 @@ void calcMaximumDerivative (Derivative *dvdt, int nPoints, double t, double *vol
     }
 }
 
-void setVelocityPoints (double dx, int p1, int p2)
+// Inicializar a estrutura Velocity
+void setVelocityPoints (Velocity *v, double dx, int p1, int p2)
 {
-    // Abrir o arquivo que armazena informacoes da velocidade de propagacao
-    velocityFile = fopen("velocity.txt","w+");
-    // Atribui os identificadores dos pontos que serao medidos
-    id_1 = p1;
-    id_2 = p2;
-    // TO DO: Fazer para varios pontos de medicao
-    delta_x = (id_2 - id_1)*dx;
+    v->velocityFile = fopen("velocity.txt","w+");
+    v->id_1 = p1;
+    v->id_2 = p2;
+    v->delta_x = (v->id_2 - v->id_1)*dx;
+}
+
+// Inicializar a estrutura Retropropagation
+void setRetropropagation (Retropropagation *r, int id)
+{
+  r->id = id;
+  r->id_prev = id-1;
+  r->min_deriv = 9999.0;
+}
+
+// Inicializar a estrutura Plot
+void setPlot (Plot *p, int id)
+{
+    char filename[50];
+    sprintf(filename,"data%d.dat",id);
+    p->id = id;
+    p->plotFile = fopen(filename,"w+");
+}
+
+// Calcular o menor valor assumido pela derivada espacial no ponto de referencia
+void calcMinimumSpacialDerivative (Retropropagation *r, double t, double v, double v_prev)
+{
+  double dif = v_prev - v;
+  if (dif < 0 && dif < r->min_deriv)
+  {
+    r->min_deriv = dif;
+    r->t = t;
+  }
 }
 
 // Escrever o arquivo .vtk com a solucao
@@ -280,6 +328,12 @@ void writeVTKFile (double *Vm, Graph *g, int k)
     fclose(file);
 }
 
+// Escreve o potencial de um volume em arquivo para cada instante de tempo
+void writePlotData(double t, double *v, Plot *plot)
+{
+    fprintf(plot->plotFile,"%.10lf %.10lf\n",t,v[plot->id]);
+}
+
 // Escreve o valor das derivadas maximas de todos os pontos na malha
 void writeMaximumDerivative (Derivative *dvdt, int nPoints)
 {
@@ -287,6 +341,14 @@ void writeMaximumDerivative (Derivative *dvdt, int nPoints)
     for (int i = 0; i < nPoints; i++)
         fprintf(dvdtFile,"Point %d --> || t = %.10lf || max_dvdt = %.10lf ||\n",i,dvdt[i].t,dvdt[i].value);
     fclose(dvdtFile);
+}
+
+void writeMinimumSpacialDerivative (Retropropagation *r)
+{
+  FILE *retroFile = fopen("block.txt","w+");
+  fprintf(retroFile,"The minimum spacial derivative on Node %d happen at t = %.5lf and value is %.10lf\n", \
+  r->id, r->t,r->min_deriv);
+  fclose(retroFile);
 }
 
 // Escrever o estado de todos os volumes de controle em um arquivo
@@ -297,19 +359,19 @@ void writeSteadyStateFile (FILE *steadyFile, int nPoints, double vm[], double m[
 }
 
 // Calcula velocidade: v = dx/dt
-void calcVelocity (Derivative *dvdt)
+void calcVelocity (Velocity *v, Derivative *dvdt)
 {
-    double t = dvdt[id_2].t - dvdt[id_1].t;
-    double velocity = delta_x / t;
-    fprintf(velocityFile,"\n\n[!] Propagation velocity!\n");
-    fprintf(velocityFile,"t1 = %.10lf\n",dvdt[id_1].t);
-    fprintf(velocityFile,"dvdt[%d] = %.10lf\n\n",id_1,dvdt[id_1].value);
-    fprintf(velocityFile,"t2 = %.10lf\n",dvdt[id_2].t);
-    fprintf(velocityFile,"dvdt[%d] = %.10lf\n",id_2,dvdt[id_2].value);
-    fprintf(velocityFile,"delta_x = %.10lf\n",delta_x);
-    fprintf(velocityFile,"delta_t = %.10lf\n",t);
-    fprintf(velocityFile,"\n!!!!!!!! Propagation velocity = %lf cm/s !!!!!!!!!!\n",velocity*1000.0);
-    fclose(velocityFile); 
+    double t = dvdt[v->id_2].t - dvdt[v->id_1].t;
+    double velocity = v->delta_x / t;
+    fprintf(v->velocityFile,"\n\n[!] Propagation velocity!\n");
+    fprintf(v->velocityFile,"t1 = %.10lf\n",dvdt[v->id_1].t);
+    fprintf(v->velocityFile,"dvdt[%d] = %.10lf\n\n",v->id_1,dvdt[v->id_1].value);
+    fprintf(v->velocityFile,"t2 = %.10lf\n",dvdt[v->id_2].t);
+    fprintf(v->velocityFile,"dvdt[%d] = %.10lf\n",v->id_2,dvdt[v->id_2].value);
+    fprintf(v->velocityFile,"delta_x = %.10lf\n",v->delta_x);
+    fprintf(v->velocityFile,"delta_t = %.10lf\n",t);
+    fprintf(v->velocityFile,"\n!!!!!!!! Propagation velocity = %lf cm/s !!!!!!!!!!\n",velocity*1000.0);
+    fclose(v->velocityFile); 
 }
 
 // Liberar memoria de todas as estruturas
@@ -329,6 +391,8 @@ void freeMonodomain (MonodomainMVF *monoMVF)
     free(monoMVF->hNew);
     free(monoMVF->nOld);
     free(monoMVF->nNew);
+    fclose(monoMVF->plot->plotFile);
+    free(monoMVF->plot);
     // freeGraph(monoMVF->g);
     free(monoMVF);
     printf("ok\n");

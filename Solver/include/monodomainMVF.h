@@ -29,6 +29,9 @@ const double SIGMA = 0.004;                  // Condutividade citoplasmatica da 
 struct MonodomainMVF;
 struct Point;
 struct Derivative;
+struct Retropropagation;
+struct Velocity;
+struct Plot;
 
 // Estrutura do resolvedor da equacao do Monodominio
 struct MonodomainMVF
@@ -53,6 +56,9 @@ struct MonodomainMVF
   double *nNew;                               // Vetor com o valor da variavel de estado de cada ponto no tempo n
   double *nOld;                               // Vetor com o valor da variavel de estado de cada ponto no tempo n
   Derivative *dvdt;                           // Vetor das derivadas maximas de cada ponto da malha
+  Retropropagation *retro;                    // Estrutura usada para verificar se houve retropropagacao na simulacao
+  Plot *plot;                                // Identificador do volume do plot
+  Velocity *vel;                             // Estrutura da velocidade propagacao
   Graph *g;                                   // Grafo contendo a estrutura da malha
   char filename[50];                             // Nome do arquivo de saida
 }typedef MonodomainMVF;
@@ -70,6 +76,33 @@ struct Derivative
   double value;                               // Valor da derivada
 }typedef Derivative;
 
+// Estrutura da verificacao de uma retropropagacao
+struct Retropropagation
+{
+  int id;                                     // Identificador do Node usado como referencia
+  int id_prev;                                // Identificador do Node vizinho ao de referencia
+  double t;                                   // Tempo em que a menor derivada espacial foi registrada
+  double min_deriv;                           // Valor da menor derivada espacial para o Node de referencia
+}typedef Retropropagation;
+
+// Estrutura para o calculo da velocidade de propagacao
+struct Velocity
+{
+  FILE *velocityFile;                         // Referencia para o arquivo aonde a velocidade sera gravada
+  int id_1;                                   // Primeiro ponto de referencia
+  int id_2;                                   // Segundo ponto de referencia
+  double t1;                                  // Tempo em que ocorreu a derivada maxima no primeiro ponto
+  double t2;                                  // Tempo em que ocorreu a derivada maxima no segundo ponto
+  double delta_x;                             // Espaco entre os dois pontos de referencia
+}typedef Velocity;
+
+// Estrutura para o plot do grafico de um volume
+struct Plot
+{
+  FILE *plotFile;                             // Referencia para o arquivo de plot
+  int id;                                     // Identificador do volume que sera plotado
+}typedef Plot;
+
 /* ================================= FUNCTIONS ======================================================= */
 MonodomainMVF* newMonodomainMVF (int argc, char *argv[]);
 void setInitialConditionsModel_FromFile (MonodomainMVF *monoMVF, char filename[]);
@@ -82,28 +115,16 @@ void writeSteadyStateFile (FILE *steadyFile, int nPoints, double vm[], double m[
 void assembleLoadVector (MonodomainMVF *monoMVF);
 void solveEDO (MonodomainMVF *monoMVF, double t);
 void writeVTKFile (double *Vm, Graph *g, int k);
-void setVelocityPoints (double dx, int p1, int p2);
+void writePlotData(double t, double *v, Plot *plot);
+void setVelocityPoints (Velocity *v, double dx, int p1, int p2);
+void setRetropropagation (Retropropagation *r, int id);
+void setPlot (Plot *p, int id);
 void calcMaximumDerivative (Derivative *dvdt, int nPoints, double t, double *vold, double *vnew);
+void calcMinimumSpacialDerivative (Retropropagation *r, double t, double v, double v_prev);
 void writeMaximumDerivative (Derivative *dvdt, int nPoints);
-void calcVelocity (Derivative *dvdt);
-/*
-double* buildLocalMassMatrix (double h);
-double* buildLocalStiffMatrix (double h);
-double* buildGlobalMatrixFromLocal (double *local_A, int *map, int np, int ne);
-double* buildGlobalMatrix (double *A, double *B, double dt, int np);
-void setBoundaryConditions (double *K, int np);
-void scaleFactor (double *V, double scale, int np);
-void setInitialConditionsModel (MonodomainFEM *monoFEM);
-void setInitialConditionsModel_FromFile (MonodomainFEM *monoFEM, char *filename);
-void calcPropagationVelocity (Derivative *dvdt, double t);
-void findBifurcation (MonodomainFEM *monoFEM);
-void kirchoffCondition_Matrix (MonodomainFEM *monoFEM);
-void kirchoffCondition_Vector (MonodomainFEM *monoFEM);
-void calcVelocity (Derivative *dvdt);
-void solveMonodomain (MonodomainFEM *monoFEM);
-void writeMaximumDerivative (Derivative *dvdt, int nPoints);
+void writeMinimumSpacialDerivative (Retropropagation *r);
+void calcVelocity (Velocity *v, Derivative *dvdt);
 
-*/
 
 void printError (char *msg);
 /* =================================================================================================== */

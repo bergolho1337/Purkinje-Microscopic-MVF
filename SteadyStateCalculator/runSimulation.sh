@@ -8,11 +8,11 @@
 # Variables
 PROGRAM_NAME="steadystateMVF"                  # Nome do programa
 ARGS="0.1 5000"                             # Argumentos do programa
-MIN_ELEM=75                                # Numero minimo de elementos
-MAX_ELEM=75                                # Numero maximo de elementos
+MIN_ELEM=38                                # Numero minimo de elementos
+MAX_ELEM=38                                # Numero maximo de elementos
 MIN_MESH=1                                  # Numero minimo de malhas
-MAX_MESH=13                                  # Numero maximo de malhas
-FIBER_SIZE=0.50                             # Tamanho da fibra
+MAX_MESH=40                                  # Numero maximo de malhas
+FIBER_SIZE=0.25                             # Tamanho da fibra
 
 echo "======= RUNNING STEADY STATE SIMULATION ======="
 # Compilar o codigo fonte

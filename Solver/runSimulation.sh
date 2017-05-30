@@ -1,15 +1,16 @@
 # ================================================================================================================
 # Script para solucao automatica de um conjunto de malhas
 # Cada simulacao eh feita para um tamanho fixo de fibra (FIBER_SIZE) e de elementos (NELEM)
+# ************ Lembre-se de alterar a funcao setVelocityPoints() em "monodomainMVF.h" ************************
 # ================================================================================================================
 #!/bin/bash
 
 PROGRAM_NAME="purkinjeMVF"
 ARGS="0.1 1000"
 MIN_MESH=1                                  # Numero minimo de malhas
-MAX_MESH=13                                  # Numero maximo de malhas
-FIBER_SIZE=0.50                                # Tamanho da fibra
-NELEM=75                                   # Numero de elementos
+MAX_MESH=10                                  # Numero maximo de malhas
+FIBER_SIZE=1.00                                # Tamanho da fibra
+NELEM=150                                   # Numero de elementos
 
 echo "======= RUNNING BIFURCATION SIMULATION ======="
 echo "FIBER SIZE = $FIBER_SIZE cm"
@@ -34,12 +35,15 @@ echo "--------------------------------------------------------------------------
 for i in $(seq $MIN_MESH $MAX_MESH); do
     echo "------ Simulation $i ---------"
     ./$PROGRAM_NAME $ARGS Malhas/$FIBER_SIZE/E_$NELEM/test$i.msh SteadyState/e-$NELEM/steadystate$i.dat
-    # Copy the results in folder VTK to correct one in the Results folder
+    # Copy the results to the Resultados folder
     mkdir Resultados/Mesh_$i
     cp -r VTK Resultados/Mesh_$i
-    cp ./velocity.txt Resultados/Mesh_$i/velocity$i.txt
+    mv ./velocity.txt Resultados/Mesh_$i/velocity$i.txt
+    mv ./block.txt Resultados/Mesh_$i/block$i.txt
+    mv ./data* Resultados/Mesh_$i/data$i.dat
     echo 
 done
+
 echo "-----------------------------------------------------------------------------------------------------"
     
 
