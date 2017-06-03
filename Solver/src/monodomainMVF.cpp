@@ -46,18 +46,18 @@ MonodomainMVF* newMonodomainMVF (int argc, char *argv[])
     LUDecomposition(monoMVF->K,monoMVF->g->total_nodes);
 
     // Atribuir pontos em que iremos calcular a velocidade
-    setVelocityPoints(monoMVF->vel,monoMVF->dx,58,258);       // 1cm
-    //setVelocityPoints(monoMVF->vel,monoMVF->dx,29,129);     // 0.5 cm
+    //setVelocityPoints(monoMVF->vel,monoMVF->dx,58,258);       // 1cm
+    setVelocityPoints(monoMVF->vel,monoMVF->dx,29,129);     // 0.5 cm
     //setVelocityPoints(monoMVF->vel,monoMVF->dx,14,64);      // 0.25 cm
 
     // Atribuir o ponto de referencia para a retropropagacao
-    setRetropropagation(monoMVF->retro,258);  // 1 cm
-    //setRetropropagation(monoMVF->retro,129);    // 0.5 cm
+    //setRetropropagation(monoMVF->retro,258);  // 1 cm
+    setRetropropagation(monoMVF->retro,129);    // 0.5 cm
     //setRetropropagation(monoMVF->retro,64);   // 0.25 cm
 
     // Atribuir o ponto de referncia para o plot
-    setPlot(monoMVF->plot,258);                // 1 cm
-    //setPlot(monoMVF->plot,129);                // 0.5 cm
+    //setPlot(monoMVF->plot,258);                // 1 cm
+    setPlot(monoMVF->plot,60);                // 0.5 cm
     //setPlot(monoMVF->plot,64);                 // 0.25 cm
 
     //printInfoModel(monoMVF);
@@ -176,10 +176,14 @@ void solveMonodomain (MonodomainMVF *monoMVF)
         #endif
 
         // Passa para a proxima iteracao
-        memcpy(monoMVF->VOld,monoMVF->VNew,sizeof(double)*np);
-        memcpy(monoMVF->mOld,monoMVF->mNew,sizeof(double)*np);
-        memcpy(monoMVF->hOld,monoMVF->hNew,sizeof(double)*np);
-        memcpy(monoMVF->nOld,monoMVF->nNew,sizeof(double)*np);
+        swap(&monoMVF->VOld,&monoMVF->VNew);
+        swap(&monoMVF->mOld,&monoMVF->mNew);
+        swap(&monoMVF->hOld,&monoMVF->hNew);
+        swap(&monoMVF->nOld,&monoMVF->nNew);
+        //memcpy(monoMVF->VOld,monoMVF->VNew,sizeof(double)*np);
+        //memcpy(monoMVF->mOld,monoMVF->mNew,sizeof(double)*np);
+        //memcpy(monoMVF->hOld,monoMVF->hNew,sizeof(double)*np);
+        //memcpy(monoMVF->nOld,monoMVF->nNew,sizeof(double)*np);
     }
     printf("ok\n");
     
@@ -410,4 +414,11 @@ void printInfoModel (MonodomainMVF *monoMVF)
     printf("M = %d\n",monoMVF->M);
     printGraph(monoMVF->g);
     printf("================================================================\n");
+}
+
+void swap (double **a, double **b)
+{
+    double *tmp = *a;
+    *a = *b;
+    *b = tmp;
 }

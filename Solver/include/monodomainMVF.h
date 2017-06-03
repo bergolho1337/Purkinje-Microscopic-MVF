@@ -124,6 +124,7 @@ void calcMinimumSpacialDerivative (Retropropagation *r, double t, double v, doub
 void writeMaximumDerivative (Derivative *dvdt, int nPoints);
 void writeMinimumSpacialDerivative (Retropropagation *r);
 void calcVelocity (Velocity *v, Derivative *dvdt);
+void swap (double **a, double **b);
 
 
 void printError (char *msg);

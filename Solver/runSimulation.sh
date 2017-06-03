@@ -7,10 +7,12 @@
 
 PROGRAM_NAME="purkinjeMVF"
 ARGS="0.1 1000"
+MESH_FOLDER="Mesh-Networks-2"
+STEADY_FOLDER="SteadyState-2"
 MIN_MESH=1                                  # Numero minimo de malhas
-MAX_MESH=10                                  # Numero maximo de malhas
-FIBER_SIZE=1.00                                # Tamanho da fibra
-NELEM=150                                   # Numero de elementos
+MAX_MESH=3                                  # Numero maximo de malhas
+FIBER_SIZE=0.50                                # Tamanho da fibra
+NELEM=75                                   # Numero de elementos
 
 echo "======= RUNNING BIFURCATION SIMULATION ======="
 echo "FIBER SIZE = $FIBER_SIZE cm"
@@ -34,7 +36,7 @@ fi
 echo "-----------------------------------------------------------------------------------------------------"
 for i in $(seq $MIN_MESH $MAX_MESH); do
     echo "------ Simulation $i ---------"
-    ./$PROGRAM_NAME $ARGS Malhas/$FIBER_SIZE/E_$NELEM/test$i.msh SteadyState/e-$NELEM/steadystate$i.dat
+    ./$PROGRAM_NAME $ARGS $MESH_FOLDER/$FIBER_SIZE/E_$NELEM/test$i.msh $STEADY_FOLDER/e-$NELEM/steadystate$i.dat
     # Copy the results to the Resultados folder
     mkdir Resultados/Mesh_$i
     cp -r VTK Resultados/Mesh_$i

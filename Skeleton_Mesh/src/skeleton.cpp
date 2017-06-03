@@ -1,4 +1,7 @@
 #include "../include/skeleton.h"
+#include "../include/queue.h"
+
+int total_nodes;                                            // Numero total de nodos atualmente na arvore
 
 Skeleton* newSkeleton (int argc, char *argv[])
 {
@@ -6,21 +9,42 @@ Skeleton* newSkeleton (int argc, char *argv[])
     fflush(stdout);
     Skeleton *sk = (Skeleton*)malloc(sizeof(Skeleton));
     sk->fib_size = atof(argv[1]);
-    sk->type = atoi(argv[2]);
-    strcpy(sk->filename,argv[3]);
+    sk->biff = atoi(argv[2]);
+    sk->type = atoi(argv[3]);
+    strcpy(sk->filename,argv[4]);
     printf("ok\n");
     return sk;
 }
 
+Point* newPoint (double x, double y, double z)
+{
+    Point *p = (Point*)malloc(sizeof(Point));
+    p->id = total_nodes;
+    p->x = x;
+    p->y = y;
+    p->z = z;
+    total_nodes++;
+    return p;
+}
+
 void buildSkeleton (Skeleton *sk)
 {
-    buildSkeleton_K(sk);
+    switch (sk->type)
+    {
+        case 1: buildSkeleton_K(sk);
+                break;
+        case 2: buildSkeleton_K_Iter(sk);
+                break;
+        //case 3: buildSkeleton_K_Iter_Ang(sk);
+        //        break;
+        default: exit(EXIT_FAILURE);
+    }
     writeSkeletonToFile(sk);
 }
 
 void buildSkeleton_K (Skeleton *sk)
 {
-    printf("[!] Constructing Skeleton type %d - Bifurcation fiber ... ",sk->type);
+    printf("[!] Constructing Skeleton type %d - Bifurcation fiber number %d ... ",sk->type,sk->biff);
     fflush(stdout);
     // Create the points
     double d_ori[3], d_rot[3];
@@ -29,10 +53,10 @@ void buildSkeleton_K (Skeleton *sk)
     calcOriginalDirection(p1,p2,d_ori);
     sk->points.push_back(p1);
     sk->points.push_back(p2);
-    if (sk->type % 2 == 0)
+    if (sk->biff % 2 == 0)
     {
-        int k = sk->type / 2;
-        double ang_rot = M_PI / (double)sk->type;
+        int k = sk->biff / 2;
+        double ang_rot = M_PI / (double)sk->biff;
         double ang = ang_rot;
         for (int i = 0; i < k; i++, ang += ang_rot)
         {
@@ -46,10 +70,10 @@ void buildSkeleton_K (Skeleton *sk)
     }
     else
     {
-        int k = (sk->type-1) / 2;
+        int k = (sk->biff-1) / 2;
         Point p3(p2.x + d_ori[0]*sk->fib_size,p2.y + d_ori[1]*sk->fib_size,p2.z + d_ori[2]*sk->fib_size);
         sk->points.push_back(p3);
-        double ang_rot = M_PI / (double)(sk->type-1);
+        double ang_rot = M_PI / (double)(sk->biff-1);
         double ang = ang_rot;
         for (int i = 0; i < k; i++, ang += ang_rot)
         {
@@ -64,11 +88,84 @@ void buildSkeleton_K (Skeleton *sk)
     // Create elements
     Element e1(0,1);
     sk->elements.push_back(e1);
-    for (int i = 0; i < sk->type; i++)
+    for (int i = 0; i < sk->biff; i++)
     {
         Element e2(1,i+2); 
         sk->elements.push_back(e2);
     }
+}
+
+// Reduzir o tamanho
+void buildSkeleton_K_Iter (Skeleton *sk)
+{
+    printf("[!] Constructing Skeleton type %d - Iterative fiber number %d ... \n",sk->type,sk->biff);
+    
+    int id, k;
+    double d_ori[3], d_rot[3];
+    double ang, ang_rot;
+    Queue *q = newQueue();
+
+    // Create the first segment
+    total_nodes = 0;
+    Point *p1 = newPoint(0,0,0);
+    Point *p2 = newPoint(sk->fib_size,0,0);
+    calcOriginalDirection(*p1,*p2,d_ori);
+    sk->points.push_back(*p1);
+    sk->points.push_back(*p2);
+    Element e1(p1->id,p2->id);
+    sk->elements.push_back(e1);
+    Enqueue(&q,p2->id,d_ori);
+
+    for (int i = 0; i < MAX_ITER; i++)
+    {
+        int cont = q->in_the_queue;
+        //printQueue(q);
+        while (cont > 0)
+        {
+            QNode *qnode = Dequeue(&q);
+            id = qnode->id;
+
+            if (sk->biff % 2 == 0)
+            {
+                k = sk->biff / 2;
+                ang_rot = M_PI / (double)sk->biff;
+                ang = ang_rot;
+            }
+            else
+            {
+                k = (sk->biff-1) / 2;
+                ang_rot = M_PI / (double)(sk->biff-1);
+                ang = ang_rot;
+                Point *p3 = newPoint(sk->points[id].x + qnode->d_ori[0]*sk->fib_size,sk->points[id].y + qnode->d_ori[1]*sk->fib_size,sk->points[id].z + qnode->d_ori[2]*sk->fib_size);
+                sk->points.push_back(*p3);
+                calcOriginalDirection(sk->points[id],*p3,d_ori);
+                Element e2(id,p3->id);
+                sk->elements.push_back(e2);
+                Enqueue(&q,p3->id,d_ori);
+            }
+
+            for (int i = 0; i < k; i++, ang += ang_rot)
+            {
+                rotate(qnode->d_ori,d_rot,ang);
+                Point *p3 = newPoint(sk->points[id].x + d_rot[0]*sk->fib_size,sk->points[id].y + d_rot[1]*sk->fib_size,sk->points[id].z + d_rot[2]*sk->fib_size);
+                sk->points.push_back(*p3);
+                calcOriginalDirection(sk->points[id],*p3,d_ori);
+                Element e2(id,p3->id);
+                sk->elements.push_back(e2);
+                Enqueue(&q,p3->id,d_ori);
+
+                
+                rotate(qnode->d_ori,d_rot,-ang);
+                Point *p4 = newPoint(sk->points[id].x + d_rot[0]*sk->fib_size,sk->points[id].y + d_rot[1]*sk->fib_size,sk->points[id].z + d_rot[2]*sk->fib_size);
+                sk->points.push_back(*p4);
+                calcOriginalDirection(sk->points[id],*p4,d_ori);
+                Element e3(id,p4->id);
+                sk->elements.push_back(e3);
+                Enqueue(&q,p4->id,d_ori);
+            }
+            cont--;
+        }
+    }    
 }
 
 void calcOriginalDirection (Point p1, Point p2, double d_ori[])
