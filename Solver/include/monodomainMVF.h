@@ -89,18 +89,20 @@ struct Retropropagation
 struct Velocity
 {
   FILE *velocityFile;                         // Referencia para o arquivo aonde a velocidade sera gravada
-  int id_1;                                   // Primeiro ponto de referencia
-  int id_2;                                   // Segundo ponto de referencia
-  double t1;                                  // Tempo em que ocorreu a derivada maxima no primeiro ponto
-  double t2;                                  // Tempo em que ocorreu a derivada maxima no segundo ponto
-  double delta_x;                             // Espaco entre os dois pontos de referencia
+  int np;                                     // Numero de pontos em que a velocidade sera medida
+  int id_source;                              // Identificador do primeiro nodo (fonte)
+  int *ids;                                   // Identificador dos pontos em que a velocidade sera calculada (id[0] -> fonte) 
+  double t1;                                  // Vetor do tempo inicial do ponto de fonte
+  double *t2;                                 // Vetor de tempos finais dos pontos
+  double *delta_x;                            // Espaco entre os pontos de referencia
 }typedef Velocity;
 
 // Estrutura para o plot do grafico de um volume
 struct Plot
 {
-  FILE *plotFile;                             // Referencia para o arquivo de plot
-  int id;                                     // Identificador do volume que sera plotado
+  FILE **plotFile;                            // Referencia para os arquivos de plot
+  int np;                                     // Numero de pontos que serao plotados
+  int *ids;                                    // Identificador dos volumes que serao plotados
 }typedef Plot;
 
 /* ================================= FUNCTIONS ======================================================= */
@@ -116,9 +118,10 @@ void assembleLoadVector (MonodomainMVF *monoMVF);
 void solveEDO (MonodomainMVF *monoMVF, double t);
 void writeVTKFile (double *Vm, Graph *g, int k);
 void writePlotData(double t, double *v, Plot *plot);
-void setVelocityPoints (Velocity *v, double dx, int p1, int p2);
+//void setVelocityPoints (Velocity *v, double dx, int p1, int p2);
+void setVelocityPoints (Velocity *v, int np, int ids[], double dx[]);
 void setRetropropagation (Retropropagation *r, int id);
-void setPlot (Plot *p, int id);
+void setPlot (Plot *p, int ids[], int np);
 void calcMaximumDerivative (Derivative *dvdt, int nPoints, double t, double *vold, double *vnew);
 void calcMinimumSpacialDerivative (Retropropagation *r, double t, double v, double v_prev);
 void writeMaximumDerivative (Derivative *dvdt, int nPoints);
