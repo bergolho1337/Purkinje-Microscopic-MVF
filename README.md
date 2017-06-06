@@ -46,7 +46,7 @@ $ ./meshGenerator <in_VTK_file> <out_MSH_file>
 
 ```sh
 $ make
-$ ./steadyState <dt> <t_max> <mesh_file> <mesh_id> [steady_state_file]
+$ ./steadystateMVF <dt> <t_max> <mesh_file> <mesh_id> [steady_state_file]
 ```
 
   - Existe também um script chamado 'runSimulation.sh' que calcula o estado estacionário das malhas contidas em um diretório qualquer.
@@ -68,7 +68,7 @@ $ ./runSimulation.sh
 
 ```sh
 $ make
-$ ./purkinjeFEM <dt> <t_max> <mesh_file> <steady_state_file>
+$ ./purkinjeMVF <dt> <t_max> <mesh_file> <steady_state_file>
 ```
 
   - Pode-se executar o script 'runSimulation.sh' para já calcular a solução de um intervalo de malhas contidos em um diretório qualquer.
