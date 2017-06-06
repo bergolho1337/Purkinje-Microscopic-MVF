@@ -47,12 +47,15 @@ MonodomainMVF* newMonodomainMVF (int argc, char *argv[])
 
     // Atribuir pontos em que iremos calcular a velocidade
     // 1.0 cm
-    int ids[6] = {58,258,408,558,708,858};           
-    double delta_x[5] = {200*monoMVF->dx,200*monoMVF->dx,200*monoMVF->dx,200*monoMVF->dx,200*monoMVF->dx};
+    //int ids[6] = {58,258,408,558,708,858};           
+    //double delta_x[5] = {200*monoMVF->dx,200*monoMVF->dx,200*monoMVF->dx,200*monoMVF->dx,200*monoMVF->dx};
     // 0.5 cm
-    //int ids[6] = {29,129,204,279,354,429};              
-    //double delta_x[5] = {100*monoMVF->dx,100*monoMVF->dx,100*monoMVF->dx,100*monoMVF->dx,100*monoMVF->dx};
-    
+    int ids[6] = {37,112,262,562,1162,2362};              
+    double delta_x[5] = {75*monoMVF->dx,150*monoMVF->dx,225*monoMVF->dx,300*monoMVF->dx,375*monoMVF->dx};
+    // 0.2 cm
+    //int ids[6] = {15,45,105,225,465,945};
+    //double delta_x[5] = {30*monoMVF->dx,60*monoMVF->dx,90*monoMVF->dx,120*monoMVF->dx,150*monoMVF->dx};
+
     setVelocityPoints(monoMVF->vel,5,ids,delta_x);        
 
     // Atribuir o ponto de referencia para a retropropagacao
@@ -286,7 +289,7 @@ void setPlot (Plot *p, int ids[], int np)
     {
         p->ids[i] = ids[i+1];
         p->plotFile[i] = (FILE*)malloc(sizeof(FILE));
-        sprintf(filename,"data%d.dat",p->ids[i]);
+        sprintf(filename,"Graphics/data%d.dat",p->ids[i]);
         p->plotFile[i] = fopen(filename,"w+");
     }
 }

@@ -29,14 +29,16 @@ Point* newPoint (double x, double y, double z)
 
 void buildSkeleton (Skeleton *sk)
 {
+    printf("[!] Constructing Skeleton type %d - Iterative fiber number %d ... \n",sk->type,sk->biff);
+
     switch (sk->type)
     {
         case 1: buildSkeleton_K(sk);
                 break;
         case 2: buildSkeleton_K_Iter(sk);
                 break;
-        //case 3: buildSkeleton_K_Iter_Ang(sk);
-        //        break;
+        case 3: buildSkeleton_K_Iter_Ang(sk);
+                break;
         default: exit(EXIT_FAILURE);
     }
     writeSkeletonToFile(sk);
@@ -44,8 +46,6 @@ void buildSkeleton (Skeleton *sk)
 
 void buildSkeleton_K (Skeleton *sk)
 {
-    printf("[!] Constructing Skeleton type %d - Bifurcation fiber number %d ... ",sk->type,sk->biff);
-    fflush(stdout);
     // Create the points
     double d_ori[3], d_rot[3];
     Point p1(0,0,0);
@@ -95,11 +95,9 @@ void buildSkeleton_K (Skeleton *sk)
     }
 }
 
-// Reduzir o tamanho
+// Gera uma fibra do tipo 2 - Crescimento iterativo para qualquer numero de bifurcacao
 void buildSkeleton_K_Iter (Skeleton *sk)
 {
-    printf("[!] Constructing Skeleton type %d - Iterative fiber number %d ... \n",sk->type,sk->biff);
-    
     int id, k;
     double d_ori[3], d_rot[3];
     double ang, ang_rot;
@@ -163,6 +161,58 @@ void buildSkeleton_K_Iter (Skeleton *sk)
                 sk->elements.push_back(e3);
                 Enqueue(&q,p4->id,d_ori);
             }
+            cont--;
+        }
+    }    
+}
+
+// Gera uma fibra do tipo 3 - Crescimento iterativo e com controle de angulo
+void buildSkeleton_K_Iter_Ang (Skeleton *sk)
+{
+    int id, k;
+    double d_ori[3], d_rot[3];
+    double ang_rot;
+    Queue *q = newQueue();
+
+    // Create the first segment
+    total_nodes = 0;
+    ang_rot = ANG;
+    Point *p1 = newPoint(0,0,0);
+    Point *p2 = newPoint(sk->fib_size,0,0);
+    calcOriginalDirection(*p1,*p2,d_ori);
+    sk->points.push_back(*p1);
+    sk->points.push_back(*p2);
+    Element e1(p1->id,p2->id);
+    sk->elements.push_back(e1);
+    Enqueue(&q,p2->id,d_ori);
+
+    for (int i = 0; i < MAX_ITER; i++)
+    {
+        int cont = q->in_the_queue;
+        // Descomentar para diminuir o tamanho da fibra a cada iteracao de crescimento
+        //sk->fib_size *= 0.6;
+        //printQueue(q);
+        while (cont > 0)
+        {
+            QNode *qnode = Dequeue(&q);
+            id = qnode->id;
+
+            rotate(qnode->d_ori,d_rot,ang_rot);
+            Point *p3 = newPoint(sk->points[id].x + d_rot[0]*sk->fib_size,sk->points[id].y + d_rot[1]*sk->fib_size,sk->points[id].z + d_rot[2]*sk->fib_size);
+            sk->points.push_back(*p3);
+            calcOriginalDirection(sk->points[id],*p3,d_ori);
+            Element e2(id,p3->id);
+            sk->elements.push_back(e2);
+            Enqueue(&q,p3->id,d_ori);
+
+            
+            rotate(qnode->d_ori,d_rot,-ang_rot);
+            Point *p4 = newPoint(sk->points[id].x + d_rot[0]*sk->fib_size,sk->points[id].y + d_rot[1]*sk->fib_size,sk->points[id].z + d_rot[2]*sk->fib_size);
+            sk->points.push_back(*p4);
+            calcOriginalDirection(sk->points[id],*p4,d_ori);
+            Element e3(id,p4->id);
+            sk->elements.push_back(e3);
+            Enqueue(&q,p4->id,d_ori);
             cont--;
         }
     }    

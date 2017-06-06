@@ -7,7 +7,10 @@
 using namespace std;
 
 // Numero maximo de iteracoes de crescimento (Fibra do tipo 2)
-const int MAX_ITER = 3;
+const int MAX_ITER = 5;
+
+// Tamanho do angulo de bifurcacao em radianos (Fibra do tipo 3)
+const double ANG = M_PI / 3.0;
 
 struct Point
 {
@@ -39,6 +42,7 @@ void freeSkeleton (Skeleton *sk);
 void buildSkeleton (Skeleton *sk);
 void buildSkeleton_K (Skeleton *sk);
 void buildSkeleton_K_Iter (Skeleton *sk);
+void buildSkeleton_K_Iter_Ang (Skeleton *sk);
 void writeSkeletonToFile (Skeleton *sk);
 void calcOriginalDirection (Point p1, Point p2, double d_ori[]);
 void rotate (double d_ori[], double d_rot[], double teta);

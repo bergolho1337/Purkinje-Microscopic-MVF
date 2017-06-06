@@ -24,4 +24,8 @@ $(OBJECT_DIR)/%.o: $(SOURCE_DIR)/%.cpp
 clean:
 	rm -f $(OBJECT_DIR)/*.o $(PROGRAM_NAME)
 
+remade:
+	$(MAKE) clean
+	$(MAKE)
+
 print-%  : ; @echo $* = $($*)
