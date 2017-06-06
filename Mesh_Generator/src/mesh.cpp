@@ -3,12 +3,10 @@
 Mesh* newMesh (int argc, char *argv[])
 {
     printf("--------------------------------------------------------------------------------------------\n");
-    printf("[!] Reading VTK file '%s' !\n",argv[3]);
+    printf("[!] Reading VTK file '%s' !\n",argv[1]);
     Mesh *mesh = (Mesh*)malloc(sizeof(Mesh));
-    mesh->xMax = atof(argv[1]);
-    mesh->nElem = atoi(argv[2]);
-    mesh->h = mesh->xMax / (double)mesh->nElem;
-    Graph *g = readPurkinjeNetworkFromFile(argv[3]);
+    mesh->h = DX;
+    Graph *g = readPurkinjeNetworkFromFile(argv[1]);
     //printGraph(g);
     GraphToMEF(mesh,g);
     #ifdef DEBUG
@@ -88,7 +86,6 @@ void writeMeshInfo (Mesh *mesh)
     fprintf(outFile,"---------------------------- MESH INFO --------------------------------------------\n");
     fprintf(outFile,"Number of points = %d\n",mesh->nPoints);
     fprintf(outFile,"Number of elements = %d\n",mesh->nElem);
-    fprintf(outFile,"Xmax = %lf\n",mesh->xMax);
     fprintf(outFile,"h = %lf\n\n",mesh->h);
     fprintf(outFile,"-> POINTS\n");
     for (int i = 0; i < (int)mesh->points.size(); i++)
@@ -106,7 +103,6 @@ void printMeshInfo (Mesh *mesh)
     printf("---------------------------- MESH INFO --------------------------------------------\n");
     printf("Number of points = %d\n",mesh->nPoints);
     printf("Number of elements = %d\n",mesh->nElem);
-    printf("Xmax = %lf\n",mesh->xMax);
     printf("h = %lf\n\n",mesh->h);
     printf("-> POINTS\n");
     for (int i = 0; i < (int)mesh->points.size(); i++)

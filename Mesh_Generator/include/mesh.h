@@ -11,6 +11,9 @@ struct Mesh;
 struct Point;
 struct Element;
 
+// Tamanho de uma celula de Purkinje
+const double DX = 0.006666666666666667094565124074;
+
 struct Point
 {
     double x, y, z;                 // Coordenadas do ponto
@@ -26,7 +29,6 @@ struct Mesh
 {
     int nElem;                      // Numero de elementos
     int nPoints;                    // Numero de pontos
-    double xMax;                    // Tamanho da fibra
     double h;                       // Distancia entre dois pontos
     vector<Point> points;           // Vetor de pontos
     vector<Element> elements;       // Vetor de elementos
