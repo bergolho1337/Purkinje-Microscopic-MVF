@@ -7,11 +7,13 @@ Mesh* newMesh (int argc, char *argv[])
     Mesh *mesh = (Mesh*)malloc(sizeof(Mesh));
     mesh->h = DX;
     Graph *g = readPurkinjeNetworkFromFile(argv[1]);
+    GraphToMesh(mesh,g);
     //printGraph(g);
-    GraphToMEF(mesh,g);
+    
     #ifdef DEBUG
     writeMeshInfo(mesh);
     #endif
+    
     printf("--------------------------------------------------------------------------------------------\n");
     return mesh;
 }
@@ -25,59 +27,57 @@ void calcDirection (double d_ori[], Node *n1, Node *n2)
     for (int i = 0; i < 3; i++) d_ori[i] /= norm;
 }
 
-
-// Converte uma estrutura em grafo para uma de Elementos Finitos
+// Constroi uma malha de elementos finitos partir de um grafo gerado a partir de um .vtk
 // map_graph_elem -> Mapeamento que relaciona os id's do grafo com os id's dos nodos da malha
-void GraphToMEF (Mesh *mesh, Graph *g)
+void GraphToMesh (Mesh *mesh, Graph *g)
 {
     int N = g->total_nodes;
-    int map_graph_elem[N];
-    memset(map_graph_elem,0,sizeof(map_graph_elem));
-    int contNodes = 0;
-    int contElem = 0;
-    Node *ptr = g->listNodes;
+    mesh->map_graph_elem = (int*)calloc(N,sizeof(int));
     // Construir o nodo 0 primeiro
+    Node *ptr = g->listNodes;
     Point point; point.x = ptr->x; point.y = ptr->y; point.z = ptr->z;
     mesh->points.push_back(point);
-    // Percorrer cada nodo construindo os elementos
-    while (ptr != NULL)
+    // Busca em profundidade
+    DFS(mesh,ptr);
+}
+
+// Busca em profundidade
+void DFS (Mesh *mesh, Node *u)
+{
+    Edge *v = u->edges;
+    while (v != NULL)
     {
-        Edge *ptrl = ptr->edges;
-        while (ptrl != NULL)
-        {
-            // Descobre qual o id relacionado do nodo grafo na malha de elementos
-            int id_ori = map_graph_elem[ptr->id];
-            // So pegar arestas que vao de um nodo menor para um maior
-            if (ptrl->dest->id > ptr->id)
-            {
-                double w = ptrl->w;
-                int nElem = w / mesh->h;
-                double d_ori[3], d[3];
-                calcDirection(d_ori,ptr,ptrl->dest);
-                d[0] = ptr->x; d[1] = ptr->y; d[2] = ptr->z;
-                // Cresce a quantidade de elementos necessarios de tamanho 'h' para dar o tamanho do segmento
-                for (int k = 1; k <= nElem; k++)
-                {
-                    double x, y, z;
-                    x = d[0] + d_ori[0]*mesh->h*k; y = d[1] + d_ori[1]*mesh->h*k; z = d[2] + d_ori[2]*mesh->h*k;
-                    Point point; point.x = x; point.y = y; point.z = z;
-                    contNodes++;
-                    mesh->points.push_back(point);
-                    Element elem; elem.left = id_ori; elem.right = contNodes;
-                    contElem++;
-                    mesh->elements.push_back(elem);
-                    id_ori = contNodes;
-                }
-                // Salva o id de origem do ultimo nodo adicionado, para caso ele gere filhos
-                map_graph_elem[ptrl->dest->id] = id_ori;
-            }
-            ptrl = ptrl->next;
-        }
-        ptr = ptr->next;
+        growSegment(mesh,u,v);
+        DFS(mesh,v->dest);
+        v = v->next;
     }
     mesh->nPoints = mesh->points.size();
-    mesh->nElem = mesh->elements.size();  
+    mesh->nElem = mesh->elements.size();
 }
+
+void growSegment (Mesh *mesh, Node *u, Edge *v)
+{
+    double d_ori[3], d[3];
+    double w = v->w;
+    int nElem = w / mesh->h;
+    int id_source = mesh->map_graph_elem[u->id];
+    calcDirection(d_ori,u,v->dest);
+    d[0] = u->x; d[1] = u->y; d[2] = u->z;
+    printf("Node %d will grow %d points\n",u->id,nElem);
+    // Cresce a quantidade de elementos necessarios de tamanho 'h' para dar o tamanho do segmento
+    for (int k = 1; k <= nElem; k++)
+    {
+        double x, y, z;
+        x = d[0] + d_ori[0]*mesh->h*k; y = d[1] + d_ori[1]*mesh->h*k; z = d[2] + d_ori[2]*mesh->h*k;
+        Point point; point.x = x; point.y = y; point.z = z;
+        mesh->points.push_back(point);
+        Element elem; elem.left = id_source; elem.right = mesh->points.size()-1;
+        mesh->elements.push_back(elem);
+        id_source = mesh->points.size()-1;
+    }
+    // Salva o id de origem do ultimo nodo adicionado, para caso ele gere filhos
+    mesh->map_graph_elem[v->id] = id_source;
+}   
 
 // Imprime informacoes sobre a malha em um arquivo
 void writeMeshInfo (Mesh *mesh)
@@ -128,6 +128,26 @@ void writeMeshToFile (Mesh *mesh, char *filename)
         for (int i = 0; i < mesh->nElem; i++)
             fprintf(file,"%d %d\n",mesh->elements[i].left,mesh->elements[i].right);
         fclose(file);
+    }   
+}
+
+// Escrever a malha em um arquivo .vtk
+void writeMeshToVTK (Mesh *mesh, const char *filename)
+{
+    if (mesh != NULL)
+    {
+        //changeExtension(filename);
+        printf("[!] Mesh file will be saved in :> %s\n",filename);
+        FILE *outFile = fopen(filename,"w+");
+        fprintf(outFile,"# vtk DataFile Version 3.0\n");
+        fprintf(outFile,"Purkinje\nASCII\nDATASET POLYDATA\n");
+        fprintf(outFile,"POINTS %d float\n",(int)mesh->points.size());
+        for (int i = 0; i < (int)mesh->points.size(); i++)
+            fprintf(outFile,"%.8lf %.8lf %.8lf\n",mesh->points[i].x,mesh->points[i].y,mesh->points[i].z);
+        fprintf(outFile,"LINES %d %d\n",(int)mesh->elements.size(),(int)mesh->elements.size()*3);
+        for (int i = 0; i < (int)mesh->elements.size(); i++)
+            fprintf(outFile,"2 %d %d\n",mesh->elements[i].left,mesh->elements[i].right);
+        fclose(outFile);
     }   
 }
 

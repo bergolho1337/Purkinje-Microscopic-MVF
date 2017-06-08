@@ -39,7 +39,7 @@ Graph* readPurkinjeNetworkFromFile (char *filename)
         int e[2];
         if (!fscanf(inFile,"%d %d %d",&trash,&e[0],&e[1])) error("Reading file");
         insertEdgeGraph(&g,e[0],e[1]);
-        insertEdgeGraph(&g,e[1],e[0]);
+        //insertEdgeGraph(&g,e[1],e[0]);
     }
     fclose(inFile);
     return g;
@@ -156,11 +156,11 @@ void printGraph (Graph *g)
 	printf("======================= PRINTING GRAPH ================================\n");
 	while (ptr != NULL)
 	{
-	    printf("|| %d (%2.lf %2.lf %2.lf) %d ||",ptr->id,ptr->x,ptr->y,ptr->z,ptr->num_edges);
+	    printf("|| %d (%.2lf %.2lf %.2lf) %d ||",ptr->id,ptr->x,ptr->y,ptr->z,ptr->num_edges);
 		ptrl = ptr->edges;
 		while (ptrl != NULL)
 		{
-			printf(" --> || %d %2.lf (%2.lf %2.lf %2.lf) ||",ptrl->id,ptrl->w,ptrl->dest->x,ptrl->dest->y, \
+			printf(" --> || %d %.2lf (%.2lf %.2lf %.2lf) ||",ptrl->id,ptrl->w,ptrl->dest->x,ptrl->dest->y, \
 					ptrl->dest->z);
 			ptrl = ptrl->next;
 		}

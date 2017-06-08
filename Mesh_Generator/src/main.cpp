@@ -23,6 +23,7 @@ int main (int argc, char *argv[])
         printf("============================================================================================\n");
         Mesh *mesh = newMesh(argc,argv);
         writeMeshToFile(mesh,argv[2]);
+        writeMeshToVTK(mesh,"mesh.vtk");
         printf("[+] Done\n");
         printf("============================================================================================\n");
         return 0;

@@ -13,6 +13,7 @@ struct Element;
 
 // Tamanho de uma celula de Purkinje
 const double DX = 0.006666666666666667094565124074;
+//const double DX = 0.5;
 
 struct Point
 {
@@ -30,14 +31,18 @@ struct Mesh
     int nElem;                      // Numero de elementos
     int nPoints;                    // Numero de pontos
     double h;                       // Distancia entre dois pontos
+    int *map_graph_elem;            // Mapeamento dos pontos (grafo -> elemento)
     vector<Point> points;           // Vetor de pontos
     vector<Element> elements;       // Vetor de elementos
 }typedef Mesh;
 
 Mesh* newMesh (int argc, char *argv[]);
-void GraphToMEF (Mesh *mesh, Graph *g);
+void GraphToMesh (Mesh *mesh, Graph *g);
 void calcDirection (double d_ori[], Node *n1, Node *n2);
 void writeMeshToFile (Mesh *mesh, char *filename);
+void writeMeshToVTK (Mesh *mesh, const char *filename);
 void writeMeshInfo (Mesh *mesh);
 void printMeshInfo (Mesh *mesh);
 void changeExtension (char *filename);
+void DFS (Mesh *mesh, Node *u);
+void growSegment (Mesh *mesh, Node *u, Edge *v);
