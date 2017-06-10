@@ -2,6 +2,8 @@
 #include <cstdio>
 #include <cmath>
 #include <cstring>
+#include <map>
+#include <queue>
 
 using namespace std;
 
@@ -51,6 +53,7 @@ Graph* readPurkinjeNetworkFromFile (char *filename);
 Node* searchNode (Graph *g, int id);
 Node* insertNodeGraph (Graph **g, double p[]);
 void insertEdgeGraph (Graph **g, int id_1, int id_2);
+map<int,int> BFS (Graph *g, int s);
 void printGraph (Graph *g);
 // =============================================================================================================
 // =============================================================================================================

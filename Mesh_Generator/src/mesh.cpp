@@ -8,6 +8,7 @@ Mesh* newMesh (int argc, char *argv[])
     mesh->h = DX;
     Graph *g = readPurkinjeNetworkFromFile(argv[1]);
     GraphToMesh(mesh,g);
+    writeLevelToFile(mesh,g);
     //printGraph(g);
     
     #ifdef DEBUG
@@ -159,4 +160,41 @@ void changeExtension (char *filename)
     filename[N-2] = 's';
     filename[N-1] = 'h';
     printf("[!] Mesh file will be saved in :> %s\n",filename);
+}
+
+// Template paa funcao de ordenacao do 'map'
+template <typename T1, typename T2>
+struct less_second
+{
+    typedef pair<T1,T2> type;
+    bool operator ()(type const &a, type const &b) const
+    {
+        return a.second < b.second;
+    }
+};
+
+// Roda uma BFS e escreve os niveis da arvore
+// Primeiro descobre os indices de cada nivel a partir do grafo do Skeleton
+// Depois usa o mapeamento grafo->malha para imprimir os indices de cada vertice, porem relacionado na malha
+void writeLevelToFile (Mesh *mesh, Graph *g)
+{
+    FILE *lvlFile = fopen("level.txt","w+");
+    map<int,int> dist = BFS(g,0);
+    // Copia o 'map' para um 'vector'
+    vector< pair<int,int> > levels(dist.begin(),dist.end());
+    // Ordenar por nivel
+    sort(levels.begin(),levels.end(),less_second<int,int>());
+    // Imprimir os niveis
+    int maxLevel = levels[levels.size()-1].second;
+    for (int level = 0; level <= maxLevel; level++)
+    {
+        for (unsigned int j = 0; j < levels.size(); j++)
+        {
+            // Escreve o identificador do vertice na malha de elementos finitos
+            if (level == levels[j].second)
+                fprintf(lvlFile,"%d ",mesh->map_graph_elem[levels[j].first]);
+        }
+        fprintf(lvlFile,"\n");
+    }
+    fclose(lvlFile);
 }

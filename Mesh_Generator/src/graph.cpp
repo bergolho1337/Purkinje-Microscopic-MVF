@@ -169,3 +169,35 @@ void printGraph (Graph *g)
 	}
 	printf("=======================================================================\n");
 }
+
+// Busca em largura
+map<int,int> BFS (Graph *g, int s)
+{
+    Node *ptr;
+    Edge *ptrl;
+    map<int,int> dist;
+    queue<int> q;
+
+    // Inicializa as variaveis
+    dist[0] = 0;
+    q.push(0);
+
+    // Rodar BFS
+    while (!q.empty())
+    {
+        int u = q.front(); q.pop();
+        ptr = searchNode(g,u);
+        ptrl = ptr->edges;
+        while (ptrl != NULL)
+        {
+            if (!dist.count(ptrl->id))
+            {
+                dist[ptrl->id] = dist[ptr->id] + 1;
+                q.push(ptrl->id);
+            }
+            ptrl = ptrl->next;
+        }
+    }
+
+    return dist;
+}

@@ -3,6 +3,9 @@
 #include <cmath>
 #include <cstring>
 #include <vector>
+#include <map>
+#include <queue>
+#include <algorithm>
 #include "../include/graph.h"
 
 using namespace std;
@@ -41,6 +44,7 @@ void GraphToMesh (Mesh *mesh, Graph *g);
 void calcDirection (double d_ori[], Node *n1, Node *n2);
 void writeMeshToFile (Mesh *mesh, char *filename);
 void writeMeshToVTK (Mesh *mesh, const char *filename);
+void writeLevelToFile (Mesh *mesh, Graph *g);
 void writeMeshInfo (Mesh *mesh);
 void printMeshInfo (Mesh *mesh);
 void changeExtension (char *filename);
