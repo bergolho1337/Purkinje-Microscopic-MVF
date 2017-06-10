@@ -1,1 +1,0 @@
-The minimum spacial derivative on Node 258 happen at t = 10.40000 and value is -0.2013548920
