@@ -140,6 +140,40 @@ double calcNorm (double x1, double y1, double z1, double x2, double y2, double z
     return sqrt(pow((x1-x2),2) + pow((y1-y2),2) + pow((z1-z2),2));
 }
 
+// Algoritmo de Dijkstra que calcula a distancia entre um vertice 's' para todos os outros vertices do grafo
+void Dijkstra (Graph *g, int s)
+{
+    printf("[!] Rodando Dijkstra ... ");
+    fflush(stdout);
+
+    g->dist = (double*)malloc(sizeof(double)*g->total_nodes);
+    for (int i = 0; i < g->total_nodes; i++) g->dist[i] = INF;
+    g->dist[s] = 0;
+    priority_queue< pair<double,int>, vector< pair<double,int> >, greater< pair<double,int> > > pq;
+    pq.push(make_pair(0,s));
+
+    while (!pq.empty())
+    {
+        pair<double,int> front = pq.top(); pq.pop();
+        double d = front.first;
+        int u = front.second;
+        if (d > g->dist[u]) continue;
+        Edge *ptrl = searchNode(g,u)->edges;
+        while (ptrl != NULL)
+        {
+            int id = ptrl->id;
+            double w = ptrl->w; 
+            if (g->dist[u] + w < g->dist[id])
+            {
+                g->dist[id] = g->dist[u] + w;
+                pq.push(make_pair(g->dist[id],id));
+            }
+            ptrl = ptrl->next;
+        }
+    }
+    printf("ok\n");
+}
+
 void printGraph (Graph *g)
 {
 	Node *ptr;

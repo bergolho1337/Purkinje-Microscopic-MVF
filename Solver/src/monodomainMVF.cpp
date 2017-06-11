@@ -11,6 +11,8 @@ MonodomainMVF* newMonodomainMVF (int argc, char *argv[])
     
     // Ler arquivo da malha e montar o grafo
     monoMVF->g = readPurkinjeNetworkFromFile(argv[3],monoMVF->dx);
+    // 75, 300, 800, 1140
+    Dijkstra(monoMVF->g,75);
 
     // Calcular o parametro alfa do sistema linear: alfa = (BETA*Cm*dx*dx) / (SIGMA*dt)
     monoMVF->alfa = (BETA*Cm*monoMVF->dx*monoMVF->dx) / (monoMVF->dt);
@@ -46,19 +48,9 @@ MonodomainMVF* newMonodomainMVF (int argc, char *argv[])
     LUDecomposition(monoMVF->K,monoMVF->g->total_nodes);
 
     // Atribuir pontos em que iremos calcular a velocidade
-    // 1.0 cm
-    int ids[2] = {58,258};
-    double delta_x[1] = {200*monoMVF->dx};
-    setVelocityPoints(monoMVF->vel,1,ids,delta_x);
-    setPlot(monoMVF->plot,ids,1);
-    // 0.5 cm
-    //int ids[6] = {37,112,262,562,1162,2362};              
-    //double delta_x[5] = {75*monoMVF->dx,150*monoMVF->dx,225*monoMVF->dx,300*monoMVF->dx,375*monoMVF->dx};
-    // 0.2 cm
-    //int ids[6] = {15,45,105,225,465,945};
-    //double delta_x[5] = {30*monoMVF->dx,60*monoMVF->dx,90*monoMVF->dx,120*monoMVF->dx,150*monoMVF->dx};
-
-    //setVelocityPoints(monoMVF->vel,5,ids,delta_x);        
+    int ids[4] = {75,300,800,1140};
+    setVelocityPoints(monoMVF->vel,3,ids);
+    setPlot(monoMVF->plot,ids,3);
 
     // Atribuir o ponto de referencia para a retropropagacao
     setRetropropagation(monoMVF->retro,258);        // 1 cm
@@ -199,7 +191,7 @@ void solveMonodomain (MonodomainMVF *monoMVF)
     writeMaximumDerivative(monoMVF->dvdt,np);
     
     // Calcular a velocidade de propagacao nos pontos pre-definidos
-    calcVelocity(monoMVF->vel,monoMVF->dvdt);
+    calcVelocity(monoMVF->vel,monoMVF->dvdt,monoMVF->g->dist);
 
     // Escrever em arquivo o valor da derivada minima do ponto de referencia
     // Aonde houver mudanca na ordem de grandeza da derivada eh o ponto em que ocorre bloqueio
@@ -257,19 +249,15 @@ void calcMaximumDerivative (Derivative *dvdt, int nPoints, double t, double *vol
 }
 
 // Inicializar a estrutura Velocity
-void setVelocityPoints (Velocity *v, int np, int ids[], double dx[])
+void setVelocityPoints (Velocity *v, int np, int ids[])
 {
     v->velocityFile = fopen("velocity.txt","w+");
     v->np = np;
     v->id_source = ids[0];
     v->ids = (int*)malloc(sizeof(int)*np);
-    v->delta_x = (double*)malloc(sizeof(double)*np);
     v->t2 = (double*)malloc(sizeof(double)*np);
     for (int i = 0; i < np; i++) 
-    {
         v->ids[i] = ids[i+1];
-        v->delta_x[i] = dx[i];
-    }
 }
 
 // Inicializar a estrutura Retropropagation
@@ -386,19 +374,19 @@ void writeSteadyStateFile (FILE *steadyFile, int nPoints, double vm[], double m[
 }
 
 // Calcula velocidade de cada volume controle: v = dx/dt
-void calcVelocity (Velocity *v, Derivative *dvdt)
+void calcVelocity (Velocity *v, Derivative *dvdt, double dist[])
 {
     double t, velocity;
     for (int i = 0; i < v->np; i++)
     {
         t = dvdt[v->ids[i]].t - dvdt[v->id_source].t;
-        velocity =v->delta_x[i] / t;
+        velocity = dist[v->ids[i]] / t;
         fprintf(v->velocityFile,"\n\n[!] Propagation velocity! Id = %d\n",v->ids[i]);
         fprintf(v->velocityFile,"t1 = %.10lf\n",dvdt[v->id_source].t);
         fprintf(v->velocityFile,"dvdt[%d] = %.10lf\n\n",v->id_source,dvdt[v->id_source].value);
         fprintf(v->velocityFile,"t2 = %.10lf\n",dvdt[v->ids[i]].t);
         fprintf(v->velocityFile,"dvdt[%d] = %.10lf\n",v->ids[i],dvdt[v->ids[i]].value);
-        fprintf(v->velocityFile,"delta_x = %.10lf\n",v->delta_x[i]);
+        fprintf(v->velocityFile,"delta_x = %.10lf\n",dist[i]);
         fprintf(v->velocityFile,"delta_t = %.10lf\n",t);
         fprintf(v->velocityFile,"\n!!!!!!!! Propagation velocity = %lf cm/s !!!!!!!!!!\n",velocity*1000.0);
         fprintf(v->velocityFile,"\n=============================================================\n\n");

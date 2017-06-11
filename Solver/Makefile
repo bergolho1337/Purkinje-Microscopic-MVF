@@ -24,4 +24,10 @@ clean:
 clcResults:
 	rm -r Resultados/Mesh_*
 
+clcData:
+	rm -f data*
+	rm -f block.txt
+	rm -f max-dvdt.dat
+	rm -f velocity.txt
+
 print-%  : ; @echo $* = $($*)

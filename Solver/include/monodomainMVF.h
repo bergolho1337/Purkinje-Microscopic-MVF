@@ -94,7 +94,6 @@ struct Velocity
   int *ids;                                   // Identificador dos pontos em que a velocidade sera calculada (id[0] -> fonte) 
   double t1;                                  // Vetor do tempo inicial do ponto de fonte
   double *t2;                                 // Vetor de tempos finais dos pontos
-  double *delta_x;                            // Espaco entre os pontos de referencia
 }typedef Velocity;
 
 // Estrutura para o plot do grafico de um volume
@@ -118,15 +117,14 @@ void assembleLoadVector (MonodomainMVF *monoMVF);
 void solveEDO (MonodomainMVF *monoMVF, double t);
 void writeVTKFile (double *Vm, Graph *g, int k);
 void writePlotData(double t, double *v, Plot *plot);
-//void setVelocityPoints (Velocity *v, double dx, int p1, int p2);
-void setVelocityPoints (Velocity *v, int np, int ids[], double dx[]);
+void setVelocityPoints (Velocity *v, int np, int ids[]);
 void setRetropropagation (Retropropagation *r, int id);
 void setPlot (Plot *p, int ids[], int np);
 void calcMaximumDerivative (Derivative *dvdt, int nPoints, double t, double *vold, double *vnew);
 void calcMinimumSpacialDerivative (Retropropagation *r, double t, double v, double v_prev);
 void writeMaximumDerivative (Derivative *dvdt, int nPoints);
 void writeMinimumSpacialDerivative (Retropropagation *r);
-void calcVelocity (Velocity *v, Derivative *dvdt);
+void calcVelocity (Velocity *v, Derivative *dvdt, double dist[]);
 void swap (double **a, double **b);
 
 

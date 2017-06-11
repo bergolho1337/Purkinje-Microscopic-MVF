@@ -54,7 +54,7 @@ struct MonodomainMVF
   double *nOld;                               // Vetor com o valor da variavel de estado de cada ponto no tempo n
   Derivative *dvdt;                           // Vetor das derivadas maximas de cada ponto da malha
   Graph *g;                                   // Grafo contendo a estrutura da malha
-  char filename[50];                             // Nome do arquivo de saida
+  char filename[50];                          // Nome do arquivo de saida
 }typedef MonodomainMVF;
 
 // Estrutura de um ponto do dominio

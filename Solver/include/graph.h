@@ -3,8 +3,12 @@
 #include <cmath>
 #include <cstring>
 #include <vector>
+#include <queue>
+#include <algorithm>
 
 using namespace std;
+
+const double INF = __DBL_MAX__;
 
 struct Edge;
 struct Node;
@@ -44,6 +48,7 @@ struct Graph
 	Node *lastNode;				// Ponteiro para último nó da lista de nós
 	int total_nodes;			// Contador de nós
 	int total_edges;			// Contador de arestas
+	double *dist;				// Vetor de distancia do Dijkstra
 }typedef Graph;
 
 // Funcoes do grafo
@@ -52,6 +57,7 @@ Graph* readPurkinjeNetworkFromFile (char *filename, double &dx);
 Node* searchNode (Graph *g, int id);
 void insertNodeGraph (Graph *g, double p[]);
 void insertEdgeGraph (Graph **g, int id_1, int id_2);
+void Dijkstra (Graph *g, int s);
 void printGraph (Graph *g);
 // =============================================================================================================
 // =============================================================================================================
