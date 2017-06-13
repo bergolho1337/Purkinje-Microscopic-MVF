@@ -29,5 +29,6 @@ clcData:
 	rm -f block.txt
 	rm -f max-dvdt.dat
 	rm -f velocity.txt
+	rm -f lu.dat
 
 print-%  : ; @echo $* = $($*)

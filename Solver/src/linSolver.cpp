@@ -209,3 +209,52 @@ void solveLinearSystem_LU (double *A, double *b, double *x, int N)
     //}
 	}
 }
+
+// Escreve a matriz da decomposicao LU em um arquivo separado
+void writeLUDecomposition (double *A, int N)
+{
+  FILE *out = fopen("lu.dat","w+");
+  // Escrever a matriz
+  fprintf(out,"%d\n",N);
+  for (int i = 0; i < N; i++)
+  {
+    for (int j = 0; j < N; j++)
+      fprintf(out,"%.10lf ",A[i*N+j]);
+    fprintf(out,"\n");
+  }
+  // Escrever o vetor pivot
+  for (int i = 0; i < N; i++)
+    fprintf(out,"%.10lf\n",pivot[i]);
+  fclose(out);
+}
+
+double* readLUDecompositionFromFile (char filename[])
+{
+  printf("[!] Lendo decomposicao LU de arquivo ... ");
+  fflush(stdout);
+  int N;
+  double *A;
+  FILE *in = fopen(filename,"r");
+  if (!fscanf(in,"%d",&N)) Error("Reading file!");
+  A = (double*)calloc(N*N,sizeof(double));
+  pivot = (double*)calloc(N,sizeof(double));
+  // Ler a matriz
+  for (int i = 0; i < N; i++)
+  {
+    for (int j = 0; j < N; j++)
+      if (!fscanf(in,"%lf",&A[i*N+j])) Error("Reading file!");
+  }
+  // Ler o pivot
+  for (int i = 0; i < N; i++)
+      if (!fscanf(in,"%lf",&pivot[i])) Error("Reading file!");
+  fclose(in);
+  printf("ok\n");
+
+  return A;
+}
+
+void Error (const char *msg)
+{
+  printf("[-] ERROR ! %s\n",msg);
+  exit(-1);
+}

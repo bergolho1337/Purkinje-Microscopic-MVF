@@ -27,12 +27,13 @@ int main (int argc, char *argv[])
   if (argc-1 < 4)
   {
     printf("=============================================================================================\n");
-    printf("Usage:> %s <dt> <t_max> <mesh_file> <steady_state_file>\n",argv[0]);
+    printf("Usage:> %s <dt> <t_max> <mesh_file> <steady_state_file> [lu_file]\n",argv[0]);
     printf("---------------------------------------------------------------------------------------------\n");
     printf("<dt> = Tamanho da discretizacao no tempo\n");
     printf("<t_max> = Tempo maximo de simulacao\n");
     printf("<mesh_file> = Arquivo contendo a malha com os pontos definindo os volumes e as suas conexoes\n");
     printf("<steady_state_file> = Arquivo contendo a solucao do estado estacionario dos pontos da malha\n");
+    printf("<lu_file> = Arquivo contendo a decomposicao LU jah calculada para a malha\n");
     printf("[!] DEBUGACAO EH ATIVADA POR FLAG NO ARQUIVO \"monodomainMVF.h\".\n");
     printf("---------------------------------------------------------------------------------------------\n");
     printf("Exemplo: %s 0.1 1000 Malhas/0.50/E_75/test1.msh SteadyState/e-75/steadystate1.dat\n",argv[0]);

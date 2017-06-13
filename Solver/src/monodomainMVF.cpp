@@ -11,8 +11,8 @@ MonodomainMVF* newMonodomainMVF (int argc, char *argv[])
     
     // Ler arquivo da malha e montar o grafo
     monoMVF->g = readPurkinjeNetworkFromFile(argv[3],monoMVF->dx);
-    // 75, 300, 800, 1140
-    Dijkstra(monoMVF->g,75);
+    // Calcular as distancia do ponto de referencia para todos os outros (delta_x)
+    Dijkstra(monoMVF->g,58);
 
     // Calcular o parametro alfa do sistema linear: alfa = (BETA*Cm*dx*dx) / (SIGMA*dt)
     monoMVF->alfa = (BETA*Cm*monoMVF->dx*monoMVF->dx) / (monoMVF->dt);
@@ -39,18 +39,24 @@ MonodomainMVF* newMonodomainMVF (int argc, char *argv[])
     monoMVF->functions = buildFunctions();
 
     // Atribuir as condicoes iniciais 
-    setInitialConditionsModel_FromFile(monoMVF,argv[4]);
+    setInitialConditionsModel_FromFile(monoMVF,argv[4]);    
 
-    // Construir a matriz global do sistema linear ligado a solucao da EDP
-    assembleMatrix(monoMVF);    
-
-    // Decompor a matriz em LU
-    LUDecomposition(monoMVF->K,monoMVF->g->total_nodes);
+    // Matriz LU foi passada como argumento ? 
+    if (argc-1 == 5)
+        monoMVF->K = readLUDecompositionFromFile(argv[5]);
+    else
+    {
+        // Construir a matriz global do sistema linear ligado a solucao da EDP
+        assembleMatrix(monoMVF);
+        // Decompor a matriz em LU
+        LUDecomposition(monoMVF->K,monoMVF->g->total_nodes);
+        writeLUDecomposition(monoMVF->K,monoMVF->g->total_nodes);
+    }
 
     // Atribuir pontos em que iremos calcular a velocidade
-    int ids[4] = {75,300,800,1140};
-    setVelocityPoints(monoMVF->vel,3,ids);
-    setPlot(monoMVF->plot,ids,3);
+    int ids[2] = {58,258};
+    setVelocityPoints(monoMVF->vel,1,ids);
+    setPlot(monoMVF->plot,ids,1);
 
     // Atribuir o ponto de referencia para a retropropagacao
     setRetropropagation(monoMVF->retro,258);        // 1 cm

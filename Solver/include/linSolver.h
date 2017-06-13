@@ -29,4 +29,12 @@ void LUDecomposition (double *A, int N);
 // Checar se o sistema foi resolvido corretamente.
 double checkSystem (double *A, double *b, double *x, int N);
 
+// Escrever a matriz da decomposicao em um arquivo
+void writeLUDecomposition (double *A, int N);
+
+// Ler a decomposicao LU a partir do arquivo passado
+double* readLUDecompositionFromFile (char filename[]);
+
+void Error (const char *msg);
+
 #endif
