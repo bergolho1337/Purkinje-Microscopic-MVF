@@ -41,12 +41,12 @@ $ ./meshGenerator <in_VTK_file> <out_MSH_file>
 # SteadyStateCalculator
 
   - Constrói um arquivo contendo a solução estacionária para uma determinada malha gerada a partir do Mesh_Generator.
-  - O uso é feito a partir da passagem do intervalo de discretização no tempo, dt, o tempo máximo de simulação, o arquivo .msh da malha e um identificador da malha.
+  - O uso é feito a partir da passagem do intervalo de discretização no tempo, dt, o tempo máximo de simulação, o arquivo .msh da malha e o nome do arquivo do estado estacionário de saída.
   - Pode-se passar o argumento opcional [steady_state_file], com isso será utilizado a solução estacionária de uma simulação já previamente calculada como condição inicial. A única restrição é que deve ser passado um arquivo de uma simulação anterior, por exemplo se for rodar a simulação 31 deve-se passar o arquivo 'steadystate30.dat' como argumento (só funciona com malhas do tipo 1). 
 
 ```sh
 $ make
-$ ./steadystateMVF <dt> <t_max> <mesh_file> <mesh_id> [steady_state_file]
+$ ./steadystateMVF <dt> <t_max> <mesh_file> <out_steady_state_file> [in_steady_state_file]
 ```
 
   - Existe também um script chamado 'runSimulation.sh' que calcula o estado estacionário das malhas contidas em um diretório qualquer.
@@ -63,12 +63,13 @@ $ ./runSimulation.sh
   - A sistema não linear de EDOs associado é resolvido usando Euler Explícito.
   - Atualmente está versão está configurada para o modelo celular de Noble.
   - Para usar basta passar como argumento para o programa o passo de tempo 'dt', o período máximo da simulação 't_max', o arquivo da malha gerado a partir do Mesh_Generator e o arquivo contendo a solução estacionária vinda do StadyStateCalculator. 
+  - Pode-se passar um arquivo com a decomposição LU da matriz do sistema como um parâmetro adicional [lu.dat].
   - Solução fica armazena na pasta VTK contendo os valores do potencial transmembrânico de todos os miócitos.
   - Para visualizar a simulação abrir os arquivos da pasta VTK no Paraview.
 
 ```sh
 $ make
-$ ./purkinjeMVF <dt> <t_max> <mesh_file> <steady_state_file>
+$ ./purkinjeMVF <dt> <t_max> <mesh_file> <steady_state_file> [lu.dat]
 ```
 
   - Pode-se executar o script 'runSimulation.sh' para já calcular a solução de um intervalo de malhas contidos em um diretório qualquer.
