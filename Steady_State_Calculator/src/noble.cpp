@@ -4,7 +4,7 @@
 
 double I_Stim__Nob (int point, double t)
 {
-    // Somente os 2 primeiros pontos ficam como celulas de estimulo
+    // Somente os 5 primeiros pontos ficam como celulas de estimulo
     if (point <= 5)
     {
         double min_time, max_time;
@@ -55,13 +55,23 @@ double g_Na__Nob (double t, double vm, double m, double h, double n)
 double I_Na__Nob (double t, double vm, double m, double h, double n)
 {
     return ((g_Na__Nob(t,vm,m,h,n)+1.4e-01)*(vm-E_Na));
-    //return ((g_Na__Nob(t,vm,m,h,n)+1.220e-01)*(vm-E_Na));      // Sem oscilacoes
 }
 
-double dvdt__Nob (int point, double t, double vm, double m, double h, double n)
+// Corrente do sodio sem auto-oscilacoes
+double I_Na_NoOscilation__Nob (double t, double vm, double m, double h, double n)
 {
-	//return ((-(I_Na(t,y)+I_K(t,y)+I_Leak(t,y))/CM));
-    return ((-(I_Na__Nob(t,vm,m,h,n)+I_K__Nob(t,vm,m,h,n)+I_Leak__Nob(t,vm,m,h,n))+I_Stim__Nob(point,t))/CM);
+    return ((g_Na__Nob(t,vm,m,h,n)+1.220e-01)*(vm-E_Na));      // Sem oscilacoes
+}
+
+double dvdt__Nob (int type, int point, double t, double vm, double m, double h, double n)
+{
+    // Purkinje cell
+    if (type == 0)
+        return ((-(I_Na__Nob(t,vm,m,h,n)+I_K__Nob(t,vm,m,h,n)+I_Leak__Nob(t,vm,m,h,n))+I_Stim__Nob(point,t))/CM);
+    // Myocardium cell
+    else
+        return ((-(I_Na_NoOscilation__Nob(t,vm,m,h,n)+I_K__Nob(t,vm,m,h,n)+I_Leak__Nob(t,vm,m,h,n))+I_Stim__Nob(point,t))/CM);
+    //return ((-(I_Na(t,y)+I_K(t,y)+I_Leak(t,y))/CM));
 }
 
 /* ====================================================================================================== */
@@ -77,7 +87,7 @@ double alpha_m__Nob (double t, double vm, double m, double h, double n)
 	return (((1.0e-01*((-vm)-4.8e+01))/(exp((((-vm)-4.8e+01)/1.5e+01))-1.0e+00)));
 }
 
-double dmdt__Nob (int point, double t, double vm, double m, double h, double n)
+double dmdt__Nob (int type, int point, double t, double vm, double m, double h, double n)
 {
 	return ((alpha_m__Nob(t,vm,m,h,n)*(1.0e+00-m))-(beta_m__Nob(t,vm,m,h,n)*m));
 }
@@ -95,7 +105,7 @@ double alpha_h__Nob (double t, double vm, double m, double h, double n)
 	return ((1.7e-01*exp((((-vm)-9.0e+01)/2.0e+01))));
 }
 
-double dhdt__Nob (int point, double t, double vm, double m, double h, double n)
+double dhdt__Nob (int type, int point, double t, double vm, double m, double h, double n)
 {
 	return ((alpha_h__Nob(t,vm,m,h,n)*(1.0e+00-h))-(beta_h__Nob(t,vm,m,h,n)*h));
 }
@@ -113,7 +123,7 @@ double alpha_n__Nob (double t, double vm, double m, double h, double n)
 	return (((1.0e-04*((-vm)-5.0e+01))/(exp((((-vm)-5.0e+01)/1.0e+01))-1.0e+00)));
 }
 
-double dndt__Nob (int point, double t, double vm, double m, double h, double n)
+double dndt__Nob (int type, int point, double t, double vm, double m, double h, double n)
 {
 	return ((alpha_n__Nob(t,vm,m,h,n)*(1.0e+00-n))-(beta_n__Nob(t,vm,m,h,n)*n));
 }

@@ -29,6 +29,7 @@ Edge* newEdge (int id, double w, Node *dest);
 // Estrutura de nó do grafo
 struct Node
 {
+	int type;				// 0 = Purkinje cell || 1 = PMJ
 	int id;					// Identificador do nodo
 	double x, y, z;			// Coordenadas (x,y,z)
 	int num_edges;			// Contador do número de arestas
@@ -37,7 +38,7 @@ struct Node
 }typedef Node;
 // =============================================================================================================
 // Funcoes de Node
-Node* newNode (int id, double x, double y, double z);
+Node* newNode (int id, int type, double x, double y, double z);
 // =============================================================================================================
 // Estrutura do grafo
 struct Graph
@@ -52,12 +53,15 @@ struct Graph
 void initGraph (Graph **g);
 Graph* readPurkinjeNetworkFromFile (char *filename, double &dx);
 Node* searchNode (Graph *g, int id);
-void insertNodeGraph (Graph *g, double p[]);
+void insertNodeGraph (Graph *g, int type, double p[]);
 void insertEdgeGraph (Graph **g, int id_1, int id_2);
+void insertPMJ (Graph *g);
 void printGraph (Graph *g);
+bool isConnectToPMJ (Edge *ptrl);
 // =============================================================================================================
 // =============================================================================================================
 // Funcoes auxiliares
 double calcNorm (double x1, double y1, double z1, double x2, double y2, double z2);
+void calcPosition (Node *p1, Node *p2, double p[]);
 void error (char *msg);
 // =============================================================================================================

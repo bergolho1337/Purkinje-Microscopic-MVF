@@ -10,7 +10,7 @@
 // dt = 0.1 ms
 
 // Function pointer
-typedef double (*Func) (int point, double t, double vm, double m, double h, double n);
+typedef double (*Func) (int type, int point, double t, double vm, double m, double h, double n);
 
 /* ============================== CONSTANTS ========================================== */
 
@@ -49,25 +49,25 @@ double g_K1__Nob (double t, double vm, double m, double h, double n);
 double I_K__Nob (double t, double vm, double m, double h, double n);
 double g_Na__Nob (double t, double vm, double m, double h, double n);
 double I_Na__Nob (double t, double vm, double m, double h, double n);
-double dvdt__Nob (int point, double t, double vm, double m, double h, double n);
+double dvdt__Nob (int type, int point, double t, double vm, double m, double h, double n);
 /* ********************************************************************************************************************** */
 // dm/dt
 
 double beta_m__Nob (double t, double vm, double m, double h, double n);
 double alpha_m__Nob (double t, double vm, double m, double h, double n);
-double dmdt__Nob (int point, double t, double vm, double m, double h, double n);
+double dmdt__Nob (int type, int point, double t, double vm, double m, double h, double n);
 /* ********************************************************************************************************************** */
 // dh/dt
 
 double beta_h__Nob (double t, double vm, double m, double h, double n);
 double alpha_h__Nob (double t, double vm, double m, double h, double n);
-double dhdt__Nob (int point, double t, double vm, double m, double h, double n);
+double dhdt__Nob (int type, int point, double t, double vm, double m, double h, double n);
 /* ********************************************************************************************************************** */
 // dn/dt
 
 double beta_n__Nob (double t, double vm, double m, double h, double n);
 double alpha_n__Nob (double t, double vm, double m, double h, double n);
-double dndt__Nob (int point, double t, double vm, double m, double h, double n);
+double dndt__Nob (int type, int point, double t, double vm, double m, double h, double n);
 /* ********************************************************************************************************************** */
 
 void setInitialConditions__Nob (double *y, int num_eq);

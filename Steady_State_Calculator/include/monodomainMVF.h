@@ -14,16 +14,21 @@
 using namespace std;
 
 // >>>>>>>>>>> DESCOMENTAR ESSES defines PARA ATIVAR AS FLAGS <<<<<<<<<<<
-//#define DEBUG 1                                       // Flag para debugacao e imprimir informacoes na tela (matrizes e vetores)
+//#define DEBUG 1     // Flag para debugacao e imprimir informacoes na tela (matrizes e vetores)
+#define PMJ         // Flag para ativar a ligacao com PMJ's nas folhas da arvore                                    
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 // Function pointer
-typedef double (*Func) (int point, double t, double vm, double m, double h, double n);     
+typedef double (*Func) (int type, int point, double t, double vm, double m, double h, double n);     
 
 /* ============================== CONSTANTES ================================================== */
 const double BETA = 0.14;                     // Razao area superficial por volume (cm^-1) (Bruno)
 const double Cm = 1.0;                        // Capacitancia da membrana (uF/cm^2) (Bruno)
 const double SIGMA = 0.004;                  // Condutividade citoplasmatica da celula (mS/cm) (default=0.004)
+const double h2 = 25.0;                        // Tamanho do volume de controle do PMJ (cm)
+const double d2 = 0.002;                        // Diametro do volume de controle do PMJ (cm)
+const double d1 = 0.002;                      // Diametro do volume de controle de uma Purkinje cell (cm)
+const double RPMJ = 1.1e+04;                  // Resistencia do PMJ (k ohm)
 /* ============================================================================================ */
 
 struct MonodomainMVF;
@@ -40,6 +45,10 @@ struct MonodomainMVF
   double dt;                                  // Tamanho da discretizacao no tempo (k)
   double t_max;                               // Tempo maximo de simulacao
   double alfa;                                // Numero usado no sistema linear da EDP
+  double gamma;                               // Numero usado no sistema linear da EDP
+  double delta;                               // Numero usado no sistema linear da EDP
+  double theta;                               // Numero usado no sistema linear da EDP
+  double eta;                                 // Numero usado no sistema linear da EDP
   Func *functions;                            // Vetor de ponteiros para as funcoes envolvidas no metodo
   double *K;                                  // Matriz global do sistema linear
   double *F;                                  // Vetor de carga global
@@ -54,7 +63,7 @@ struct MonodomainMVF
   double *nOld;                               // Vetor com o valor da variavel de estado de cada ponto no tempo n
   Derivative *dvdt;                           // Vetor das derivadas maximas de cada ponto da malha
   Graph *g;                                   // Grafo contendo a estrutura da malha
-  char filename[50];                          // Nome do arquivo de saida
+  char filename[200];                         // Nome do arquivo de saida
 }typedef MonodomainMVF;
 
 // Estrutura de um ponto do dominio
@@ -82,31 +91,7 @@ void writeSteadyStateFile (FILE *steadyFile, int nPoints, double vm[], double m[
 void assembleLoadVector (MonodomainMVF *monoMVF);
 void solveEDO (MonodomainMVF *monoMVF, double t);
 void writeVTKFile (double *Vm, Graph *g, int k);
-/*
-double* buildLocalMassMatrix (double h);
-double* buildLocalStiffMatrix (double h);
-double* buildGlobalMatrixFromLocal (double *local_A, int *map, int np, int ne);
-double* buildGlobalMatrix (double *A, double *B, double dt, int np);
-void setBoundaryConditions (double *K, int np);
-void scaleFactor (double *V, double scale, int np);
-void setInitialConditionsModel (MonodomainFEM *monoFEM);
-void setInitialConditionsModel_FromFile (MonodomainFEM *monoFEM, char *filename);
-void calcPropagationVelocity (Derivative *dvdt, double t);
-void findBifurcation (MonodomainFEM *monoFEM);
-void kirchoffCondition_Matrix (MonodomainFEM *monoFEM);
-void kirchoffCondition_Vector (MonodomainFEM *monoFEM);
-void setVelocityPoints (double dx, int p1, int p2);
-
-void calcMaximumDerivative (Derivative *dvdt, int nPoints, double t, double *vold, double *vnew);
-void calcVelocity (Derivative *dvdt);
-
-void solveMonodomain (MonodomainFEM *monoFEM);
-;
-
-void writeMaximumDerivative (Derivative *dvdt, int nPoints);
-
-*/
-
+void swap (double **a, double **b);
 void printError (char *msg);
 /* =================================================================================================== */
 

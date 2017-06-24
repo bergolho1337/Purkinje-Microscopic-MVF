@@ -25,7 +25,7 @@ Graph* readPurkinjeNetworkFromFile (char *filename, double &dx)
     {
         double p[3];
         if (!fscanf(inFile,"%lf %lf %lf",&p[0],&p[1],&p[2])) error("Reading file");
-        insertNodeGraph(g,p);
+        insertNodeGraph(g,0,p);
     }
     // Ler as arestas
     for (int i = 0; i < E; i++)
@@ -40,9 +40,10 @@ Graph* readPurkinjeNetworkFromFile (char *filename, double &dx)
 }
 
 // Construtor de um nodo
-Node* newNode (int id, double x, double y, double z)
+Node* newNode (int id, int type, double x, double y, double z)
 {
     Node *node = (Node*)malloc(sizeof(Node));
+    node->type = type;
     node->id = id;
     node->x = x;
     node->y = y;
@@ -66,10 +67,10 @@ Edge* newEdge (int id, double w, Node *dest)
 
 
 // Insere um nodo com coordenadas (px,py,pz) no grafo
-void insertNodeGraph (Graph *g, double p[])
+void insertNodeGraph (Graph *g, int type, double p[])
 {
     Node *ptr = g->listNodes;
-    Node *ptrNew = newNode(g->total_nodes++,p[0],p[1],p[2]);
+    Node *ptrNew = newNode(g->total_nodes++,type,p[0],p[1],p[2]);
     // Primeiro nodo do grafo
     if (ptr == NULL)
         g->listNodes = ptrNew;
@@ -140,6 +141,46 @@ double calcNorm (double x1, double y1, double z1, double x2, double y2, double z
     return sqrt(pow((x1-x2),2) + pow((y1-y2),2) + pow((z1-z2),2));
 }
 
+// Calcula a posicao do novo Node
+void calcPosition (Node *p1, Node *p2, double p[])
+{
+    double size = 2.00;
+    double norm;
+    norm = calcNorm(p1->x,p1->y,p1->z,p2->x,p2->y,p2->z);
+    p[0] = (p1->x - p2->x)/norm; p[1] = (p1->y - p2->y)/norm; p[2] = (p1->z - p2->z)/norm;
+    p[0] = p1->x + size*p[0]; p[1] = p1->y + size*p[1]; p[2] = p1->z + size*p[2];
+}
+
+// Insere um volume de PMJ para cada folha da arvore 
+void insertPMJ (Graph *g)
+{
+    double p[3];
+    Node *ptr = g->listNodes;
+    while (ptr != NULL)
+    {
+        // Node eh uma folha, nao eh a raiz e eh do tipo Purkinje cell
+        if (ptr->type == 0 && ptr->num_edges == 1 && ptr->id != 0)
+        {
+            calcPosition(ptr,ptr->edges->dest,p);
+            insertNodeGraph(g,1,p);
+            insertEdgeGraph(&g,ptr->id,g->total_nodes-1);
+            insertEdgeGraph(&g,g->total_nodes-1,ptr->id);
+        }
+        ptr = ptr->next;
+    }
+}
+
+/* Verifica se um Node esta conectado a algum PMJ */
+bool isConnectToPMJ (Edge *ptrl)
+{
+    while (ptrl != NULL)
+    {
+        if (ptrl->dest->type == 1) return true;
+        ptrl = ptrl->next;
+    }
+    return false;
+}
+
 void printGraph (Graph *g)
 {
 	Node *ptr;
@@ -148,7 +189,7 @@ void printGraph (Graph *g)
 	printf("======================= PRINTING GRAPH ================================\n");
 	while (ptr != NULL)
 	{
-	    printf("|| %d (%.4lf %.4lf %.4lf) %d ||",ptr->id,ptr->x,ptr->y,ptr->z,ptr->num_edges);
+	    printf("|| %d (%d) (%.4lf %.4lf %.4lf) %d ||",ptr->id,ptr->type,ptr->x,ptr->y,ptr->z,ptr->num_edges);
 		ptrl = ptr->edges;
 		while (ptrl != NULL)
 		{

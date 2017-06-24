@@ -9,16 +9,22 @@ MonodomainMVF* newMonodomainMVF (int argc, char *argv[])
     monoMVF->t_max = atof(argv[2]);
     monoMVF->M = nearbyint(monoMVF->t_max / monoMVF->dt);
     
-    // Ler arquivo da malha e montar o grafo
+    // Ler arquivo da malha, adicionar os PMJ e montar o grafo
     monoMVF->g = readPurkinjeNetworkFromFile(argv[3],monoMVF->dx);
+    #ifdef PMJ
+    insertPMJ(monoMVF->g);
+    monoMVF->gamma = (SIGMA) / (monoMVF->dx*monoMVF->dx);
+    monoMVF->delta = (BETA*Cm*h2*h2*d2) / monoMVF->dt;
+    monoMVF->theta = (1) / (RPMJ*monoMVF->dx*monoMVF->dx*d1);
+    monoMVF->eta = (BETA*Cm) / (monoMVF->dt);
+    #endif
+    //printGraph(monoMVF->g);
 
     // Calcular o parametro alfa do sistema linear: alfa = (BETA*Cm*dx*dx) / (SIGMA*dt)
     monoMVF->alfa = (BETA*Cm*monoMVF->dx*monoMVF->dx) / (monoMVF->dt);
-
+    
     // Montar o nome do arquivo do steady-state
-    monoMVF->id = atoi(argv[4]);
-    monoMVF->nVolFiber = monoMVF->g->total_edges / (monoMVF->id + 1);
-    sprintf(monoMVF->filename,"steadystate%d.dat",monoMVF->id);
+    sprintf(monoMVF->filename,"%s",argv[4]);
 
     // Alocar memoria
     monoMVF->VOld = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
@@ -43,8 +49,6 @@ MonodomainMVF* newMonodomainMVF (int argc, char *argv[])
 
     // Decompor a matriz em LU
     LUDecomposition(monoMVF->K,monoMVF->g->total_nodes);
-
-    //printInfoModel(monoMVF);
 
     return monoMVF;
 }
@@ -107,6 +111,7 @@ void setInitialConditionsModel (MonodomainMVF *monoMVF, int argc, char *argv[])
 }
 
 // Montar a matriz do sistema linear, relacionado a solucao da EDP
+// As divisoes nos indices da matriz sao para simplificar depois o vetor do lado direito
 void assembleMatrix (MonodomainMVF *monoMVF)
 {
     printf("[!] Construindo matriz ...\n");
@@ -114,7 +119,7 @@ void assembleMatrix (MonodomainMVF *monoMVF)
 
     Node *ptr;
     Edge *ptrl;
-    int np, u, v;
+    int np, u, v, type;
     np = monoMVF->g->total_nodes;
     monoMVF->K = (double*)calloc(np*np,sizeof(double));
     
@@ -123,14 +128,59 @@ void assembleMatrix (MonodomainMVF *monoMVF)
     while (ptr != NULL)
     {
         u = ptr->id;
+        type = ptr->type;
         ptrl = ptr->edges;
-        while (ptrl != NULL)
+
+        // PMJ
+        if (type == 1)
         {
-            v = ptrl->dest->id;
-            monoMVF->K[u*np+v] = -SIGMA;
-            ptrl = ptrl->next;
+            while (ptrl != NULL)
+            {
+                v = ptrl->dest->id;
+                monoMVF->K[u*np+v] = -1.0 / monoMVF->delta;
+                ptrl = ptrl->next;
+            }
+            monoMVF->K[u*np+u] = (1.0 + monoMVF->delta) / monoMVF->delta;
         }
-        monoMVF->K[u*np+u] = ptr->num_edges*SIGMA + monoMVF->alfa;
+        // Purkinje cell
+        else
+        {
+            // Esta ligada a algum PMJ ?
+            bool isPMJ = isConnectToPMJ(ptr->edges);
+            ptrl = ptr->edges;
+            // Se nao tiver PMJ por perto eh ligacao normal com Purkinje cells
+            if (isPMJ == false)
+            {
+                while (ptrl != NULL)
+                {
+                    v = ptrl->dest->id;
+                    monoMVF->K[u*np+v] = -SIGMA / monoMVF->alfa;
+                    ptrl = ptrl->next;
+                }
+                monoMVF->K[u*np+u] = (ptr->num_edges*SIGMA + monoMVF->alfa) / monoMVF->alfa;
+            }
+            // Senao eh ligacao especial Purkinje cell - PMJ
+            else
+            {
+                monoMVF->K[u*np+u] = monoMVF->eta;
+                while (ptrl != NULL)
+                {
+                    v = ptrl->dest->id;
+                    if (ptrl->dest->type == 0)
+                    {
+                        monoMVF->K[u*np+v] = -monoMVF->gamma / monoMVF->eta;
+                        monoMVF->K[u*np+u] += monoMVF->gamma;
+                    }
+                    else
+                    {
+                        monoMVF->K[u*np+v] = -monoMVF->theta / monoMVF->eta;
+                        monoMVF->K[u*np+u] += monoMVF->theta;
+                    }
+                    ptrl = ptrl->next;
+                }
+                monoMVF->K[u*np+u] /= monoMVF->eta;
+            }    
+        }
         ptr = ptr->next;
     }
 }
@@ -170,18 +220,11 @@ void solveMonodomain (MonodomainMVF *monoMVF)
         // Resolver as EDOs (parte reativa)
         solveEDO(monoMVF,t);
 
-        //calcPropagationVelocity(monoMVF->VNew,t);
-
-        #ifdef DEBUG
-        printVector("Vstar",monoMVF->Vstar,monoMVF->nPoints*2);
-        printVector("VNew",monoMVF->VNew,monoMVF->nPoints*2);
-        #endif
-
         // Passa para a proxima iteracao
-        memcpy(monoMVF->VOld,monoMVF->VNew,sizeof(double)*np);
-        memcpy(monoMVF->mOld,monoMVF->mNew,sizeof(double)*np);
-        memcpy(monoMVF->hOld,monoMVF->hNew,sizeof(double)*np);
-        memcpy(monoMVF->nOld,monoMVF->nNew,sizeof(double)*np);
+        swap(&monoMVF->VOld,&monoMVF->VNew);
+        swap(&monoMVF->mOld,&monoMVF->mNew);
+        swap(&monoMVF->hOld,&monoMVF->hNew);
+        swap(&monoMVF->nOld,&monoMVF->nNew);
     }
     fclose(steadyFile); 
     printf("ok\n");
@@ -191,37 +234,59 @@ void solveMonodomain (MonodomainMVF *monoMVF)
 // Constroi o vetor de termos independentes do sistema linear
 void assembleLoadVector (MonodomainMVF *monoMVF)
 {
-    int np;
-    double alfa;
-    np = monoMVF->g->total_nodes;
-    alfa = monoMVF->alfa;
-    for (int i = 0; i < np; i++)
-        monoMVF->F[i] = alfa*monoMVF->VOld[i];
+    Node *ptr = monoMVF->g->listNodes;
+    while (ptr != NULL)
+    {
+        int u = ptr->id;
+        // Purkinje cell
+        if (ptr->type == 0)
+        {
+            bool isPMJ = isConnectToPMJ(ptr->edges);
+            // Purkinje cell - Purkinje cell
+            if (isPMJ == false)
+                monoMVF->F[u] = monoMVF->VOld[u];
+            // Purkinje cell - PMJ
+            else
+                monoMVF->F[u] = monoMVF->VOld[u];
+        }
+        // PMJ
+        else
+        {
+            // Purkinje cell - PMJ
+            monoMVF->F[u] = monoMVF->VOld[u];
+        }
+        ptr = ptr->next;
+    }
 }
 
 // Resolve o sistema de EDO's
 void solveEDO (MonodomainMVF *monoMVF, double t)
 {
-    int np;
-    int point;
+    Node *ptr;
+    int id, type;
     double f, dt;
-    np = monoMVF->g->total_nodes;
     dt = monoMVF->dt;
+    ptr = monoMVF->g->listNodes;
     // Resolver o sistema de EDO para cada ponto (Potencial e as variaveis de estado)
-    for (point = 0; point < np; point++)
+    while (ptr != NULL)
     {
+        id = ptr->id;
+        type = ptr->type;
+
         // V^{n+1} = V^{*} + f*dt
-        f = monoMVF->functions[0](point,t,monoMVF->Vstar[point],monoMVF->mOld[point],monoMVF->hOld[point],monoMVF->nOld[point]);
-        monoMVF->VNew[point] = monoMVF->Vstar[point] + f*dt;
+        f = monoMVF->functions[0](type,id,t,monoMVF->Vstar[id],monoMVF->mOld[id],monoMVF->hOld[id],monoMVF->nOld[id]);
+        monoMVF->VNew[id] = monoMVF->Vstar[id] + f*dt;
         // m^{n+1} = m^{n} + f*dt
-        f = monoMVF->functions[1](point,t,monoMVF->VOld[point],monoMVF->mOld[point],monoMVF->hOld[point],monoMVF->nOld[point]);
-        monoMVF->mNew[point] = monoMVF->mOld[point] + f*dt;   
+        f = monoMVF->functions[1](type,id,t,monoMVF->VOld[id],monoMVF->mOld[id],monoMVF->hOld[id],monoMVF->nOld[id]);
+        monoMVF->mNew[id] = monoMVF->mOld[id] + f*dt;   
         // h^{n+1} = h^{n} + f*dt
-        f = monoMVF->functions[2](point,t,monoMVF->VOld[point],monoMVF->mOld[point],monoMVF->hOld[point],monoMVF->nOld[point]);
-        monoMVF->hNew[point] = monoMVF->hOld[point] + f*dt;
+        f = monoMVF->functions[2](type,id,t,monoMVF->VOld[id],monoMVF->mOld[id],monoMVF->hOld[id],monoMVF->nOld[id]);
+        monoMVF->hNew[id] = monoMVF->hOld[id] + f*dt;
         // n^{n+1} = n^{n} + f*dt
-        f = monoMVF->functions[3](point,t,monoMVF->VOld[point],monoMVF->mOld[point],monoMVF->hOld[point],monoMVF->nOld[point]);
-        monoMVF->nNew[point] = monoMVF->nOld[point] + f*dt;
+        f = monoMVF->functions[3](type,id,t,monoMVF->VOld[id],monoMVF->mOld[id],monoMVF->hOld[id],monoMVF->nOld[id]);
+        monoMVF->nNew[id] = monoMVF->nOld[id] + f*dt;
+
+        ptr = ptr->next;
     }
 }
 
@@ -229,7 +294,7 @@ void solveEDO (MonodomainMVF *monoMVF, double t)
 void writeVTKFile (double *Vm, Graph *g, int k)
 {
     FILE *file;
-    int i, np, ne;
+    int np, ne;
     char filename[50];
     Node *ptr = g->listNodes;
     np = g->total_nodes;
@@ -306,12 +371,18 @@ void printInfoModel (MonodomainMVF *monoMVF)
 {
     printf("======================== INFO MODEL ============================\n");
     printf("Number of volumes = %d\n",monoMVF->g->total_nodes);
-    printf("Number of fibers = %d\n",monoMVF->id+1);
-    printf("Number of volumes per fiber = %d\n",monoMVF->nVolFiber);
+    printf("Number of conections = %d\n",monoMVF->g->total_edges);
     printf("dt = %.4lf\n",monoMVF->dt);
     printf("t_max = %.4lf\n",monoMVF->t_max);
     printf("dx = %.4lf\n",monoMVF->dx);
     printf("M = %d\n",monoMVF->M);
     printGraph(monoMVF->g);
     printf("================================================================\n");
+}
+
+void swap (double **a, double **b)
+{
+    double *tmp = *a;
+    *a = *b;
+    *b = tmp;
 }
