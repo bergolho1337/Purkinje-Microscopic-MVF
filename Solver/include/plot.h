@@ -16,5 +16,4 @@ void printProgress (int iter, int max_iter);
 void printProgress2 (int iter, int max_iter);
 void printError (const char *msg);
 
-
 #endif

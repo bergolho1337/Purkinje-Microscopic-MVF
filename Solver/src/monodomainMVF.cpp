@@ -13,6 +13,7 @@ MonodomainMVF* newMonodomainMVF (int argc, char *argv[])
     monoMVF->g = readPurkinjeNetworkFromFile(argv[3],monoMVF->dx);
     // Calcular as distancia do ponto de referencia para todos os outros (delta_x)
     Dijkstra(monoMVF->g,50);
+
     // Inserir os PMJs nas folhas
     #ifdef PMJ
     insertPMJ(monoMVF->g);
@@ -26,22 +27,7 @@ MonodomainMVF* newMonodomainMVF (int argc, char *argv[])
     monoMVF->alfa = (BETA*Cm*monoMVF->dx*monoMVF->dx) / (monoMVF->dt);
 
     // Alocar memoria
-    monoMVF->VOld = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
-    monoMVF->Vstar = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
-    monoMVF->VNew = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
-    monoMVF->mOld = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
-    monoMVF->mNew = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
-    monoMVF->hOld = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
-    monoMVF->hNew = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
-    monoMVF->nOld = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
-    monoMVF->nNew = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
-    monoMVF->F = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
-    monoMVF->dvdt = (Derivative*)malloc(monoMVF->g->total_nodes*sizeof(Derivative));
-    monoMVF->retro = (Retropropagation*)malloc(sizeof(Retropropagation));
-    monoMVF->vel = (Velocity*)malloc(sizeof(Velocity));
-    monoMVF->plot = (Plot*)malloc(sizeof(Plot));
-    for (int i = 0; i < monoMVF->g->total_nodes; i++)
-      monoMVF->dvdt[i].value = 0;
+    allocateMonodomain(monoMVF);
 
     // Atribuir as funcoes do modelo celular 
     monoMVF->functions = buildFunctions();
@@ -65,16 +51,6 @@ MonodomainMVF* newMonodomainMVF (int argc, char *argv[])
     int ids[6] = {50,100,200,220,250,270};
     setVelocityPoints(monoMVF->vel,5,ids);
     setPlot(monoMVF->plot,ids,5);
-
-    // Atribuir o ponto de referencia para a retropropagacao
-    //setRetropropagation(monoMVF->retro,258);        // 1 cm
-    //setRetropropagation(monoMVF->retro,129);        // 0.5 cm
-
-    // Atribuir o ponto de referncia para o plot
-    //setPlot(monoMVF->plot,ids,5);                // 1 cm
-    //setPlot(monoMVF->plot,ids,5);                // 0.5 cm
-
-    //printInfoModel(monoMVF);
 
     return monoMVF;
 }
@@ -211,10 +187,6 @@ void solveMonodomain (MonodomainMVF *monoMVF)
         if (i % 10 == 0)
           writeVTKFile(monoMVF->VOld,monoMVF->g,i);
 
-        // Escrever a solucao estacionaria
-        //if (i == 40000)
-        //    writeSteadyStateFile(steadyFile,np,monoMVF->VOld,monoMVF->mOld,monoMVF->hOld,monoMVF->nOld);
-
         // Resolver a EDP (parte difusiva)
         assembleLoadVector(monoMVF);
         solveLinearSystem_LU(monoMVF->K,monoMVF->F,monoMVF->Vstar,np);
@@ -244,7 +216,7 @@ void solveMonodomain (MonodomainMVF *monoMVF)
 
     // Escrever em arquivo o valor da derivada minima do ponto de referencia
     // Aonde houver mudanca na ordem de grandeza da derivada eh o ponto em que ocorre bloqueio
-    writeMinimumSpacialDerivative(monoMVF->retro);
+    //writeMinimumSpacialDerivative(monoMVF->retro);
 }
 
 // Constroi o vetor de termos independentes do sistema linear
@@ -322,7 +294,7 @@ void calcMaximumDerivative (Derivative *dvdt, int nPoints, double t, double *vol
 // Inicializar a estrutura Velocity
 void setVelocityPoints (Velocity *v, int np, int ids[])
 {
-    v->velocityFile = fopen("velocity.txt","w+");
+    v->velocityFile = fopen("Output/velocity.txt","w+");
     v->np = np;
     v->id_source = ids[0];
     v->ids = (int*)malloc(sizeof(int)*np);
@@ -350,7 +322,7 @@ void setPlot (Plot *p, int ids[], int np)
     {
         p->ids[i] = ids[i+1];
         p->plotFile[i] = (FILE*)malloc(sizeof(FILE));
-        sprintf(filename,"data%d.dat",p->ids[i]);
+        sprintf(filename,"Output/data%d.dat",p->ids[i]);
         p->plotFile[i] = fopen(filename,"w+");
     }
 }
@@ -423,7 +395,7 @@ void writePlotData(double t, double *v, Plot *plot)
 // Escreve o valor das derivadas maximas de todos os pontos na malha
 void writeMaximumDerivative (Derivative *dvdt, int nPoints)
 {
-    FILE *dvdtFile = fopen("max-dvdt.dat","w+");
+    FILE *dvdtFile = fopen("Output/max-dvdt.dat","w+");
     for (int i = 0; i < nPoints; i++)
         fprintf(dvdtFile,"Point %d --> || t = %.10lf || max_dvdt = %.10lf ||\n",i,dvdt[i].t,dvdt[i].value);
     fclose(dvdtFile);
@@ -431,7 +403,7 @@ void writeMaximumDerivative (Derivative *dvdt, int nPoints)
 
 void writeMinimumSpacialDerivative (Retropropagation *r)
 {
-  FILE *retroFile = fopen("block.txt","w+");
+  FILE *retroFile = fopen("Output/block.txt","w+");
   fprintf(retroFile,"The minimum spacial derivative on Node %d happen at t = %.5lf and value is %.10lf\n", \
   r->id, r->t,r->min_deriv);
   fclose(retroFile);
@@ -463,6 +435,27 @@ void calcVelocity (Velocity *v, Derivative *dvdt, double dist[])
         fprintf(v->velocityFile,"\n=============================================================\n\n");
     }
     fclose(v->velocityFile); 
+}
+
+// Alocar memoria para as estruturas
+void allocateMonodomain (MonodomainMVF *monoMVF)
+{
+    monoMVF->VOld = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
+    monoMVF->Vstar = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
+    monoMVF->VNew = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
+    monoMVF->mOld = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
+    monoMVF->mNew = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
+    monoMVF->hOld = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
+    monoMVF->hNew = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
+    monoMVF->nOld = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
+    monoMVF->nNew = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
+    monoMVF->F = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
+    monoMVF->dvdt = (Derivative*)malloc(monoMVF->g->total_nodes*sizeof(Derivative));
+    monoMVF->retro = (Retropropagation*)malloc(sizeof(Retropropagation));
+    monoMVF->vel = (Velocity*)malloc(sizeof(Velocity));
+    monoMVF->plot = (Plot*)malloc(sizeof(Plot));
+    for (int i = 0; i < monoMVF->g->total_nodes; i++)
+      monoMVF->dvdt[i].value = 0;
 }
 
 // Liberar memoria de todas as estruturas

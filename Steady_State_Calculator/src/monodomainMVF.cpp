@@ -11,6 +11,8 @@ MonodomainMVF* newMonodomainMVF (int argc, char *argv[])
     
     // Ler arquivo da malha, adicionar os PMJ e montar o grafo
     monoMVF->g = readPurkinjeNetworkFromFile(argv[3],monoMVF->dx);
+
+    // Inserir PMJs
     #ifdef PMJ
     insertPMJ(monoMVF->g);
     monoMVF->gamma = (SIGMA) / (monoMVF->dx*monoMVF->dx);
@@ -27,16 +29,7 @@ MonodomainMVF* newMonodomainMVF (int argc, char *argv[])
     sprintf(monoMVF->filename,"%s",argv[4]);
 
     // Alocar memoria
-    monoMVF->VOld = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
-    monoMVF->Vstar = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
-    monoMVF->VNew = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
-    monoMVF->mOld = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
-    monoMVF->mNew = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
-    monoMVF->hOld = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
-    monoMVF->hNew = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
-    monoMVF->nOld = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
-    monoMVF->nNew = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
-    monoMVF->F = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
+    allocateMonodomain(monoMVF);
 
     // Atribuir as funcoes do modelo celular 
     monoMVF->functions = buildFunctions();
@@ -343,6 +336,21 @@ void writeSteadyStateFile (FILE *steadyFile, int nPoints, double vm[], double m[
 {
     for (int i = 0; i < nPoints; i++)
         fprintf(steadyFile,"%.10lf %.10lf %.10lf %.10lf\n",vm[i],m[i],h[i],n[i]);
+}
+
+// Alocar memoria de todas as estruturas
+void allocateMonodomain (MonodomainMVF *monoMVF)
+{
+    monoMVF->VOld = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
+    monoMVF->Vstar = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
+    monoMVF->VNew = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
+    monoMVF->mOld = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
+    monoMVF->mNew = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
+    monoMVF->hOld = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
+    monoMVF->hNew = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
+    monoMVF->nOld = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
+    monoMVF->nNew = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
+    monoMVF->F = (double*)calloc(monoMVF->g->total_nodes,sizeof(double));
 }
 
 // Liberar memoria de todas as estruturas

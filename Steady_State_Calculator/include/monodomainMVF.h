@@ -83,6 +83,7 @@ struct Derivative
 MonodomainMVF* newMonodomainMVF (int argc, char *argv[]);
 void setInitialConditionsModel (MonodomainMVF *monoMVF, int argc, char *argv[]);
 Func* buildFunctions ();
+void allocateMonodomain (MonodomainMVF *monoMVF);
 void freeMonodomain (MonodomainMVF *monoMVF);
 void printInfoModel (MonodomainMVF *monoMVF);
 void assembleMatrix (MonodomainMVF *monoMVF);

@@ -36,7 +36,7 @@ int main (int argc, char *argv[])
     printf("<lu_file> = Arquivo contendo a decomposicao LU jah calculada para a malha\n");
     printf("[!] DEBUGACAO EH ATIVADA POR FLAG NO ARQUIVO \"monodomainMVF.h\".\n");
     printf("---------------------------------------------------------------------------------------------\n");
-    printf("Exemplo: %s 0.1 1000 Malhas/0.50/E_75/test1.msh SteadyState/e-75/steadystate1.dat\n",argv[0]);
+    printf("Exemplo: %s 0.1 1000 cable.msh steadystate.sst\n",argv[0]);
     printf("=============================================================================================\n");
     return 1;
   }

@@ -1,10 +1,3 @@
-/*
-******************************************
-    Autor: Lucas Berg
-    Last Update: 02/06/17
-******************************************
-*/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctime>

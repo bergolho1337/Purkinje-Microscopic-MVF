@@ -213,7 +213,7 @@ void solveLinearSystem_LU (double *A, double *b, double *x, int N)
 // Escreve a matriz da decomposicao LU em um arquivo separado
 void writeLUDecomposition (double *A, int N)
 {
-  FILE *out = fopen("lu.dat","w+");
+  FILE *out = fopen("Output/lu.dat","w+");
   // Escrever a matriz
   fprintf(out,"%d\n",N);
   for (int i = 0; i < N; i++)

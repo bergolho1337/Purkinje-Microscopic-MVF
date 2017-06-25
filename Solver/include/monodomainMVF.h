@@ -15,7 +15,7 @@ using namespace std;
 
 // >>>>>>>>>>> DESCOMENTAR ESSES defines PARA ATIVAR AS FLAGS <<<<<<<<<<<
 //#define DEBUG 1      // Flag para debugacao e imprimir informacoes na tela (matrizes e vetores)
-//#define PMJ            // Flag para ativar a ligacao com PMJ's nas folhas da arvore
+#define PMJ            // Flag para ativar a ligacao com PMJ's nas folhas da arvore
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 // Function pointer
@@ -117,23 +117,24 @@ struct Plot
 MonodomainMVF* newMonodomainMVF (int argc, char *argv[]);
 void setInitialConditionsModel_FromFile (MonodomainMVF *monoMVF, char filename[]);
 Func* buildFunctions ();
+void allocateMonodomain (MonodomainMVF *monoMVF);
 void freeMonodomain (MonodomainMVF *monoMVF);
 void printInfoModel (MonodomainMVF *monoMVF);
 void assembleMatrix (MonodomainMVF *monoMVF);
-void solveMonodomain (MonodomainMVF *monoMVF);
-void writeSteadyStateFile (FILE *steadyFile, int nPoints, double vm[], double m[], double h[], double n[]);
 void assembleLoadVector (MonodomainMVF *monoMVF);
+void solveMonodomain (MonodomainMVF *monoMVF);
 void solveEDO (MonodomainMVF *monoMVF, double t);
-void writeVTKFile (double *Vm, Graph *g, int k);
-void writePlotData(double t, double *v, Plot *plot);
 void setVelocityPoints (Velocity *v, int np, int ids[]);
 void setRetropropagation (Retropropagation *r, int id);
 void setPlot (Plot *p, int ids[], int np);
 void calcMaximumDerivative (Derivative *dvdt, int nPoints, double t, double *vold, double *vnew);
 void calcMinimumSpacialDerivative (Retropropagation *r, double t, double v, double v_prev);
+void calcVelocity (Velocity *v, Derivative *dvdt, double dist[]);
 void writeMaximumDerivative (Derivative *dvdt, int nPoints);
 void writeMinimumSpacialDerivative (Retropropagation *r);
-void calcVelocity (Velocity *v, Derivative *dvdt, double dist[]);
+void writeSteadyStateFile (FILE *steadyFile, int nPoints, double vm[], double m[], double h[], double n[]);
+void writeVTKFile (double *Vm, Graph *g, int k);
+void writePlotData(double t, double *v, Plot *plot);
 void swap (double **a, double **b);
 
 void printError (char *msg);
