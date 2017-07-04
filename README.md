@@ -41,7 +41,7 @@ $ ./meshGenerator <in_VTK_file> <out_MSH_file>
 # Sst-Neumann
 
   - Constrói um arquivo contendo a solução estacionária para uma determinada malha gerada a partir do Mesh_Generator.
-  - Nesta versão considera-se que nas folhas da árvore se aplica uma condição de contorno do tipo Neumann. 
+  - Nesta versão considera-se que nas folhas da árvore se aplica uma condição de contorno do tipo Neumann homogênea. 
   - O uso é feito a partir da passagem do intervalo de discretização no tempo, dt, o tempo máximo de simulação, o arquivo .msh da malha e o nome do arquivo do estado estacionário de saída.
 
 ```sh
