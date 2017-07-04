@@ -15,8 +15,10 @@ struct Point;
 struct Element;
 
 // Tamanho de uma celula de Purkinje
-const double DX = 0.006666666666666667094565124074;
-//const double DX = 0.5;
+//const double DX = 0.0068;	                      // T. Stankovičová, 2003 (cm) -- Pig Purkinje cell
+//const double DX = 0.0164;                         // Michael F. Sheets (1983)   -- Dog Purkinje cell
+//const double DX = 0.01;                           // Teste -- Alien Purkinje cell
+const double DX = 0.02;				    // Teste 2 -- Orc Purinje cell
 
 struct Point
 {

@@ -1,5 +1,0 @@
-Malhas do segundo experimento.
-
-Fibra simples com bifurcação no final. O número de bifurcações vai de [1,40].
-
-Crescimento iterativo. 

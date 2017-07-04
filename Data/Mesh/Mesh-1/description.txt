@@ -1,3 +1,0 @@
-Malhas do primeiro experimento.
-
-Fibra simples com bifurcação no final. O número de bifurcações vai de [1,40].
