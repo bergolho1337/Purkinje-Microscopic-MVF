@@ -4,8 +4,8 @@ Resolve a equação do monodomínio utilizando o Método dos Volumes Finitos. O 
 
   - Skeleton_Mesh
   - Mesh_Generator
-  - SteadyStateCalculator
-  - Solver
+  - Sst-Neumann
+  - Solver-Neumann
 
 # Skeleton_Mesh
 
@@ -24,13 +24,13 @@ $ ./skeletonMesh <xMax> <biff> <type> <out_VTK_file>
 ```
 
   - Pode-se utilizar também o shell script generateSkeleton.sh e definir os parâmetros neste arquivo.
-  - Dessa forma o script pode gerar um conjunto de malhas indo de [MIN_MESH,MAX_MESH] para cada tamanho de fibra dentro do intervalo [MIN_SIZE,MAX_SIZE].  
+  - Dessa forma o script pode gerar um conjunto de malhas indo de [MIN_MESH,MAX_MESH] para cada tamanho de fibra dentro do intervalo [MIN_SIZE,MAX_SIZE]. 
 
 # Mesh_Generator
 
-  - Constrói a malha de elementos finitos a partir da malha vinda do Skeleton_Mesh.
+  - Constrói a malha de volumes de controle a partir de uma malha vinda do Skeleton_Mesh.
   - Para usar basta passar como argumento para o programa o arquivo gerado pelo Skeleton_Mesh e definir o nome para o arquivo de saída, lembrando que o mesmo deve estar com a extensão '.msh'.
-  - Atualmente o programa considera o tamanho de uma célula de Purkinje com um valor de DX=0.006666666666666667 cm (~= 66.67 um).
+  - Deve-se também definir qual será o tamanho das células. Essa informação é definida no arquivo 'mesh.h'.
   - Também existe a opção de se utilizar o shell script 'generateMeshes.sh' para gerar um conjunto de malhas indo de [MIN_MESH,MAX_MESH]. 
 
 ```sh
@@ -38,43 +38,43 @@ $ make
 $ ./meshGenerator <in_VTK_file> <out_MSH_file>
 ```
 
-# SteadyStateCalculator
+# Sst-Neumann
 
   - Constrói um arquivo contendo a solução estacionária para uma determinada malha gerada a partir do Mesh_Generator.
+  - Nesta versão considera-se que nas folhas da árvore se aplica uma condição de contorno do tipo Neumann. 
   - O uso é feito a partir da passagem do intervalo de discretização no tempo, dt, o tempo máximo de simulação, o arquivo .msh da malha e o nome do arquivo do estado estacionário de saída.
-  - Pode-se passar o argumento opcional [steady_state_file], com isso será utilizado a solução estacionária de uma simulação já previamente calculada como condição inicial. A única restrição é que deve ser passado um arquivo de uma simulação anterior, por exemplo se for rodar a simulação 31 deve-se passar o arquivo 'steadystate30.dat' como argumento (só funciona com malhas do tipo 1). 
 
 ```sh
 $ make
-$ ./steadystateMVF <dt> <t_max> <mesh_file> <out_steady_state_file> [in_steady_state_file]
+$ ./steadystateMVF <dt> <t_max> <mesh_file> <out_steady_state_file>
 ```
 
-  - Existe também um script chamado 'runSimulation.sh' que calcula o estado estacionário das malhas contidas em um diretório qualquer.
-  - Os resultados são gravados na pasta definida na variável deste shell script.
-
-```sh
-$ ./runSimulation.sh
-```
-
-# Solver
+# Solver-Neumann
 
   - Resolve a equação monodomínio utilizando o MVF para geração do potencial de ação dos miócitos da fibra.
   - A EDP associada do problema é resolvida usando decomposição LU com pivoteamento. A cada passo de tempo se faz retro+pos substituições.
   - A sistema não linear de EDOs associado é resolvido usando Euler Explícito.
   - Atualmente está versão está configurada para o modelo celular de Noble.
-  - Para usar basta passar como argumento para o programa o passo de tempo 'dt', o período máximo da simulação 't_max', o arquivo da malha gerado a partir do Mesh_Generator e o arquivo contendo a solução estacionária vinda do StadyStateCalculator. 
-  - Pode-se passar um arquivo com a decomposição LU da matriz do sistema como um parâmetro adicional [lu.dat].
-  - Solução fica armazena na pasta VTK contendo os valores do potencial transmembrânico de todos os miócitos.
+  - Para usar basta passar como argumento para o programa o passo de tempo 'dt', o período máximo da simulação 't_max', o arquivo da malha gerado a partir do Mesh_Generator, o arquivo contendo a solução estacionária vinda do Sst-Neumann e definir o número e quais volumes de controle serão analisados para o cálculo da velocidade propagação.
+  - A solução fica armazena na pasta VTK contendo os valores do potencial transmembrânico de todos os miócitos.
   - Para visualizar a simulação abrir os arquivos da pasta VTK no Paraview.
+  - Informações adicionais a respeito da velocidade de propagação ficam armazenadas na pasta Output.
 
 ```sh
 $ make
-$ ./purkinjeMVF <dt> <t_max> <mesh_file> <steady_state_file> [lu.dat]
+$ ./purkinjeMVF <dt> <t_max> <in_mesh_file> <in_steady_state_file>
 ```
 
-  - Pode-se executar o script 'runSimulation.sh' para já calcular a solução de um intervalo de malhas contidos em um diretório qualquer.
-  - Os resultados ficam armazenados na pasta definida no shell script.
+  - É possível gerar as figuras do potencial de ação de cada volume de controle utilizado para o cálculo da velocidade de propagação a partir do comando 'plot' configurado no Makefile.
 
 ```sh
-$ ./runSimulation.sh
+$ make plot
 ```
+
+  - Também pode-se mover os resultados (figuras + dados) para uma pasta Results. O usuário só precisa especificar o nome do experimento (<out_result_folder>).
+  - Os arquivos ficarão salvos em Results/<out_result_folder>.
+
+```sh
+$ ./moveResults.sh <out_result_folder>"
+```
+
