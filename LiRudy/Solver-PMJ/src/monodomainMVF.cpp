@@ -9,11 +9,12 @@ MonodomainMVF* newMonodomainMVF (int argc, char *argv[])
     monoMVF->t_max = atof(argv[2]);
     monoMVF->M = nearbyint(monoMVF->t_max / monoMVF->dt);
     sprintf(monoMVF->filename,"%s",argv[4]);
+    setTypeCell(monoMVF,argv[3]);
     
     // Ler arquivo da malha, adicionar os PMJ e montar o grafo
     monoMVF->g = readPurkinjeNetworkFromFile(argv[3],monoMVF->dx);
     // Calcular as distancia do ponto de referencia para todos os outros (delta_x)
-    Dijkstra(monoMVF->g,ids[0]);
+    Dijkstra(monoMVF->g,monoMVF->ids[0]);
 
     // Adicionar os PMJ e montar o grafo
     insertPMJ(monoMVF->g);
@@ -40,8 +41,8 @@ MonodomainMVF* newMonodomainMVF (int argc, char *argv[])
     setStimulusCells(monoMVF->vol,monoMVF->g->total_nodes);
 
     // Atribuir pontos em que iremos calcular a velocidade
-    setVelocityPoints(monoMVF->vel);
-    setPlot(monoMVF->plot);
+    setVelocityPoints(monoMVF->vel,monoMVF->ids);
+    setPlot(monoMVF->plot,monoMVF->ids);
 
     // Construir a matriz global do sistema linear ligado a solucao da EDP
     assembleMatrix(monoMVF);    
@@ -402,8 +403,26 @@ void moveVstar (Volume vol[], double Vstar[], int np)
     }
 }
 
+// Identificar a partir do nome do arquivo qual o tipo de celula utilizado
+void setTypeCell (MonodomainMVF *monoMVF, const char filename[])
+{
+    // Alocar e inicializar o vetor 'ids' com os volumes a serem plotados
+    string str(filename);
+    monoMVF->ids = (int*)malloc(sizeof(int)*NPLOT);
+    if (str.find("alien") != string::npos)
+        memcpy(monoMVF->ids,ids_alien,sizeof(int)*NPLOT);
+    else if (str.find("dog") != string::npos)
+        memcpy(monoMVF->ids,ids_dog,sizeof(int)*NPLOT);
+    else if (str.find("pig") != string::npos)
+        memcpy(monoMVF->ids,ids_pig,sizeof(int)*NPLOT);
+    else if (str.find("orc") != string::npos)
+        memcpy(monoMVF->ids,ids_orc,sizeof(int)*NPLOT);
+    else
+        printError("Invalid type of cell");
+}
+
 // Inicializar a estrutura Velocity a partir do array global 'ids'
-void setVelocityPoints (Velocity *v)
+void setVelocityPoints (Velocity *v, int ids[])
 {
     v->velocityFile = fopen("Output/velocity.txt","w+");
     // Primeiro ponto eh sempre o source
@@ -416,7 +435,7 @@ void setVelocityPoints (Velocity *v)
 }
 
 // Inicializar a estrutura a partir do array global 'ids'
-void setPlot (Plot *p)
+void setPlot (Plot *p, int ids[])
 {
     char filename[200];
     // Primeiro ponto eh sempre o source
@@ -441,6 +460,7 @@ void freeMonodomain (MonodomainMVF *monoMVF)
     free(monoMVF->F);
     free(monoMVF->Vstar);
     free(monoMVF->dvdt);
+    free(monoMVF->ids);
     freeVolume(monoMVF->vol,monoMVF->g->total_nodes);
     freeVelocity(monoMVF->vel);
     freePlot(monoMVF->plot);

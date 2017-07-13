@@ -32,11 +32,11 @@ const double d1 = 0.002;                      // Diametro do volume de controle 
 const double RPMJ = 11000;                  // Resistencia do PMJ (k ohm) (default=11000)
 const int NSC = 5;                          // Numero de celulas de estimulo
 /* ============================================================================================ */
-/* Vetor com os identificadores dos volumes do plot */
-const int ids[NPLOT] = {50,65,80,95,110,120};                   // Dog
-//const int ids[NPLOT] = {50,100,150,200,250,294};              // Pig
-//const int ids[NPLOT] = {50,80,110,140,170,200};               // Alien
-//const int ids[NPLOT] = {50,60,70,80,90,100};                  // Orc
+/* Vetor com os identificadores dos volumes do plot: 2 cm */
+const int ids_dog[NPLOT] = {50,65,80,95,110,120};                   // Dog
+const int ids_pig[NPLOT] = {50,100,150,200,250,294};              // Pig
+const int ids_alien[NPLOT] = {50,80,110,140,170,200};               // Alien
+const int ids_orc[NPLOT] = {50,60,70,80,90,100};                  // Orc
 /* ============================================================================================ */
 
 struct MonodomainMVF;
@@ -49,9 +49,9 @@ struct Plot;
 // Estrutura do resolvedor da equacao do Monodominio
 struct MonodomainMVF
 {
-  int id;                                     // Identificador da malha
   int nVolFiber;                              // Numero de volumes por fibra
   int M;                                      // Numero de subintervalos no tempo
+  int typeCell;                               // Tipo de celula utilizado
   double dx;                                  // Tamanho da discretizacao no espaco (h)
   double dt;                                  // Tamanho da discretizacao no tempo (k)
   double t_max;                               // Tempo maximo de simulacao
@@ -69,6 +69,7 @@ struct MonodomainMVF
   Velocity *vel;                              // Vetor com as velocidade de propagacao dos volumes
   Graph *g;                                   // Grafo contendo a estrutura da malha
   char filename[200];                         // Nome do arquivo de saida
+  int *ids;                                   // Vetor com os identificadores dos volumes a serem plotados
 }typedef MonodomainMVF;
 
 // Estrutura de um ponto do dominio
@@ -114,13 +115,13 @@ struct Volume
 
 /* ================================= FUNCTIONS ======================================================= */
 MonodomainMVF* newMonodomainMVF (int argc, char *argv[]);
+void setTypeCell (MonodomainMVF *monoMVF, const char filename[]);
 void setInitialConditionsModel_FromFile (Volume vol[], int np, const char filename[]);
-Func* buildFunctions ();
 void allocateMonodomain (MonodomainMVF *monoMVF);
 void setTimeSettingsModel (Volume vol[], int np, double dt, double tmax);
 void setStimulusCells (Volume vol[], int np);
-void setVelocityPoints (Velocity *v);
-void setPlot (Plot *p);
+void setVelocityPoints (Velocity *v, int ids[]);
+void setPlot (Plot *p, int ids[]);
 void assembleMatrix (MonodomainMVF *monoMVF);
 void solveMonodomain (MonodomainMVF *monoMVF);
 void assembleLoadVector (MonodomainMVF *monoMVF);
