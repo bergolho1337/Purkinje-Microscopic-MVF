@@ -23,12 +23,16 @@ int main (int argc, char *argv[])
   if (argc-1 < 4)
   {
     printf("=============================================================================================\n");
-    printf("Usage:> %s <dt> <t_max> <mesh_file> <out_steady_state_file>\n",argv[0]);
+    printf("Usage:> %s <dt> <t_max> <mesh_file> <out_steady_state_file> [ALPHA] [d1]\n",argv[0]);
     printf("---------------------------------------------------------------------------------------------\n");
     printf("<dt> = Tamanho da discretizacao no tempo\n");
     printf("<t_max> = Tempo maximo de simulacao\n");
     printf("<mesh_file> = Arquivo contendo a malha com os pontos definindo os volumes e as suas conexoes\n");
     printf("<out_steady_state_file> = Arquivo de saida com a solucao estacionaria\n");
+    printf("---------------------------------------------------------------------------------------------\n");
+    printf(" !! Parametros opcionais !! (Analise de sensibilidade)\n");
+    printf("[ALPHA] = Rpmj*Vpmj\n");
+    printf("[d1] = Diametro da celula de Purkinje\n");
     printf("[!] DEBUGACAO EH ATIVADA POR FLAG NO ARQUIVO \"monodomainMVF.h\".\n");
     printf("---------------------------------------------------------------------------------------------\n");
     printf("Exemplo: %s 0.1 5000 cable.msh steadystate.stt\n",argv[0]);

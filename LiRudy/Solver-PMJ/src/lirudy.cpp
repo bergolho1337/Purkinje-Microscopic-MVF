@@ -74,7 +74,7 @@ double kmup   = 0.00028;
 double  qtr1,qtr2;
 
 double bsss,csqn1,bjsr,cjsr,csqn,bcsr,ccsr;
-double casss,dcasss,cassstot,bsr,bsl,b1,c1,d1;
+double casss,dcasss,cassstot,bsr,bsl,b1,c1;
 double cassl,dcassl;
 double qdiff;
 

@@ -1,5 +1,9 @@
 #include "../include/monodomainMVF.h"
 
+// Analise de sensibilidade
+double ALFA;
+double d1;
+
 // Construtor da estrutura MonodomainMVF
 MonodomainMVF* newMonodomainMVF (int argc, char *argv[])
 {
@@ -10,6 +14,7 @@ MonodomainMVF* newMonodomainMVF (int argc, char *argv[])
     monoMVF->M = nearbyint(monoMVF->t_max / monoMVF->dt);
     sprintf(monoMVF->filename,"%s",argv[4]);
     setTypeCell(monoMVF,argv[3]);
+    setSensibilityVariables(argc,argv);
     
     // Ler arquivo da malha, adicionar os PMJ e montar o grafo
     monoMVF->g = readPurkinjeNetworkFromFile(argv[3],monoMVF->dx);
@@ -86,6 +91,23 @@ void setInitialConditionsModel_FromFile (Volume vol[], int np, const char filena
         vol[i].vOld = vol[i].cell->v;
     }
     fclose(steadyFile);  
+}
+
+// Atribui os valores da analise de sensibilidade
+void setSensibilityVariables (int argc, char *argv[])
+{
+    // Valores padroes
+    if (argc-1 == 4)
+    {
+        ALFA = 1.375;
+        d1 = 0.002;
+    }
+    // Usuario definiu valores
+    else
+    {
+        ALFA = atof(argv[5]);
+        d1 = atof(argv[6]);
+    }
 }
 
 /* Iniciliazar as variaveis ligadas ao tempo de cada celula */
@@ -316,6 +338,7 @@ void calcMaximumDerivative (Derivative dvdt[], int np, double t, Volume vol[])
 void calcVelocity (Velocity *v, Derivative dvdt[], double dist[])
 {
     FILE *vFile = fopen("Output/v.txt","w+");
+    FILE *dFile = fopen("Output/delay.txt","w+");
     double t, velocity;
     for (int i = 0; i < v->np; i++)
     {
@@ -333,9 +356,9 @@ void calcVelocity (Velocity *v, Derivative dvdt[], double dist[])
 
         fprintf(vFile,"%d %lf\n",v->ids[i],velocity*1000.0);
     } 
-    fprintf(v->velocityFile,"Delay = %.10lf\n",dvdt[v->ids[v->np-1]].t-dvdt[v->ids[v->np-2]].t);
-    fprintf(v->velocityFile,"\n=============================================================\n\n");
+    fprintf(dFile,"%.10lf\n",dvdt[v->ids[v->np-1]].t-dvdt[v->ids[v->np-2]].t);
     fclose(v->velocityFile);
+    fclose(dFile);
     fclose(vFile);
 }
 
