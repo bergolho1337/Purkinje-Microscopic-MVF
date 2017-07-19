@@ -14,7 +14,7 @@ for alpha in "${ALPHA[@]}"; do
             ./solverMVF 0.1 2000 ../Data/Mesh/cable5cm_$cn.msh ../Data/SteadyState/5cm-$cn-alpha_$alpha-d1_$d1.sst $alpha $d1
             make plot
             mv Output/*.txt Results/5cm-$cn-alpha_$alpha-d1_$d1
-            mv Output/*.png Results/5cm-$cn-alpha_$alpha-d1_$d1
+            mv Output/*.pdf Results/5cm-$cn-alpha_$alpha-d1_$d1
             cp -r VTK Results/5cm-$cn-alpha_$alpha-d1_$d1
         done
     done
