@@ -1,5 +1,9 @@
 #include "../include/monodomainMVF.h"
 
+// Analise de sensibilidade
+double ALFA;
+double d1;
+
 // Construtor da estrutura MonodomainMVF
 MonodomainMVF* newMonodomainMVF (int argc, char *argv[])
 {
@@ -9,6 +13,7 @@ MonodomainMVF* newMonodomainMVF (int argc, char *argv[])
     monoMVF->t_max = atof(argv[2]);
     monoMVF->M = nearbyint(monoMVF->t_max / monoMVF->dt);
     sprintf(monoMVF->filename,"%s",argv[4]);
+    setSensibilityVariables(argc,argv);
     
     // Ler arquivo da malha, adicionar os PMJ e montar o grafo
     monoMVF->g = readPurkinjeNetworkFromFile(argv[3],monoMVF->dx);
@@ -52,6 +57,23 @@ Func* buildFunctions ()
   func[2] = dhdt__Nob;
   func[3] = dndt__Nob;
   return func;
+}
+
+// Atribui os valores da analise de sensibilidade
+void setSensibilityVariables (int argc, char *argv[])
+{
+    // Valores padroes
+    if (argc-1 == 4)
+    {
+        ALFA = 1.375;
+        d1 = 0.002;
+    }
+    // Usuario definiu valores
+    else
+    {
+        ALFA = atof(argv[5]);
+        d1 = atof(argv[6]);
+    }
 }
 
 // Atribuir as condicoes iniciais para todos os pontos da malha

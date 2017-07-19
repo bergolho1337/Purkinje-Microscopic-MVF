@@ -15,7 +15,7 @@ using namespace std;
 
 // >>>>>>>>>>> DESCOMENTAR ESSES defines PARA ATIVAR AS FLAGS <<<<<<<<<<<
 //#define DEBUG 1     // Flag para debugacao e imprimir informacoes na tela (matrizes e vetores)
-#define NPLOT 6       // Numero de volumes usados para o plot 
+#define NPLOT 11       // Numero de volumes usados para o plot 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 // Function pointer
@@ -27,15 +27,21 @@ const double Cm = 1.0;                        // Capacitancia da membrana (uF/cm
 const double SIGMA = 0.004;                  // Condutividade citoplasmatica da celula (mS/cm) (default=0.004)
 const double h2 = 0.25;                        // Tamanho do volume de controle do PMJ (cm) (default=40)
 const double d2 = 0.002;                        // Diametro do volume de controle do PMJ (cm)
-const double d1 = 0.002;                      // Diametro do volume de controle de uma Purkinje cell (cm)
+//const double d1 = 0.002;                      // Diametro do volume de controle de uma Purkinje cell (cm)
 const double RPMJ = 11000;                  // Resistencia do PMJ (k ohm) (default=11000)
-const double ALFA = 1.375;                  // Analise de sensibilidade: (h2*h2*d2*RPMJ)
+//const double ALFA = 1.375;                  // Analise de sensibilidade: (h2*h2*d2*RPMJ)
 
 /* Vetor com os identificadores dos volumes do plot: 2 cm */
-const int ids_dog[NPLOT] = {50,65,80,95,110,120};                   // Dog
-const int ids_pig[NPLOT] = {50,100,150,200,250,294};              // Pig
-const int ids_alien[NPLOT] = {50,80,110,140,170,200};               // Alien
-const int ids_orc[NPLOT] = {50,60,70,80,90,100};                  // Orc
+//const int ids_dog[NPLOT] = {50,65,80,95,110,120};                   // Dog
+//const int ids_pig[NPLOT] = {50,100,150,200,250,294};              // Pig
+//const int ids_alien[NPLOT] = {50,80,110,140,170,200};               // Alien
+//const int ids_orc[NPLOT] = {50,60,70,80,90,100};                  // Orc
+
+/* Vetor com os identificadores dos volumes do plot: 5 cm */
+const int ids_dog[NPLOT] = {50,75,100,125,150,175,200,225,250,275,304};       // Dog
+const int ids_pig[NPLOT] = {50,118,186,254,322,390,458,526,594,662,734};      // Pig
+const int ids_alien[NPLOT] = {50,95,140,185,230,275,320,365,410,455,500};     // Alien
+const int ids_orc[NPLOT] = {50,70,90,110,130,150,170,190,210,230,250};        // Orc
 /* ============================================================================================ */
 
 struct MonodomainMVF;
@@ -116,6 +122,7 @@ MonodomainMVF* newMonodomainMVF (int argc, char *argv[]);
 void setInitialConditionsModel_FromFile (Volume vol[], int np, const char filename[]);
 Func* buildFunctions ();
 void allocateMonodomain (MonodomainMVF *monoMVF);
+void setSensibilityVariables (int argc, char*argv[]);
 void setTypeCell (MonodomainMVF *monoMVF, const char filename[]);
 void setVelocityPoints (Velocity *v, int ids[]);
 void setPlot (Plot *p, int ids[]);

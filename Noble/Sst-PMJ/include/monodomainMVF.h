@@ -26,9 +26,9 @@ const double Cm = 1.0;                        // Capacitancia da membrana (uF/cm
 const double SIGMA = 0.004;                  // Condutividade citoplasmatica da celula (mS/cm) (default=0.004)
 const double h2 = 0.25;                        // Tamanho do volume de controle do PMJ (cm) (default=40)
 const double d2 = 0.002;                        // Diametro do volume de controle do PMJ (cm)
-const double d1 = 0.002;                      // Diametro do volume de controle de uma Purkinje cell (cm)
+//const double d1 = 0.002;                      // Diametro do volume de controle de uma Purkinje cell (cm)
 const double RPMJ = 11000;                  // Resistencia do PMJ (k ohm) (default=11000)
-const double ALFA = 1.375;                  // Analise de sensibilidade: (h2*h2*d2*RPMJ)
+//const double ALFA = 1.375;                  // Analise de sensibilidade: (h2*h2*d2*RPMJ)
 /* ============================================================================================ */
 
 struct MonodomainMVF;
@@ -86,6 +86,7 @@ void UsageSteady (char *pName);
 void UsageSolver (char *pName);
 MonodomainMVF* newMonodomainMVF (int argc, char *argv[]);
 void setInitialConditionsModel (Volume vol[], int np, int argc, char *argv[]);
+void setSensibilityVariables (int argc, char *argv[]);
 Func* buildFunctions ();
 void allocateMonodomain (MonodomainMVF *monoMVF);
 void freeMonodomain (MonodomainMVF *monoMVF);
