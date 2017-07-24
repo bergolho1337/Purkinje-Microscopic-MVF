@@ -391,7 +391,8 @@ void writeVTKFile (Volume *vol, Graph *g, int k)
         Edge *ptrl = ptr->edges;
         while (ptrl != NULL)
         {
-            fprintf(file,"2 %d %d\n",ptr->id,ptrl->dest->id);
+            if (ptrl->marked)
+                fprintf(file,"2 %d %d\n",ptr->id,ptrl->dest->id);
             ptrl = ptrl->next;
         }
         ptr = ptr->next;
