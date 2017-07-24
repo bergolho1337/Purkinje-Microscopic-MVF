@@ -32,8 +32,9 @@ Graph* readPurkinjeNetworkFromFile (char *filename, double &dx)
     {
         int e[2];
         if (!fscanf(inFile,"%d %d",&e[0],&e[1])) error("Reading file");
-        insertEdgeGraph(&g,e[0],e[1]);
-        insertEdgeGraph(&g,e[1],e[0]);
+        // O grafo deve ser unidirecional por causa do MVF, porem no plot uso uma aresta apenas
+        insertEdgeGraph(&g,e[0],e[1],true);
+        insertEdgeGraph(&g,e[1],e[0],false);
     }
     fclose(inFile);
     return g;
@@ -84,7 +85,7 @@ void insertNodeGraph (Graph *g, int type, double p[])
 }
 
 // Insere uma aresta no grafo
-void insertEdgeGraph (Graph **g, int id_1, int id_2)
+void insertEdgeGraph (Graph **g, int id_1, int id_2, bool marked)
 {
 	Node *ptr1, *ptr2;
 	Edge *edge;
@@ -97,6 +98,7 @@ void insertEdgeGraph (Graph **g, int id_1, int id_2)
 	
     norm = calcNorm(ptr1->x,ptr1->y,ptr1->z,ptr2->x,ptr2->y,ptr2->z);
     edge = newEdge(id_2,norm,ptr2);
+    edge->marked = marked;
     // Primeira aresta
     if (ptr1->edges == NULL)
         ptr1->edges = edge;
@@ -110,8 +112,9 @@ void insertEdgeGraph (Graph **g, int id_1, int id_2)
     }
     // Incrementar o contador de arestas do Node origem
     ptr1->num_edges++;
-    // Incrementar o numero total de arestas no grafo
-    (*g)->total_edges++;
+    // Incrementar o numero total de arestas no grafo (contar somente uma aresta)
+    if (marked)
+        (*g)->total_edges++;
 }
 
 // Busca por um Node no grafo
@@ -163,8 +166,8 @@ void insertPMJ (Graph *g)
         {
             calcPosition(ptr,ptr->edges->dest,p);
             insertNodeGraph(g,1,p);
-            insertEdgeGraph(&g,ptr->id,g->total_nodes-1);
-            insertEdgeGraph(&g,g->total_nodes-1,ptr->id);
+            insertEdgeGraph(&g,ptr->id,g->total_nodes-1,true);
+            insertEdgeGraph(&g,g->total_nodes-1,ptr->id,false);
         }
         ptr = ptr->next;
     }

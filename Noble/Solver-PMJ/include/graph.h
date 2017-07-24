@@ -18,6 +18,7 @@ const double INF = __DBL_MAX__;
 // Estrutura de uma aresta no grafo
 struct Edge
 {
+	bool marked;		
 	int id;				// Identificador do no destino
 	double w;		    // Tamanho da aresta, distancia euclidiana
 	Edge *next;			// Ponteiro para a proxima aresta
@@ -59,7 +60,7 @@ Graph* readPurkinjeNetworkFromFile (char *filename, double &dx);
 Node* searchNode (Graph *g, int id);
 void Dijkstra (Graph *g, int s);
 void insertNodeGraph (Graph *g, int type, double p[]);
-void insertEdgeGraph (Graph **g, int id_1, int id_2);
+void insertEdgeGraph (Graph **g, int id_1, int id_2, bool marked);
 void insertPMJ (Graph *g);
 void printGraph (Graph *g);
 bool isConnectToPMJ (Edge *ptrl);
