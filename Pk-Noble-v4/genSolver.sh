@@ -21,14 +21,14 @@ for alpha in "${ALPHA[@]}"; do
             echo "------------------------------------------------------"
             echo "[!] Running with:> $cn, alpha = $alpha, d1 = $d1"
             echo "------------------------------------------------------"
-            mkdir Results/cable5cm-$cn-a$alpha-d$d1; mkdir Results/cable5cm-$cn-a$alpha-d$d1/Graphics
-            ./purkinje -s 0.1 1000 Meshes/cable5cm-$cn.msh SteadyState/5cm/cable5cm-$cn-a$alpha-d$d1 $alpha $d1
+            mkdir Results/Biff-5cm/biff5cm-$cn-a$alpha-d$d1; mkdir Results/Biff-5cm/biff5cm-$cn-a$alpha-d$d1/Graphics
+            ./purkinje -s 0.1 1000 Meshes/biff5cm-$cn.msh SteadyState/Biff-5cm/biff5cm-$cn-a$alpha-d$d1 $alpha $d1
             make plot
-            mv Output/*.pdf Results/cable5cm-$cn-a$alpha-d$d1/Graphics
-            cp -r VTK Results/cable5cm-$cn-a$alpha-d$d1
-            mv Output/delay.txt Results/cable5cm-$cn-a$alpha-d$d1; 
-            mv Output/v.txt Results/cable5cm-$cn-a$alpha-d$d1
-            mv Output/velocity.txt Results/cable5cm-$cn-a$alpha-d$d1
+            mv Output/*.pdf Results/Biff-5cm/biff5cm-$cn-a$alpha-d$d1/Graphics
+            cp -r VTK Results/Biff-5cm/biff5cm-$cn-a$alpha-d$d1
+            mv Output/delay.txt Results/Biff-5cm/biff5cm-$cn-a$alpha-d$d1; 
+            mv Output/v.txt Results/Biff-5cm/biff5cm-$cn-a$alpha-d$d1
+            mv Output/velocity.txt Results/Biff-5cm/biff5cm-$cn-a$alpha-d$d1
             rm -f Output/*.dat Output/*.txt Output/*.pdf
         done
     done
