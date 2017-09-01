@@ -24,7 +24,7 @@ Graph::Graph (string filename, double &dx)
         insertEdgeGraph(e[1],e[0]);
     }
     in.close();
-    //printterm();
+    printterm();
     setTerm();
     insertPMJ();
 }

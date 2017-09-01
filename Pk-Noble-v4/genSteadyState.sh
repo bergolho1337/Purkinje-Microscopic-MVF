@@ -18,7 +18,7 @@ for alpha in "${ALPHA[@]}"; do
             echo "------------------------------------------------------"
             echo "[!] Running with:> $cn, alpha = $alpha, d1 = $d1"
             echo "------------------------------------------------------"
-            ./purkinje -t 0.1 5000 Meshes/cable5cm-$cn.msh SteadyState/cable5cm-$cn-a$alpha-d$d1 $alpha $d1
+            ./purkinje -t 0.1 5000 Meshes/biff5cm-$cn.msh SteadyState/biff5cm-$cn-a$alpha-d$d1 $alpha $d1
         done
     done
 done
