@@ -22,7 +22,7 @@ for alpha in "${ALPHA[@]}"; do
             echo "[!] Running with:> $cn, alpha = $alpha, d1 = $d1"
             echo "------------------------------------------------------"
             mkdir Results/Biff-5cm/biff5cm-$cn-a$alpha-d$d1; mkdir Results/Biff-5cm/biff5cm-$cn-a$alpha-d$d1/Graphics
-            ./purkinje -s 0.1 1000 Meshes/biff5cm-$cn.msh SteadyState/Biff-5cm/biff5cm-$cn-a$alpha-d$d1 $alpha $d1
+            ./purkinje -s 0.1 1000 Meshes/biff5cm-$cn.msh SteadyState/Biff-5cm/biff5cm-$cn-a$alpha-d$d1 Plot/biff5cm-$cn.plt $alpha $d1
             make plot
             mv Output/*.pdf Results/Biff-5cm/biff5cm-$cn-a$alpha-d$d1/Graphics
             cp -r VTK Results/Biff-5cm/biff5cm-$cn-a$alpha-d$d1

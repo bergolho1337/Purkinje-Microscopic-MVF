@@ -194,7 +194,7 @@ void SteadyState::assembleLoadVector (VectorXd &b)
 void SteadyState::setSensibilityParam (int argc, char *argv[])
 {
     // Default values
-    if (argc-1 == 5)
+    if (argc-1 == 6)
     {
         alfa = 1.375;
         d1 = 0.002;
@@ -202,8 +202,8 @@ void SteadyState::setSensibilityParam (int argc, char *argv[])
     // User-defined
     else
     {
-        alfa = atof(argv[6]);
-        d1 = atof(argv[7]);
+        alfa = atof(argv[7]);
+        d1 = atof(argv[8]);
     }
 }
 

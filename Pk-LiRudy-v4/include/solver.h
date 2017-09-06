@@ -13,48 +13,12 @@
 using namespace std;
 using namespace Eigen;
 
-// ------------ Cable ------------------------------------
-#define NPLOT 6                   
-//#define NPLOT 11
-// ------------ Bifurcation ------------------------------
-//#define NPLOT 16
-//#define NPLOT 31
-
 // Macros for the Eigen library structures
 typedef SparseMatrix<double> SpMat;
 typedef Triplet<double> T;
 
 // Function pointer
 typedef double (*Func) (int type, int point, double t, double y[]);
-
-// ----------------------------------------------------------------------------------------------
-// -------------------- Cable -------------------------------------------------------------------
-// Vetor com os identificadores dos volumes do plot: 2 cm 
-const int ids_dog[NPLOT] = {50,65,80,95,110,120};                   // Dog
-const int ids_pig[NPLOT] = {50,100,150,200,250,294};              // Pig
-const int ids_alien[NPLOT] = {50,80,110,140,170,200};               // Alien
-const int ids_orc[NPLOT] = {50,60,70,80,90,100};                  // Orc
-
-// Vetor com os identificadores dos volumes do plot: 5 cm
-//const int ids_dog[NPLOT] = {50,75,100,125,150,175,200,225,250,275,304};       // Dog
-//const int ids_pig[NPLOT] = {50,118,186,254,322,390,458,526,594,662,734};      // Pig
-//const int ids_alien[NPLOT] = {50,95,140,185,230,275,320,365,410,455,500};     // Alien
-//const int ids_orc[NPLOT] = {50,70,90,110,130,150,170,190,210,230,250};        // Orc
-
-// ----------------------------------------------------------------------------------------------
-// -------------------- Bifurcation -------------------------------------------------------------
-// Vetor com os identificadores dos volumes do plot: 2 cm 
-//const int ids_dog[NPLOT] = {50,65,80,95,110,121, 122,152,182,212,242, 243,273,303,333,363};    
-//const int ids_pig[NPLOT] = {50,100,150,200,250,294, 344,394,444,494,588, 638,688,738,788,882};              
-//const int ids_alien[NPLOT] = {50,80,110,140,170,200, 240,280,320,360,400, 440,480,520,560,600};              
-//const int ids_orc[NPLOT] = {50,60,70,80,90,100, 105,125,145,165,200, 205,225,245,265,300};               
-
-// Vetor com os identificadores dos volumes do plot: 5 cm
-//const int ids_dog[NPLOT] = {50,75,100,125,150,175,200,225,250,275,304, 334,364,394,424,454,484,514,544,574,608, 638,668,698,728,758,788,818,848,878,912};      
-//const int ids_pig[NPLOT] = {50,118,186,254,322,390,458,526,594,662,735, 805,875,945,1015,1085,1155,1225,1295,1365,1470, 1540,1610,1680,1750,1820,1890,1960,2030,2100,2205};     
-//const int ids_alien[NPLOT] = {50,95,140,185,230,275,320,365,410,455,500, 550,600,650,700,750,800,850,900,950,1000, 1050,1100,1150,1200,1250,1300,1350,1400,1450,1500};    
-//const int ids_orc[NPLOT] = {50,70,90,110,130,150,170,190,210,230,250, 275,300,325,350,375,400,425,450,475,500, 525,550,575,600,625,650,675,700,725,750};        
-
 
 struct CVolume
 {
@@ -115,12 +79,13 @@ private:
     double dx;                          // Size timestep in space
     string mesh_filename;               // Mesh filename
     string steady_filename;             // Input Steady-State filename
+    string plot_filename;               // Plot id filename
 
     double alfa;                        // Parameter: R_pmj * Vol_pmj
     double d1;                          // Parameter: d1
 
     void setSensibilityParam (int argc, char *argv[]);
-    void setTypeCell (const char s[]);  
+    void setTypeCell ();  
     void setControlVolumes ();
     void setInitCondFromFile ();
     void setStimCells ();

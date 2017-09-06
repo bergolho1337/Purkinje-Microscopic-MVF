@@ -7,7 +7,7 @@ Solver::Solver (int argc, char *argv[])
     mesh_filename = argv[4];
     steady_filename = argv[5];
     M = nearbyint(tmax/dt);
-    setTypeCell(argv[4]);
+    setTypeCell();
     g = new Graph(mesh_filename,dx);
     g->dijkstra(plot->ids[0]);
 
@@ -106,7 +106,7 @@ void Solver::solve ()
 void Solver::setSensibilityParam (int argc, char *argv[])
 {
     // Default values
-    if (argc-1 == 5)
+    if (argc-1 == 6)
     {
         alfa = 1.375;
         d1 = 0.002;
@@ -114,8 +114,8 @@ void Solver::setSensibilityParam (int argc, char *argv[])
     // User-defined
     else
     {
-        alfa = atof(argv[6]);
-        d1 = atof(argv[7]);
+        alfa = atof(argv[7]);
+        d1 = atof(argv[8]);
     }
 }
 
@@ -127,30 +127,19 @@ void Solver::setControlVolumes ()
         vol[i].cell = (Cell*)malloc(sizeof(Cell));
 }
 
-void Solver::setTypeCell (const char s[])
+void Solver::setTypeCell ()
 {
-    // Alocar e inicializar o vetor 'ids' com os volumes a serem plotados
-    string str(s);
+    // Alocar e inicializar o vetor 'ids' com os volumes a serem plotados a partir do arquivo de entrada .plt
     plot = (Plot*)malloc(sizeof(Plot));
-    plot->ids = (int*)malloc(sizeof(int)*NPLOT);
-    if (str.find("alien") != string::npos)
-    {
-        memcpy(plot->ids,ids_alien,sizeof(int)*NPLOT);
-    }
-    else if (str.find("dog") != string::npos)
-    {
-        memcpy(plot->ids,ids_dog,sizeof(int)*NPLOT);
-    }
-    else if (str.find("pig") != string::npos)
-    {
-        memcpy(plot->ids,ids_pig,sizeof(int)*NPLOT);
-    }
-    else if (str.find("orc") != string::npos)
-    {
-        memcpy(plot->ids,ids_orc,sizeof(int)*NPLOT);
-    }
-    else
-        error("Invalid type of cell");
+    FILE *pltFile = fopen(plot_filename.c_str(),"r");
+
+    if (!fscanf(pltFile,"%d",&plot->np)) error("Reading PLT file");
+    plot->ids = (int*)malloc(sizeof(int)*plot->np);
+
+    for (int i = 0; i < plot->np; i++)
+        if (!fscanf(pltFile,"%d",&plot->ids[i])) error("Reading PLT file");
+
+    fclose(pltFile);
 }
 
 void Solver::setInitCondFromFile ()
@@ -181,7 +170,7 @@ void Solver::setVelocityPoints ()
     vel = (Velocity*)malloc(sizeof(Velocity));
     vel->velocityFile = fopen("Output/velocity.txt","w+");
     // First point is always the source
-    vel->np = NPLOT-1;
+    vel->np = plot->np-1;
     vel->id_source = plot->ids[0];
     vel->ids = (int*)malloc(sizeof(int)*vel->np);
     vel->t2 = (double*)malloc(sizeof(double)*vel->np);
@@ -192,8 +181,8 @@ void Solver::setVelocityPoints ()
 void Solver::setPlot ()
 {
     char filename[200];
-    plot->plotFile = (FILE**)malloc(sizeof(FILE*)*(NPLOT-1));
-    for (int i = 1; i < NPLOT; i++)
+    plot->plotFile = (FILE**)malloc(sizeof(FILE*)*(plot->np-1));
+    for (int i = 1; i < plot->np; i++)
     {
         plot->plotFile[i-1] = (FILE*)malloc(sizeof(FILE));
         sprintf(filename,"Output/data%d.dat",plot->ids[i]);
@@ -353,7 +342,7 @@ void Solver::solveODE (double t)
 
 void Solver::writePlotData (double t)
 {
-    for (int i = 1; i < NPLOT; i++)
+    for (int i = 1; i < plot->np; i++)
         fprintf(plot->plotFile[i-1],"%.10lf %.10lf\n",t,vol[plot->ids[i]].vOld);
 }
 

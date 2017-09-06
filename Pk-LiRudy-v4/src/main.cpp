@@ -21,7 +21,7 @@ using namespace std;
 int main (int argc, char *argv[])
 {
   
-  if (argc-1 < 5)
+  if (argc-1 < 6)
   {
     Usage(argv[0]);
     return 1;
