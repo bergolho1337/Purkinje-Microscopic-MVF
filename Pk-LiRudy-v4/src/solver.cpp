@@ -6,6 +6,7 @@ Solver::Solver (int argc, char *argv[])
     tmax = atof(argv[3]);
     mesh_filename = argv[4];
     steady_filename = argv[5];
+    plot_filename = argv[6];
     M = nearbyint(tmax/dt);
     setTypeCell();
     g = new Graph(mesh_filename,dx);
