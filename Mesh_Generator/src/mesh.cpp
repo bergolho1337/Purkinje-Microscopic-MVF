@@ -5,7 +5,7 @@ Mesh* newMesh (int argc, char *argv[])
     printf("--------------------------------------------------------------------------------------------\n");
     printf("[!] Reading VTK file '%s' !\n",argv[1]);
     Mesh *mesh = (Mesh*)malloc(sizeof(Mesh));
-    mesh->h = DX;
+    mesh->h = setTypeCell(argv[3]);
     Graph *g = readPurkinjeNetworkFromFile(argv[1]);
     GraphToMesh(mesh,g);
     writeLevelToFile(mesh,g);
@@ -17,6 +17,26 @@ Mesh* newMesh (int argc, char *argv[])
     
     printf("--------------------------------------------------------------------------------------------\n");
     return mesh;
+}
+
+// Descobre qual o tipo de celula e inicializa o tamanho da discretizacao espacial
+double setTypeCell (char cName[])
+{
+    size_t found;
+    string str(cName);
+    found = str.find("alien");
+    if (found != string::npos)
+        return ALIEN_DX;
+    found = str.find("dog");
+    if (found != std::string::npos)
+        return DOG_DX;
+    found = str.find("orc");
+    if (found != string::npos)
+        return ORC_DX;
+    found = str.find("pig");
+    if (found != string::npos)
+        return PIG_DX;
+    return 0;
 }
 
 // Calcula o vetor direcao indo vertice 1 -> 2, e retorna o unitario

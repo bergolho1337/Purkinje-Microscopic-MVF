@@ -3,7 +3,7 @@
 # specific mesh. 
 # ===================================================================
 #!/bin/bash
-MESH_NAME="cable5cm"
+MESH_NAME="biff02cm"
 CELL_NAME=( "alien" "dog" "orc" "pig" )
 ALPHA=( 0.6875 1.375 2.55 )
 D1=( 0.001 0.002 0.004 )
@@ -18,7 +18,7 @@ for alpha in "${ALPHA[@]}"; do
             echo "------------------------------------------------------"
             echo "[!] Running with:> $cn, alpha = $alpha, d1 = $d1"
             echo "------------------------------------------------------"
-            ./purkinje -t 0.1 5000 Meshes/biff5cm-$cn.msh SteadyState/biff5cm-$cn-a$alpha-d$d1 Plot/biff5cm-$cn.plt $alpha $d1
+            ./purkinje -t 0.1 5000 Meshes/$MESH_NAME-$cn.msh SteadyState/$MESH_NAME-$cn-a$alpha-d$d1 Plot/$MESH_NAME-$cn.plt $alpha $d1
         done
     done
 done
