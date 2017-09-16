@@ -431,6 +431,9 @@ void Solver::calcVelocity ()
     {
         double t = dvdt[vel->ids[i]].t - dvdt[vel->id_source].t;
         double velocity = dist[vel->ids[i]] / t;
+	   // Checar se eh maior que a tolerancia
+ 	   if (t < 0)
+            velocity = 0.0;
         fprintf(vel->velocityFile,"\n\n[!] Propagation velocity! Id = %d\n",vel->ids[i]);
         fprintf(vel->velocityFile,"t1 = %.10lf\n",dvdt[vel->id_source].t);
         fprintf(vel->velocityFile,"dvdt[%d] = %.10lf\n\n",vel->id_source,dvdt[vel->id_source].value);

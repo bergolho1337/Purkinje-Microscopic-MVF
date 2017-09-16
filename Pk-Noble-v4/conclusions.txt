@@ -1,0 +1,16 @@
+1 - No experimento do cabo simples, diminuindo o tamanho da fibra tambem se diminui a velocidade de propagacao;
+
+2- No experimento da bifurcacao, reparou-se uma ligeira diminuicao na velocidade de propagacao nos terminais;
+
+3- Aumentando d1, diminuiu o delay e aumenta a velocidade de propagacao nos terminais
+
+4- Aumentando o tamanho da celula, diminui-se o delay e aumenta velocidade nos terminais
+
+5- Aumentando alpha, aumenta o delay e diminui a velocidade
+
+7- Se o delay em algum cenario jah for alto com uma fibra menor ele aumenta ainda mais
+
+8- O calculo da velocidade de propagacao fica mais dificil em fibras pequenas. Sendo necessario repensar o experimento com a fibra de 0,2 cm
+
+9- Nos experimentos com fibras muito pequenas eh possivel verificar uma certa descontinuidade do PA nos volumes proximos ao PMJ
+

@@ -32,10 +32,10 @@ class SteadyState
 {
     static constexpr double BETA = 0.14;
     static constexpr double Cm = 1.0;
-    static constexpr double SIGMA = 0.004;
-    static constexpr double h2 = 0.25;
+    static constexpr double SIGMA = 0.002;
+    static constexpr double h2 = 0.25;          // default 0.25
     static constexpr double d2 = 0.002;
-    static constexpr double RPMJ = 11000.0;
+    static constexpr double RPMJ = 11000.0;     // default 11000
     static constexpr int NSC = 5;               // Number of stimulus cells
 public:
     SteadyState (int argc, char *argv[]);

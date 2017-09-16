@@ -3,7 +3,7 @@
 # specific mesh. 
 # ===================================================================
 #!/bin/bash
-MESH_NAME="biff02cm"
+MESH_NAME="cable5cm"
 CELL_NAME=( "alien" "dog" "orc" "pig" )
 ALPHA=( 0.6875 1.375 2.55 )
 D1=( 0.001 0.002 0.004 )
