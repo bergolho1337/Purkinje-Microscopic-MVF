@@ -10,7 +10,7 @@ Solver::Solver (int argc, char *argv[])
     setTypeCell();
     M = nearbyint(tmax/dt);
     g = new Graph(mesh_filename,dx);
-    g->dijkstra(plot->ids[0]);
+    //g->dijkstra(plot->ids[0]);
 
     setControlVolumes();
     setDerivative();
@@ -51,7 +51,7 @@ void Solver::solve ()
         writePlotData(t);
 
         // Escreve no .vtk
-        if (i % 10 == 0) writeVTKFile(i);
+        if (i % 100 == 0) writeVTKFile(i);
 
         // Resolver a EDP (parte difusiva)
         assembleLoadVector(b);
@@ -379,21 +379,24 @@ void Solver::calcVelocity ()
     FILE *dFile = fopen("Output/delay.txt","w+");
     int np = vel->np;
     int nterm = g->getNTerm();
-    double *dist = g->getDist();
     int *term = g->getTerm();
     for (int i = 0; i < np; i++)
     {    
-	   double t = dvdt[vel->ids[i]].t - dvdt[vel->id_source].t;
-        double velocity = dist[vel->ids[i]] / t;
+        // Calcular a velocidade instantanea. Usar 10 volumes para tras do volume de referencia
+        g->dijkstra(vel->ids[i]);
+        double *dist = g->getDist();
+        double t = dvdt[vel->ids[i]].t - dvdt[vel->ids[i] - OFFSET].t;
+        double velocity = dist[vel->ids[i] - OFFSET] / t;
+
         // Checar se eh maior que a tolerancia
-	    if (t < 0 || fabs(dvdt[vel->ids[i]].value - dvdt[vel->id_source].value) > 16.0)
+	    if (t < 0 || fabs(dvdt[vel->ids[i]].value - dvdt[vel->ids[i] - OFFSET].value) > 16.0)
             velocity = 0.0;
         fprintf(vel->velocityFile,"\n\n[!] Propagation velocity! Id = %d\n",vel->ids[i]);
-        fprintf(vel->velocityFile,"t1 = %.10lf\n",dvdt[vel->id_source].t);
-        fprintf(vel->velocityFile,"dvdt[%d] = %.10lf\n\n",vel->id_source,dvdt[vel->id_source].value);
+        fprintf(vel->velocityFile,"t1 = %.10lf\n",dvdt[vel->ids[i] - OFFSET].t);
+        fprintf(vel->velocityFile,"dvdt[%d] = %.10lf\n\n",vel->ids[i]- OFFSET ,dvdt[vel->ids[i] - OFFSET].value);
         fprintf(vel->velocityFile,"t2 = %.10lf\n",dvdt[vel->ids[i]].t);
         fprintf(vel->velocityFile,"dvdt[%d] = %.10lf\n",vel->ids[i],dvdt[vel->ids[i]].value);
-        fprintf(vel->velocityFile,"delta_x = %.10lf\n",dist[vel->ids[i]]);
+        fprintf(vel->velocityFile,"delta_x = %.10lf\n",dist[vel->ids[i] - OFFSET]);
         fprintf(vel->velocityFile,"delta_t = %.10lf\n",t);
         fprintf(vel->velocityFile,"\n!!!!!!!! Propagation velocity = %lf cm/s !!!!!!!!!!\n",velocity*1000.0);
         fprintf(vel->velocityFile,"\n=============================================================\n\n");
@@ -402,6 +405,7 @@ void Solver::calcVelocity ()
     }
     for (int i = 0; i < nterm; i++)
     { 
+        // Calcular o delay entre o terminal e 10 volumes para tras dele
         printf("Delay between %d and %d\n",term[i],term[i]-10);
         fprintf(dFile,"%.10lf\n",dvdt[term[i]].t-dvdt[term[i]-10].t);
     }

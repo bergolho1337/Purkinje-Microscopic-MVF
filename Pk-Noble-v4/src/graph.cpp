@@ -27,6 +27,9 @@ Graph::Graph (string filename, double &dx)
     printterm();
     setTerm();
     insertPMJ();
+
+    // Alocate memory for the distance vector
+    dist = (double*)malloc(sizeof(double)*total_nodes);
 }
 
 Node::Node (int id, int type, double x, double y, double z)
@@ -144,7 +147,6 @@ void Graph::dijkstra (int s)
     printf("[!] Running Dijkstra ... ");
     fflush(stdout);
 
-    dist = (double*)malloc(sizeof(double)*total_nodes);
     for (int i = 0; i < total_nodes; i++) dist[i] = INF;
     dist[s] = 0;
     priority_queue< pair<double,int>, vector< pair<double,int> >, greater< pair<double,int> > > pq;
