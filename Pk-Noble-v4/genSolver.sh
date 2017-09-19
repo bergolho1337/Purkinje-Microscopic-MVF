@@ -33,7 +33,7 @@ for alpha in "${ALPHA[@]}"; do
             echo "[!] Running with:> $cn, alpha = $alpha, d1 = $d1"
             echo "------------------------------------------------------"
             mkdir Results/$FOLDER_NAME/$MESH_NAME-$cn-a$alpha-d$d1; mkdir Results/$FOLDER_NAME/$MESH_NAME-$cn-a$alpha-d$d1/Graphics
-            ./purkinje -s 0.1 1000 Meshes/$MESH_NAME-$cn.msh SteadyState/$FOLDER_NAME/$MESH_NAME-$cn-a$alpha-d$d1 Plot/$MESH_NAME-$cn.plt $alpha $d1
+            ./purkinje -s 0.01 1000 Meshes/$MESH_NAME-$cn.msh SteadyState/$FOLDER_NAME/$MESH_NAME-$cn-a$alpha-d$d1 Plot/$MESH_NAME-$cn.plt $alpha $d1
             make plot
             mv Output/*.pdf Results/$FOLDER_NAME/$MESH_NAME-$cn-a$alpha-d$d1/Graphics
             cp -r VTK Results/$FOLDER_NAME/$MESH_NAME-$cn-a$alpha-d$d1
