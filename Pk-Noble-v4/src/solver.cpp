@@ -365,7 +365,7 @@ void Solver::calcMaxDerivative (double t)
     {
         double diff = vol[i].yNew[0] - vol[i].yOld[0];
         // Considerar apos o primeiro estimulo
-        if (diff > dvdt[i].value && t > 250.0)
+        if (diff > dvdt[i].value && t > 0.0 && t < 250.0)
         {
             dvdt[i].value = diff;
             dvdt[i].t = t;

@@ -37,8 +37,8 @@ double g_K2__Nob (double t, double vm, double m, double h, double n)
 // Trocar o primeiro coeficiente de 1.2e+03 para 1.3e+03 tambem tira o caracter auto-oscilatorio
 double g_K1__Nob (double t, double vm, double m, double h, double n)
 {
-	return (((1.2*exp((((-vm)-9.0e+01)/5.0e+01)))+(1.5e-02*exp(((vm+9.0e+01)/6.0e+01)))));
-  //return (((1.3*exp((((-y[0])-9.0e+01)/5.0e+01)))+(1.5e-02*exp(((y[0]+9.0e+01)/6.0e+01)))));    // Sem oscilacoes
+	//return (((1.2*exp((((-vm)-9.0e+01)/5.0e+01)))+(1.5e-02*exp(((vm+9.0e+01)/6.0e+01)))));
+    return (((1.3*exp((((-vm)-9.0e+01)/5.0e+01)))+(1.5e-02*exp(((vm+9.0e+01)/6.0e+01)))));    // Sem oscilacoes
 }
 
 double I_K__Nob (double t, double vm, double m, double h, double n)
