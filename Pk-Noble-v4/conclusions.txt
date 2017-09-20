@@ -1,16 +1,17 @@
-1 - No experimento do cabo simples, diminuindo o tamanho da fibra tambem se diminui a velocidade de propagacao;
+1 - A velocidade de propagacao tanto no cabo simples quanto na bifurcacao se mantiveram mais ou menos na mesma faixa. A unica exceção foi no
+volume da bifurcacao aonde foi observado uma diminuicao significativa da velocidade;
 
-2- No experimento da bifurcacao, reparou-se uma ligeira diminuicao na velocidade de propagacao nos terminais;
+2- O estimulo nao conseguiu se propagar utilizando a celula de porco em nenhum cenario;
 
 3- Aumentando d1, diminuiu o delay e aumenta a velocidade de propagacao nos terminais
 
 4- Aumentando o tamanho da celula, diminui-se o delay e aumenta velocidade nos terminais
 
-5- Aumentando alpha, aumenta o delay e diminui a velocidade
+5- Aumentando alpha, aumenta o delay e diminui a velocidade nos terminais
 
-7- Se o delay em algum cenario jah for alto com uma fibra menor ele aumenta ainda mais
+7- Em fibras pequenas, e.g: 1.0 cm, se o delay jah for alto com uma fibra menor ainda ele aumenta ainda mais
 
-8- O calculo da velocidade de propagacao fica mais dificil em fibras pequenas. Sendo necessario repensar o experimento com a fibra de 0,2 cm
+8- Nos experimentos com fibras muito pequenas eh possivel verificar uma certa descontinuidade do PA nos volumes proximos ao PMJ
 
-9- Nos experimentos com fibras muito pequenas eh possivel verificar uma certa descontinuidade do PA nos volumes proximos ao PMJ
+9- A velocidade de propagacao apos a bifurcacao consegue se restabelecer ficando na mesma faixa que antes da bifurcacao
 
