@@ -61,6 +61,7 @@ class Solver
     static constexpr double d2 = 0.002;
     static constexpr double RPMJ = 11000.0;     // default 11000
     static constexpr int NSC = 5;               // Number of stimulus cells
+    static constexpr int OFFSET = 10;
 public:
     Solver (int argc, char *argv[]);
     void solve ();
