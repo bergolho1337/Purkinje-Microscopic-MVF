@@ -15,3 +15,9 @@ volume da bifurcacao aonde foi observado uma diminuicao significativa da velocid
 
 9- A velocidade de propagacao apos a bifurcacao consegue se restabelecer ficando na mesma faixa que antes da bifurcacao
 
+
+
+10- Quando se analisou o delay na bifurcacao notou-se que quanto menor o tamanho da fibra mais a bifurcacaoo influencia na propagacao do estimulo.
+
+11- Apos aumentar o tamanho da fibra a influencia da bifurcacao eh reduzida (0,3 ms). A ponto de quase nao influenciar mais no estimulo.
+

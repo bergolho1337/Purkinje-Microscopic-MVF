@@ -169,7 +169,7 @@ void buildSkeleton_K_Iter (Skeleton *sk)
 // Gera uma fibra do tipo 3 - Crescimento iterativo e com controle de angulo
 void buildSkeleton_K_Iter_Ang (Skeleton *sk)
 {
-    int id, k;
+    int id;
     double d_ori[3], d_rot[3];
     double ang_rot;
     Queue *q = newQueue();

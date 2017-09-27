@@ -28,7 +28,6 @@ def plotSolution (ids):
 		pyplot.xlabel("Time (ms)")
 		pyplot.ylabel("Transmembrane potential (mV)")
 		pyplot.ylim([-100,60])
-		pyplot.xlim([0,1000])
 		pyplot.legend()
 		pp.savefig()
 		pp.close()		

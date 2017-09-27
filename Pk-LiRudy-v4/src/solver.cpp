@@ -410,8 +410,8 @@ void Solver::calcMaxDerivative (double t)
     for (int i = 0; i < np; i++)
     {
         double diff = vol[i].cell->v - vol[i].vOld;
-        // Considerar apos o primeiro estimulo
-        if (diff > dvdt[i].value && t > 250.0)
+        // Considerar o primeiro estimulo
+        if (diff > dvdt[i].value && t > 0.0)
         {
             dvdt[i].value = diff;
             dvdt[i].t = t;

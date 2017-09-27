@@ -51,7 +51,7 @@ void Solver::solve ()
         writePlotData(t);
 
         // Escreve no .vtk
-        if (i % 100 == 0) writeVTKFile(i);
+        if (i % 10 == 0) writeVTKFile(i);
 
         // Resolver a EDP (parte difusiva)
         assembleLoadVector(b);
