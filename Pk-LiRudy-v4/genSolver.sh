@@ -16,7 +16,7 @@ MESH_NAME=$2
 #MESH_NAME="biff5cm"
 CELL_NAME=( "alien" "dog" "orc" "pig" )
 #ALPHA=( 0.6875 1.375 2.55 )
-ALPHA=( 0.0859375 0.171875 0.34375 )
+ALPHA=( 0.34375 0.6875 1.375 )
 D1=( 0.001 0.002 0.004 )
 
 if [ ! -f purkinje ]; then
