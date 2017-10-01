@@ -9,7 +9,7 @@
 #include <omp.h>
 #include <Eigen/Sparse>
 #include "../include/graph.h"
-#include "../include/noble.h"
+#include "../include/lirudy.h"
 
 using namespace std;
 using namespace Eigen;
@@ -23,10 +23,10 @@ typedef double (*Func) (int type, int point, double t, double y[]);
 
 struct CVolume
 {
-  int type;                                   // 0 = Purkinje cell || 1 = PMJ
-  double *yOld;                               // Solution at timestep n     {v^n, gate^n}
-  double *yNew;                               // Solution at timestep n+1   {v^n+1, gate^n+1}
-  double *yStar;                              // Solution at timestep n+1/2 {v^n+1/2, gate^n}
+  double vOld;                              
+  double vNew;                            
+  double vStar;
+  Cell *cell;                              
 }typedef CVolume;
 
 struct Derivative
@@ -57,10 +57,11 @@ class Solver
 {
     static constexpr double BETA = 0.14;
     static constexpr double Cm = 1.0;
-    static constexpr double SIGMA = 0.004;
-    static constexpr double h2 = 0.25;
+    static constexpr double SIGMA = 0.002;	// default 0.004
+    static constexpr double h2 = 0.25;          // default 0.25
     static constexpr double d2 = 0.002;
-    static constexpr double RPMJ = 11000.0;
+    static constexpr double RPMJ = 11000.0;     // default 11000
+    static constexpr int NSC = 5;               // Number of stimulus cells
     static constexpr int OFFSET = 10;
 public:
     Solver (int argc, char *argv[]);
@@ -88,8 +89,10 @@ private:
     void setSensibilityParam (int argc, char *argv[]);
     void setTypeCell ();  
     void setControlVolumes ();
-    void setFunctions ();
     void setInitCondFromFile ();
+    void setStimCells ();
+    void setStimSettings ();
+    void setModelParameters ();
     void setVelocityPoints ();
     void setDerivative ();
     void setPlot ();
