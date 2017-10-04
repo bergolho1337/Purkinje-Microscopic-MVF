@@ -5,8 +5,8 @@ from matplotlib import pyplot
 from pylab import genfromtxt
 
 def plotDelay ():
-	pk_filename = "data150.dat"		
-	mio_filename = "data200.dat"
+	pk_filename = "data75-LiRudy.dat"		
+	mio_filename = "data100-LiRudy.dat"
 	mat0 = genfromtxt(pk_filename)
 	mat1 = genfromtxt(mio_filename)
 	pyplot.plot(mat0[:,0], mat0[:,1], label = "Purkinje", linestyle ="-", linewidth=2)
@@ -16,7 +16,7 @@ def plotDelay ():
 	pyplot.xlabel("Level of the tree")
 	pyplot.ylabel("Velocity (cm/s)")
 	pyplot.legend()
-	pyplot.savefig("delay.pdf")
+	pyplot.savefig("delay-LiRudy.pdf")
 
 def main ():    	
 	plotDelay()
