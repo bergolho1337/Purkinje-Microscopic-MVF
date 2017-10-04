@@ -4,4 +4,4 @@
 	-> diminuir o numero de volumes para o calculo da velocidade (default=5)
 	-> diminuir o dt
 
-3) 
+3) Mesmas conclusões do Noble.
