@@ -1,7 +1,7 @@
 #include "../include/solver.h"
 
 // Number of threads to solve the system of ODEs
-static constexpr int nthreads = 4;
+static constexpr int nthreads = 2;
 
 Solver::Solver (int argc, char *argv[])
 {
