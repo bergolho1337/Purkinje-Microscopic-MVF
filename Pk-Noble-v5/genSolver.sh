@@ -38,14 +38,14 @@ for alpha in "${ALPHA[@]}"; do
             echo "------------------------------------------------------"
             echo "[!] Running with:> $cn, alpha = $alpha, d1 = $d1"
             echo "------------------------------------------------------"
-            mkdir Results/$FOLDER_NAME/$MESH_NAME-$cn-a$alpha-d$d1; mkdir Results/$FOLDER_NAME/$MESH_NAME-$cn-a$alpha-d$d1/Graphics
+            mkdir Results/Exp-$EXP_NUMBER/$FOLDER_NAME/$MESH_NAME-$cn-a$alpha-d$d1; mkdir Results/Exp-$EXP_NUMBER/$FOLDER_NAME/$MESH_NAME-$cn-a$alpha-d$d1/Graphics
             ./purkinje -s 0.01 500 Meshes/Exp-$EXP_NUMBER/$MESH_NAME-$cn.msh SteadyState/Exp-$EXP_NUMBER/$FOLDER_NAME/$MESH_NAME-$cn-a$alpha-d$d1 Plot/Exp-$EXP_NUMBER/$MESH_NAME-$cn.plt $alpha $d1
             make plot
-            mv Output/*.pdf Results/$FOLDER_NAME/$MESH_NAME-$cn-a$alpha-d$d1/Graphics
-            cp -r VTK Results/$FOLDER_NAME/$MESH_NAME-$cn-a$alpha-d$d1
-            mv Output/delay.txt Results/$FOLDER_NAME/$MESH_NAME-$cn-a$alpha-d$d1; 
-            mv Output/v.txt Results/$FOLDER_NAME/$MESH_NAME-$cn-a$alpha-d$d1
-            mv Output/velocity.txt Results/$FOLDER_NAME/$MESH_NAME-$cn-a$alpha-d$d1
+            mv Output/*.pdf Results/Exp-$EXP_NUMBER/$FOLDER_NAME/$MESH_NAME-$cn-a$alpha-d$d1/Graphics
+            cp -r VTK Results/Exp-$EXP_NUMBER/$FOLDER_NAME/$MESH_NAME-$cn-a$alpha-d$d1
+            mv Output/delay.txt Results/Exp-$EXP_NUMBER/$FOLDER_NAME/$MESH_NAME-$cn-a$alpha-d$d1; 
+            mv Output/v.txt Results/Exp-$EXP_NUMBER/$FOLDER_NAME/$MESH_NAME-$cn-a$alpha-d$d1
+            mv Output/velocity.txt Results/Exp-$EXP_NUMBER/$FOLDER_NAME/$MESH_NAME-$cn-a$alpha-d$d1
             rm -f Output/*.dat Output/*.txt Output/*.pdf
         done
     done
