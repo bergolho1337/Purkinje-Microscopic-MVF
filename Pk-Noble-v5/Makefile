@@ -22,6 +22,10 @@ clean:
 	rm -f VTK/*.vtk
 	rm -f Output/*.dat Output/*.txt Output/*.pdf
 
+clcResults:
+	rm -f VTK/*.vtk
+	rm -f Output/*.dat Output/*.txt Output/*.pdf
+
 remade:
 	$(MAKE) clean
 	$(MAKE)

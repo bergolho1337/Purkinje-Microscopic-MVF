@@ -22,6 +22,7 @@ int main (int argc, char *argv[])
         exit (EXIT_FAILURE);
     }
     double sf = atof(argv[1]);
+    /*	
     for (int i = 0; i < 4; i++)
     {
         int N = sf / sc[i];
@@ -33,18 +34,24 @@ int main (int argc, char *argv[])
         out << 6 << endl;
         out << N/2 << " " << N << " " << 3*N/2 << " " << 2*N << " " << 5*N/2 << " " << 3*N << endl;    
     }
+    */
     for (int i = 0; i < 4; i++)
     {
         int N = sf / sc[i];
         stringstream ss;
-        ss << "biff-" << cells[i] << "-" << sf << "cm.plt";
+        ss << "biff" << sf << "cm-" << cells[i] << ".plt";
         string filename = ss.str();
         ofstream out(filename);
 
         out << 14 << endl;
-        out << N/2 << " " << N << " " << 3*N/2 << " " << 2*N << " " << 5*N/2 << " " << 3*N << " "\
-        << 7*N/2 << " " << 4*N << " " << 9*N/2 << " " << 5*N << " " << 11*N/2 << " " << 6*N << " "\
-        << 13*N/2 << " " << 7*N << " ";    
+
+	   //out << N/2 << " " << N << " " << 3*N/2 << " " << 2*N << " " << 5*N/2 << " " << 7*N/2 << " "\
+        << 9*N/2 << " " << 5*N << " " << 11*N/2 << " " << 13*N/2 << " " << 3*N << " " << 4*N << " "\
+        << 6*N << " " << 7*N << " ";
+
+	   out << N/2 << " " << N << " " << 3*N/2 << " " << 5*N/2 << " " << 7*N/2 << " " << 9*N/2 << " "\
+        << 11*N/2 << " " << 13*N/2 << " " << 2*N << " " << 5*N << " " << 3*N << " " << 4*N << " "\
+        << 6*N << " " << 7*N << " ";	    
     } 
 
     return 0;

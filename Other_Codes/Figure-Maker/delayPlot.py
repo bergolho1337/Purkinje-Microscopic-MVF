@@ -1,3 +1,6 @@
+# Codigo para montar a figura do delay
+# Passar os arquivos .dat contendo o potencial transmebranico dos volumes de Purkinje e o do miocardio
+
 import os
 import sys
 import re
