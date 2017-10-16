@@ -18,7 +18,7 @@ fi
 MESH_NAME=$1
 EXP_NUMBER=$2
 CELL_NAME=( "alien" "dog" "orc" "pig" )
-ALPHA=( 0.6875 1.375 2.55 )
+ALPHA=( 0.34375 0.6875 1.375 )
 D1=( 0.001 0.002 0.004 )
 
 if [ ! -f purkinje ]; then
