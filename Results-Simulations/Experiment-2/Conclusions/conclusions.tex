@@ -1,0 +1,46 @@
+\documentclass[]{article}
+\usepackage[utf8]{inputenc}
+
+\title{Conclusões Experimento 2}
+\author{Lucas Arantes Berg}
+
+\begin{document}
+	
+	\maketitle
+	
+	\begin{enumerate}
+		
+		\item A velocidade de propagação tanto no cabo simples quanto na bifurcação se mantiveram mais ou menos na mesma faixa. A unica exceção foi no volume da bifurcação aonde foi observado uma diminuição significativa da velocidade;
+		
+		\item O estímulo não conseguiu se propagar utilizando a célula de porco ($68 um$) em nenhum cenário no modelo de Noble;
+		
+		\item Aumentando $d_1$, diminuiu o delay e aumentou a velocidade de propagacao nos terminais (tamanho da célula fica maior);
+		
+		\item  Aumentando o tamanho da célula, diminui-se o delay e aumenta a velocidade nos terminais;
+		
+		\item Aumentando $\alpha$, aumenta-se o delay e diminui-se a velocidade nos terminais;
+		
+		\item Os resultados do parâmetro $\alpha$ mostram que o volume do miocárdio é proporcional ao delay. Como $\alpha = R_{PMJ}*Vol_{PMJ}$ se houver uma diminuição em $\alpha$ seria equivalente a reduzirmos o valor de $Vol_{PMJ}$ na mesma proporção;
+		
+		\item Em fibras pequenas, e.g: $1.0 cm$, se o delay já for alto com uma fibra menor, e.g: $0.5 cm$, ele aumenta ainda mais (sumidouro muito grande);
+		
+		\item Nos experimentos com fibras muito pequenas é possível verificar uma certa descontinuidade do PA nos volumes próximos ao PMJ (como foi observado no trabalho de Vergara et al, 2016);
+		
+		\item A velocidade de propagação após a bifurcação consegue se restabelecer ficando na mesma faixa que antes da bifurcação;
+		
+		\item Comparando o tempo de ativação do volume do miocárdio entre o cabo e a bifurcação foi verificado que os volumes na malha da bifurcação são ativados após os do cabo (ver vídeo);
+		
+		\item Quando se analisou o delay na bifurcação notou-se que quanto menor o tamanho da fibra mais a bifurcação influência na propagação do estímulo;
+		
+		\item Após aumentar o tamanho da fibra, e.g: 2cm e 5cm, a influência da bifurcacao no delay é reduzida e permanece constante nas simulações (Noble - $0.3 ms$, LiRudy - $0.15 ms$);
+		
+		\item O modelo de LiRudy é mais sensível a mudança dos parâmetros $\alpha$, $d_1$ e $l_c$ do que o modelo de Noble;
+		
+		\item Quando não é possível a propagação do PA no volume do miocárdio a velocidade de propagação fica com o um valor errado. Isto ocorre porque o valor da derivada máxima dos pontos de medição não são os mesmos. Por isso foi substituído estes valores com 0.
+		
+		\item Também foi observado que a influência do delay da bifurcação é local e constante. A cada bifurcação encontrada ao longo da fibra é adicionado um tempo de atraso. Para o experimento 2 temos duas bifurcações ao longo do caminho. (Noble - $0.6 ms$, LiRudy - $0.3 ms$);
+		
+		\item Através da última conclusão pode-se prever o tempo de ativação de um terminal a partir da contabilização de quantas bifurcações existem entre a fonte do estímulo e o terminal. ($t = n_{bif}*t_{model}$)
+			
+	\end{enumerate}	
+\end{document}
