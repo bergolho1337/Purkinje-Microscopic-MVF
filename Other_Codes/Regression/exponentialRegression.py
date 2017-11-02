@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 
-data = np.genfromtxt(open("exponentialData2.dat","r"))
+data = np.genfromtxt(open("dataSegment.dat","r"))
 
 # Try to fit a exponential of the type: y = a*exp(b*t)
 popt, pcov = scipy.optimize.curve_fit(lambda t,a,b: a*np.exp(b*t),data[:,0],data[:,1])

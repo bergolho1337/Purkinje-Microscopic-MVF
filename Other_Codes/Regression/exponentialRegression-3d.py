@@ -10,14 +10,14 @@ from scipy.optimize import curve_fit
 from mpl_toolkits import mplot3d
 
 def fn (x, a, b, c):
-    return exp(a*x[0] + b*x[1]) + c  
-    #return a + b*x[0] + c*x[1]
+    #return exp(a*x[0] + b*x[1]) + c  
+    return a + b*x[0] + c*x[1]
 
 def fn2 (x,y,a,b,c):
-    return exp(a*x + b*y) + c
-    #return a + b*x + c*y
+    #return exp(a*x + b*y) + c
+    return a + b*x + c*y
 
-data = np.genfromtxt(open("dataDelay.dat","r"))
+data = np.genfromtxt(open("dataSegment.dat","r"))
 
 # Define the domain xy as a 2d-array
 x = scipy.array([data[:,0],data[:,1]])
