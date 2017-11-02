@@ -18,11 +18,11 @@ def plotScatter (data):
     ax.set_xlabel('x')
     ax.set_ylabel('y')
     ax.set_zlabel('z');
-    #plt.show()
-    ax.view_init(0,90)
-    plt.savefig("output-xz.pdf")
-    ax.view_init(0,180)
-    plt.savefig("output-yz.pdf")
+    plt.show()
+    #ax.view_init(0,90)
+    #plt.savefig("output-xz.pdf")
+    #ax.view_init(0,180)
+    #plt.savefig("output-yz.pdf")
 
 def plotSurface (data):
     X, Y = np.meshgrid(data[:,0], data[:,1])
