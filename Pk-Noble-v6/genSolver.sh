@@ -21,7 +21,7 @@ MESH_NAME=$2
 EXP_NUMBER=$3
 
 #CELL_NAME=( "alien" "dog" "orc" "pig" )
-CELL_NAME=( "dog" )
+CELL_NAME=( "alien" "dog" "orc" )
 ALPHA=( 0.171875 0.34375 0.6875 )
 D1=( 0.002 0.0025 0.003 0.0035 0.004 )
 

@@ -1,24 +1,66 @@
-import sys
+from pylab import *
+import scipy
 import numpy as np
 
-def func (lsize,lcell,alpha,d):
-	return np.exp( 8.63393299 * alpha - 0.10125643 * d ) + (2.81811174 * lsize + 3.81821235 * lcell) + 5.44446901
+def delay(x1,x2,x3,x4):
+    coef = [1.64005959e+03,-1.91835183e+03,3.40996996e-03,1.30797791e+01]
+    return coef[0]*exp(coef[1]*x3) + coef[2]*exp(coef[3]*x4)
 
-def delay(alpha,d):
-    return np.exp( 8.63393299 * alpha - 0.10125643 * d ) + 5.45857374
+def seg (x1,x2,x3,x4):
+    coef = [3.81768672,-0.01402317,11.99991418,-0.02819055,2.7752069]
+    return coef[0]*x1 + coef[1]*x2 + coef[2]*x3 + coef[3]*x4 + coef[4]    		
 
-def seg (lsize,lcell):
-    return 2.81811174 + (3.81821235 * lsize) - (0.01410473 * lcell)    		
+def biff (x1,x2,x3,x4,x5):
+    coef = [-2.05812575e-03,-6.37789352e-05,1.87178472e-02,-4.36363636e-03,2.19444444e+00,3.15444444e-01,-1.26703852e+00]
+    return coef[0]*x1 + coef[1]*x2**2 + coef[2]*x2 + coef[3]*x4 + coef[4]*x3 + coef[5]*x5 + coef[6]
 
-lsize =  float(sys.argv[1])
-lcell =  float(sys.argv[2])
-alpha =  float(sys.argv[3])
-d =  float(sys.argv[4])
+# Prediction function of total activation time (consider the delay of the PMJ)
+def pred_AT_total (x1,x2,x3,x4,x5):
+    return seg(x1,x2,x3,x4) + biff(x1,x2,x3,x4,x5) + delay(x1,x2,x3,x4)
 
-print("lsize = %.5f" % lsize)
-print("lcell = %.5f" % lcell)
-print("alpha = %.5f" % alpha)
-print("d1 = %.5f" % d)
-print("Seg = %.5f" % seg(lsize,lcell))
-print("Delay = %.5f" % delay(alpha,d))
-print("AT-Prediction = %.5f" % (seg(lsize,lcell) + delay(alpha,d)) )
+# Prediction function of Purkinje terminals (NOT considering the delay of the PMJ)
+def pred_AT_term (x1,x2,x3,x4,x5):
+    return seg(x1,x2,x3,x4) + biff(x1,x2,x3,x4,x5)
+
+def main ():
+    # Testing the activation of the Purkinje terminals function (the data is from the experiment with bifurcations)
+    input_file = open("AT-Total.dat","r")
+    mean = 0
+    cont = 0        
+    for line in input_file:
+        words = line.split()
+        x1 = float(words[0])
+        x2 = float(words[1])
+        x3 = float(words[2])
+        x4 = float(words[3])
+        x5 = float(words[4])
+        AT = float(words[5])
+        pred = pred_AT_total(x1,x2,x3,x4,x5)
+        error = abs(AT-pred)
+        mean = mean + error
+        cont = cont + 1
+        print("(%f %f %f %f %f) = %f --- (Analit = %f) [Error = %f]" % (x1,x2,x3,x4,x5,pred,AT,error))
+    print("Mean error = %f" % (mean / float(cont)))
+
+if __name__ == "__main__":
+    main()
+
+# ------------------------------------------------------------------------------------------
+# x1 = lf (length fiber)
+# x2 = lc (length cell)
+# x3 = d1 (depth cell)
+# x4 = alpha
+# x5 = #biff (number of bifurcations) 
+
+# TDelay
+# coef = []
+# Tdelay = 
+
+# TSeg
+# coef = [3.81768672,-0.01402317,11.99991418,-0.02819055,2.7752069] 
+# Tseg = coef[0]*x1 + coef[1]*x2 + coef[2]*x3 + coef[3]*x4 + coef[4]
+
+# TDelayBiff
+# coef = [-2.05812575e-03,-6.37789352e-05,1.87178472e-02,-4.36363636e-03,2.19444444e+00,3.15444444e-01,-1.26703852e+00]
+# TDelayBiff = coef[0]*x1 + coef[1]*x2**2 + coef[2]*x2 + coef[3]*x4 + coef[4]*x3 + coef[5]*x5 + coef[6]
+# ------------------------------------------------------------------------------------------
