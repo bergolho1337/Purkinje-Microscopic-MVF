@@ -1,0 +1,7 @@
+1) Verificar o porque houve um aumento no delay quando se aumenta o tamanho da fibra.
+
+2) Rodar o experimento de 0,5 cm novamente diminuindo a influencia dos volumes de estimulo.
+	-> diminuir o numero de volumes para o calculo da velocidade (default=5)
+	-> diminuir o dt
+
+3) Mesmas conclusões do Noble.
