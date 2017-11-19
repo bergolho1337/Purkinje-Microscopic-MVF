@@ -40,9 +40,9 @@ def plotAP ():
 	pyplot.legend()
 	pyplot.savefig("AP.png")
 
-def main ():
-	plotAP()    	
-	#plotDelay()
+def main ():    	
+	plotDelay()
+	plotPA()
 
 if __name__ == "__main__":
     main()

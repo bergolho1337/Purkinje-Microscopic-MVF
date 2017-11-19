@@ -9,10 +9,10 @@ import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 from mpl_toolkits import mplot3d
 
-# Mean error 0.171577 (Tseg)
+# Mean error 0.171510 (Tseg)
 def func0 (x1,x2,x3,x4):
-    coef = [3.81768672,-0.01402317,11.99991418,-0.02819055,2.7752069] 
-    return coef[0]*x1 + coef[1]*x2 + coef[2]*x3 + coef[3]*x4 + coef[4]
+    coef = [3.81768672,-0.01402317,1.42079815,-0.02818996,2.73394343]
+    return coef[0]*x1 + coef[1]*x2 + coef[2]*np.sqrt(x3) + coef[3]*x4 + coef[4]
 
 # Mean error 11.890324 (Tdelay)
 def func1 (x1,x2,x3,x4):
@@ -32,12 +32,14 @@ def func3 (x1,x2,x3,x4,x5):
 def func4 (x1,x2,x3,x4,x5):
     return func0(x1,x2,x3,x4) + func2(x1,x2,x3,x4,x5)
 
+
 # ------------------------------------------------------
 # Test function of the regression
-def fn (x, a, b, c, d):
+def fn (x, a, b, c, d, e):
     #return a*x[0] + b*x[1] + c*x[2] + d*x[3] + e # Tseg
     #return a*x[0] + b*x[1]**2 + c*x[1] + d*x[2] + e*x[3] + f*x[4] + g # TDelayBiff
-    return a*exp(b*x[2]) + c*exp(d*x[3])
+    #return a*exp(b*x[2]) + c*exp(d*x[3])
+    return a*x[0] + b*x[1] + c*np.sqrt(x[2]) + d*x[3] + e
 
 # ------------------------------------------------------
 
@@ -49,7 +51,7 @@ def calcMeanErrorTerm (data):
         x2 = data[i,1]
         x3 = data[i,2]
         x4 = data[i,3]
-        aprox = func4(x1,x2,x3,x4)
+        aprox = func0(x1,x2,x3,x4)
         analit = data[i,4]
         error[i] = abs(aprox - analit)
         print("(%f %f %f %f) = %f -- (Analit = %f) [Error = %f]" % (x1,x2,x3,x4,aprox,analit,error[i]))
@@ -75,13 +77,13 @@ def calcMeanErrorTotal (data):
 # -----------------------------------------------------------------------------------------------------
 # MAIN FUNCTION
 def main ():
-    data = np.genfromtxt(open("Ttotal.dat","r"))
+    data = np.genfromtxt(open("Tseg.dat","r"))
 
     # Define the domain xy as a 2d-array
-    #x = scipy.array([data[:,0],data[:,1],data[:,2],data[:,3]])   # Tseg
-    #y = scipy.array(data[:,4])                                    # Tseg
-    x = scipy.array([data[:,0],data[:,1],data[:,2],data[:,3],data[:,4]])    # TDelayBiff
-    y = scipy.array(data[:,5])                                              # TDelayBiff
+    x = scipy.array([data[:,0],data[:,1],data[:,2],data[:,3]])   # Tseg
+    y = scipy.array(data[:,4])                                    # Tseg
+    #x = scipy.array([data[:,0],data[:,1],data[:,2],data[:,3],data[:,4]])    # TDelayBiff
+    #y = scipy.array(data[:,5])                                              # TDelayBiff
 
     # Make use of the Scipy library to fit the best curve given a function 'fn' and a set of points
     popt, pcov = scipy.optimize.curve_fit(fn, x, y)
@@ -90,7 +92,7 @@ def main ():
     print popt
 
     # Calculate the mean error of the regression
-    calcMeanErrorTotal(data)
+    calcMeanErrorTerm(data)
 
 if __name__ == "__main__":
     main()
@@ -108,7 +110,7 @@ if __name__ == "__main__":
 
 # TSeg
 # coef = [3.81768672,-0.01402317,11.99991418,-0.02819055,2.7752069] 
-# Tseg = coef[0]*x1 + coef[1]*x2 + coef[2]*x3 + coef[3]*x4 + coef[4]
+# Tseg = coef[0]*x1 + coef[1]*x2 + coef[2]*np.sqrt(x3) + coef[3]*x4 + coef[4]
 
 # TDelayBiff
 # coef = [-2.05812575e-03,-6.37789352e-05,1.87178472e-02,-4.36363636e-03,2.19444444e+00,3.15444444e-01,-1.26703852e+00]
