@@ -22,27 +22,27 @@ def plotDelay ():
 	pyplot.savefig("delay-LiRudy.pdf")
 
 def plotAP ():
-	filename = "noble59.dat"
+	filename = "noble-2000ms.dat"
 	data = genfromtxt(filename)
 	pyplot.plot(data[:,0], data[:,1], label = "Vm", linestyle ="-", color="k", linewidth=2)
-	pyplot.tick_params(
-				    axis='x',          # changes apply to the x-axis
-				    which='both',      # both major and minor ticks are affected
-				    bottom='off',      # ticks along the bottom edge are off
-				    top='off',         # ticks along the top edge are off
-				    labelbottom='off') # labels along the bottom edge are off
-	pyplot.yticks(size=18)
-	pyplot.xlim([400,900])
+	#pyplot.tick_params(
+	#			    axis='x',          # changes apply to the x-axis
+	#			    which='both',      # both major and minor ticks are affected
+	#			    bottom='off',      # ticks along the bottom edge are off
+	#			    top='off',         # ticks along the top edge are off
+	#			    labelbottom='off') # labels along the bottom edge are off
+	pyplot.yticks(size=15)
+	pyplot.xlim([0,2000])
 	pyplot.ylim([-90,50])
-	pyplot.title("Potencial de Acao")
-	#pyplot.xlabel("Tempo (ms)")
-	pyplot.ylabel("Potencial Transmembranico (mV)", size=15)
+	pyplot.title("Potencial de Acao - Noble (1962)",size=18)
+	pyplot.xlabel("Tempo (ms)", size=18)
+	pyplot.ylabel("Potencial Transmembranico (mV)", size=18)
 	pyplot.legend()
-	pyplot.savefig("AP.png")
+	pyplot.savefig("AP_2.pdf")
 
 def main ():    	
-	plotDelay()
-	plotPA()
+	#plotDelay()
+	plotAP()
 
 if __name__ == "__main__":
     main()

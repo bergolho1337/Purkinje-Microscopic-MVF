@@ -1,8 +1,8 @@
 # Program that converts a table data to a single column
 
 def main ():
-    input_file = open("table-AT-Total.dat","r")
-    output_file = open("out2","w+")
+    input_file = open("table-AT-Delay.dat","r")
+    output_file = open("out","w+")
     for line in input_file:
         words = line.split()
         for word in words:

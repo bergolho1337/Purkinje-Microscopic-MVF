@@ -13,7 +13,7 @@ for sf in "${SIZE_FIBER_EXP1[@]}"; do
     for sc in "${SIZE_CELL[@]}"; do
         for alpha in "${ALPHA[@]}"; do
             for d1 in "${D1[@]}"; do
-                echo "$sf $sc $d1 $alpha 1" >> out1
+                echo "$d1 $alpha" >> out1
             done
         done
     done
