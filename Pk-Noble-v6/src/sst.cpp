@@ -108,7 +108,7 @@ void SteadyState::print ()
 void SteadyState::setMatrix (SpMat &a)
 {
     // Compute the coefficients values
-    double A = 1.0 / (RPMJ*dx*d1*d1);
+    double A = 4.0 / (RPMJ*M_PI*d1*d1*dx);
     double B = (SIGMA) / (dx*dx);
     double C = (BETA*Cm) / (dt);
     double D = (BETA*Cm*alfa) / (dt);
