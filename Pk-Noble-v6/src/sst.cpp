@@ -213,6 +213,7 @@ void SteadyState::setSensibilityParam (int argc, char *argv[])
         alfa = atof(argv[7]);
         d1 = atof(argv[8]);
     }
+    BETA = 4.0 / d1 * 1.0e-04;
 }
 
 void SteadyState::setControlVolumes ()

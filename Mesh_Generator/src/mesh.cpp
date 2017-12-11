@@ -36,6 +36,25 @@ double setTypeCell (char cName[])
     found = str.find("pig");
     if (found != string::npos)
         return PIG_DX;
+
+    found = str.find("test1");
+    if (found != string::npos)
+        return TEST1_DX;
+    found = str.find("test2");
+    if (found != string::npos)
+        return TEST2_DX;
+    found = str.find("test3");
+    if (found != string::npos)
+        return TEST3_DX;
+    found = str.find("test4");
+    if (found != string::npos)
+        return TEST4_DX;
+    found = str.find("test5");
+    if (found != string::npos)
+        return TEST5_DX;
+    found = str.find("test6");
+    if (found != string::npos)
+        return TEST6_DX;
     return 0;
 }
 

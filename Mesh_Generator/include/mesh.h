@@ -21,6 +21,13 @@ const double DOG_DX = 0.0164;                         // Michael F. Sheets (1983
 const double ALIEN_DX = 0.01;                         // Teste -- Alien Purkinje cell
 const double ORC_DX = 0.02;				              // Teste 2 -- Orc Purinje cell
 
+const double TEST1_DX = 0.0075;
+const double TEST2_DX = 0.0100;
+const double TEST3_DX = 0.0125;
+const double TEST4_DX = 0.0150;
+const double TEST5_DX = 0.0175;
+const double TEST6_DX = 0.0200;
+
 struct Point
 {
     double x, y, z;                 // Coordenadas do ponto
