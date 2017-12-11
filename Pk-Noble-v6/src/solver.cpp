@@ -54,7 +54,7 @@ void Solver::solve ()
         writePlotData(t);
 
         // Escreve no .vtk
-        //if (i % 10 == 0) writeVTKFile(i);
+        if (i % 10 == 0) writeVTKFile(i);
 
         // Resolver a EDP (parte difusiva)
         assembleLoadVector(b);
@@ -90,6 +90,7 @@ void Solver::setSensibilityParam (int argc, char *argv[])
         alfa = atof(argv[7]);
         d1 = atof(argv[8]);
     }
+    BETA = 4.0 / d1 * 1.0e-04;
 }
 
 void Solver::setControlVolumes ()
@@ -386,12 +387,13 @@ void Solver::calcVelocity ()
 {
     FILE *vFile = fopen("Output/v.txt","w+");
     FILE *dFile = fopen("Output/delay.txt","w+");
+    FILE *tFile = fopen("Output/time.txt","w+");
     int np = vel->np;
     int nterm = g->getNTerm();
     int *term = g->getTerm();
     for (int i = 0; i < np; i++)
     {    
-        // Calcular a velocidade instantanea. Usar 10 volumes para tras do volume de referencia
+        // Computar a distancia entre a fonte 
         g->dijkstra(vel->ids[i]);
         double *dist = g->getDist();
         double t = dvdt[vel->ids[i]].t - dvdt[vel->ids[i] - OFFSET].t;
@@ -411,6 +413,7 @@ void Solver::calcVelocity ()
         fprintf(vel->velocityFile,"\n=============================================================\n\n");
 
         fprintf(vFile,"%lf\n",velocity*1000.0);
+        fprintf(tFile,"%lf\n",dvdt[vel->ids[i]].t);
     }
     for (int i = 0; i < nterm; i++)
     { 
@@ -422,6 +425,7 @@ void Solver::calcVelocity ()
     fclose(vel->velocityFile);
     fclose(dFile);
     fclose(vFile);
+    fclose(tFile);
 }
 
 void Solver::nextTimestep ()
