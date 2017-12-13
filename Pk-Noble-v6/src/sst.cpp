@@ -35,14 +35,20 @@ void SteadyState::solve ()
     VectorXd b(np);
     VectorXd x(np);
 
+    #ifdef OUTPUT
     printf("[!] Solving transient problem ... \n");
     printf("[!] Progress\n");
     fflush(stdout);
+    #endif
+
     for (int i = 0; i < M; i++)
     {
         double t = i*dt;
 
+        #ifdef OUTPUT
         printProgress(i,M);
+        #endif
+
         //if (i % 10 == 0) writeVTKFile(i);
         if (i == 40000) writeSteadyStateFile(sstFile);
 
@@ -57,7 +63,9 @@ void SteadyState::solve ()
         nextTimestep();
     }
     fclose(sstFile);
-    printf("\nok\n");
+    #ifdef OUTPUT
+    printf("ok\n");
+    #endif
 }
 
 void SteadyState::moveVstar (const VectorXd vm)

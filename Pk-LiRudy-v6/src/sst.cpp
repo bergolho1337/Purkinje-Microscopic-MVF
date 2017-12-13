@@ -1,7 +1,7 @@
 #include "../include/sst.h"
 
 // Number of threads to solve the system of ODEs
-static constexpr int nthreads = 4;
+static constexpr int nthreads = 2;
 
 SteadyState::SteadyState (int argc, char *argv[])
 {
@@ -130,7 +130,7 @@ void SteadyState::print ()
 void SteadyState::setMatrix (SpMat &a)
 {
     // Compute the coefficients values
-    double A = 1.0 / (RPMJ*dx*d1*d1);
+    double A = 4.0 / (RPMJ*M_PI*d1*d1*dx);
     double B = (SIGMA) / (dx*dx);
     double C = (BETA*Cm) / (dt);
     double D = (BETA*Cm*alfa) / (dt);
@@ -235,6 +235,7 @@ void SteadyState::setSensibilityParam (int argc, char *argv[])
         alfa = atof(argv[7]);
         d1 = atof(argv[8]);
     }
+    BETA = 4.0 / d1 * 1.0e-04;
 }
 
 void SteadyState::setControlVolumes ()

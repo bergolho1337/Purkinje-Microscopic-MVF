@@ -85,7 +85,7 @@ void Solver::solve ()
         writePlotData(t);
 
         // Escreve no .vtk
-        //if (i % 10 == 0) writeVTKFile(i);
+        if (i % 10 == 0) writeVTKFile(i);
 
         // Resolver a EDP (parte difusiva)
         assembleLoadVector(b);
@@ -121,6 +121,7 @@ void Solver::setSensibilityParam (int argc, char *argv[])
         alfa = atof(argv[7]);
         d1 = atof(argv[8]);
     }
+    BETA = 4.0 / d1 * 1.0e-04;
 }
 
 void Solver::setControlVolumes ()
@@ -204,7 +205,7 @@ void Solver::setDerivative ()
 void Solver::setMatrix (SpMat &a)
 {
     // Compute the coefficients values
-    double A = 1.0 / (RPMJ*dx*d1*d1);
+    double A = 4.0 / (RPMJ*M_PI*d1*d1*dx);
     double B = (SIGMA) / (dx*dx);
     double C = (BETA*Cm) / (dt);
     double D = (BETA*Cm*alfa) / (dt);
@@ -430,6 +431,7 @@ void Solver::calcVelocity ()
 {
     FILE *vFile = fopen("Output/v.txt","w+");
     FILE *dFile = fopen("Output/delay.txt","w+");
+    FILE *tFile = fopen("Output/time.txt","w+");
     int np = vel->np;
     int nterm = g->getNTerm();
     int *term = g->getTerm();
@@ -455,6 +457,7 @@ void Solver::calcVelocity ()
         fprintf(vel->velocityFile,"\n=============================================================\n\n");
 
         fprintf(vFile,"%lf\n",velocity*1000.0);
+        fprintf(tFile,"%lf\n",dvdt[vel->ids[i]].t);
     }
     for (int i = 0; i < nterm; i++)
     { 
@@ -465,6 +468,7 @@ void Solver::calcVelocity ()
     fclose(vel->velocityFile);
     fclose(dFile);
     fclose(vFile);
+    fclose(tFile);
 }
 
 void Solver::nextTimestep ()
