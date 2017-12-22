@@ -9,8 +9,6 @@ if [ ! $# -eq 2 ]; then
 	echo "Usage:> ./genSteadyState <MESH_NAME> <EXP_NUMBER>"
     echo "<MESH_NAME> = 'cable1cm' or 'biff1cm'"
     echo "<EXP_NUMBER> = 1(Experiment 1), 2(Experiment 2)"
-    echo "Experiment 1 = Distance from source to sink is 2 times the length of a fiber"
-    echo "Experiment 2 = Distance from source to sink is 3 times the length of a fiber"
     echo "---------------------------------------------------------------------------------"
 	exit 1
 fi
@@ -18,9 +16,9 @@ fi
 MESH_NAME=$1
 EXP_NUMBER=$2
 #CELL_NAME=( "alien" "dog" "orc" "pig" )
-CELL_NAME=( "alien" "dog" "orc" )
-ALPHA=( 0.171875 0.34375 0.6875 )
-D1=( 0.002 0.0025 0.003 0.0035 0.004 )
+CELL_NAME=( "dog" )
+ALPHA=( 0.1 0.2 0.3 0.4 )
+D1=( 0.00375 0.00425 0.00475 )
 
 if [ ! -f purkinje ]; then
     make

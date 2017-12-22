@@ -26,7 +26,10 @@ Graph::Graph (string filename, double &dx)
     in.close();
     printterm();
     setTerm();
-    //insertPMJ();
+    
+    #ifdef PMJ
+    insertPMJ();
+    #endif
 
     // Alocate memory for the distance vector
     dist = (double*)malloc(sizeof(double)*total_nodes);

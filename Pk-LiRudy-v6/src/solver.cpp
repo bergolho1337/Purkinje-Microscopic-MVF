@@ -59,9 +59,11 @@ void Solver::setStimSettings ()
 
 void Solver::solve ()
 {
+    #ifdef OUTPUT
     printf("[!] Solving transient problem ... \n");
     printf("[!] Progress\n");
     fflush(stdout);
+    #endif
 
     int np = g->getTotalNodes();
     // Build the matrix
@@ -79,13 +81,17 @@ void Solver::solve ()
         double t = i*dt;
 
         // Imprime o progresso da solucao
+        #ifdef OUTPUT
         printProgress(i,M);
+        #endif
 
         // Escrever o arquivo de plot
         writePlotData(t);
 
         // Escreve no .vtk
+        #ifdef VTK
         if (i % 10 == 0) writeVTKFile(i);
+        #endif
 
         // Resolver a EDP (parte difusiva)
         assembleLoadVector(b);
@@ -101,7 +107,9 @@ void Solver::solve ()
         // Passa para a proxima iteracao
         nextTimestep();
     }
+    #ifdef OUTPUT
     printf("ok\n");
+    #endif
 
     // Calcular a velocidade de propagacao nos pontos pre-definidos
     calcVelocity();

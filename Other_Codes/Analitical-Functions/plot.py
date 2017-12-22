@@ -9,7 +9,7 @@ def main ():
 
     data = np.genfromtxt(open(sys.argv[1],"r"))
     plt.plot(data[:,0],data[:,1],"-",label="aprox")
-    plt.title('L x v')
+    plt.title('Tamanho da celula x Velocidade de Propagacao')
     plt.ylim([0.0,3.0])
     plt.ylabel('v (m/s)')
     plt.xlabel('L (um)')

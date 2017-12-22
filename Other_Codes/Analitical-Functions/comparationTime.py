@@ -58,7 +58,7 @@ def main ():
     plt.ylabel('t (ms)')
     plt.xlabel('d (um)')
     plt.grid()
-    plt.legend(loc=0,prop={'size': 11})
+    plt.legend(loc=0,prop={'size': 9})
     plt.savefig("comp_time.pdf")
     print("[+] Figure save at 'comp_time.pdf'")
 

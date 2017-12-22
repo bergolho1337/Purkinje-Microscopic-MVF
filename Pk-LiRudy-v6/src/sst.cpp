@@ -1,7 +1,7 @@
 #include "../include/sst.h"
 
 // Number of threads to solve the system of ODEs
-static constexpr int nthreads = 2;
+static constexpr int nthreads = 4;
 
 SteadyState::SteadyState (int argc, char *argv[])
 {
@@ -35,14 +35,20 @@ void SteadyState::solve ()
     VectorXd b(np);
     VectorXd x(np);
 
+    #ifdef OUTPUT
     printf("[!] Solving transient problem ... \n");
     printf("[!] Progress\n");
     fflush(stdout);
+    #endif
+
     for (int i = 0; i < M; i++)
     {
         double t = i*dt;
 
+        #ifdef OUTPUT
         printProgress(i,M);
+        #endif
+
         //if (i % 10 == 0) writeVTKFile(i);
         if (i == 40000) writeSteadyStateFile(sstFile);
 
@@ -57,7 +63,10 @@ void SteadyState::solve ()
         nextTimestep();
     }
     fclose(sstFile);
+    
+    #ifdef OUTPUT
     printf("\nok\n");
+    #endif
 }
 
 void SteadyState::moveVstar (const VectorXd vm)

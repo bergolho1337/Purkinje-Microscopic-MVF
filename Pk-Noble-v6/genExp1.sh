@@ -1,6 +1,7 @@
 # ===================================================================
-# Generate the Solver files for the sensibility analysis for a
-# specific mesh. 
+# Generate the Solver files for the Experiment-1
+# Experiment-1 = Propagation velocity vs diameter of Pk-cell
+#                Activation time vs diameter of Pk-cell
 # ===================================================================
 #!/bin/bash
 
@@ -9,9 +10,7 @@ if [ "$#" -ne 3 ]; then
     echo "./genExp1.sh <FOLDER_NAME> <MESH_NAME> <EXP_NUMBER>"
     echo "<FOLDER_NAME> = '1cm' or 'Biff1cm'"
     echo "<MESH_NAME> = 'cable1cm' or 'biff1cm'"
-    echo "<EXP_NUMBER> = 1(Experiment 1), 2(Experiment 2)"
-    echo "Experiment 1 = Distance from source to sink is 2 times the length of a fiber"
-    echo "Experiment 2 = Distance from source to sink is 3 times the length of a fiber" 
+    echo "<EXP_NUMBER> = 1(Experiment 1), 2(Experiment 2)" 
     echo "---------------------------------------------------------------------------------"
     exit 1
 fi
