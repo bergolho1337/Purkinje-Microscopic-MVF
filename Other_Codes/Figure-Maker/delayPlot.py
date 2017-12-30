@@ -8,18 +8,22 @@ from matplotlib import pyplot
 from pylab import genfromtxt
 
 def plotDelay ():
-	pk_filename = "data75-LiRudy.dat"		
-	mio_filename = "data100-LiRudy.dat"
+	pk_filename = "data232-Noble-2.dat"		
+	mio_filename = "data242-Noble-2.dat"
 	mat0 = genfromtxt(pk_filename)
 	mat1 = genfromtxt(mio_filename)
-	pyplot.plot(mat0[:,0], mat0[:,1], label = "Purkinje", linestyle ="-", linewidth=2)
-	pyplot.plot(mat1[:,0], mat1[:,1], label = "Miocardium", linestyle ="--", linewidth=2)
+	pyplot.plot(mat0[:,0], mat0[:,1], label = "Purkinje", linestyle ="-", linewidth=2, color="black")
+	pyplot.plot(mat1[:,0], mat1[:,1], label = "Miocardio", linestyle ="--", linewidth=2, color="black")
 	pyplot.grid()
-	pyplot.title("Propagation velocity x Level")
-	pyplot.xlabel("Level of the tree")
-	pyplot.ylabel("Velocity (cm/s)")
-	pyplot.legend()
-	pyplot.savefig("delay-LiRudy.pdf")
+	pyplot.tick_params(labelsize=12)
+	pyplot.xlim([0,50])
+	pyplot.title("Tempo ativacao - Purkinje x Miocardio",size=15)
+	pyplot.xlabel("Tempo (ms)", size=15)
+	pyplot.ylabel("Potencial transmembranico (mV)", size=15)
+	pyplot.legend(loc=0,prop={'size': 16})
+	pyplot.savefig("delay-Noble.png")
+	#pyplot.savefig("delay-Noble.pdf")
+	#pyplot.savefig("delay-Noble.eps",format="eps",dpi=1000)
 
 def plotAP ():
 	filename = "noble-2000ms.dat"
@@ -41,8 +45,8 @@ def plotAP ():
 	pyplot.savefig("AP_2.pdf")
 
 def main ():    	
-	#plotDelay()
-	plotAP()
+	plotDelay()
+	#plotAP()
 
 if __name__ == "__main__":
     main()

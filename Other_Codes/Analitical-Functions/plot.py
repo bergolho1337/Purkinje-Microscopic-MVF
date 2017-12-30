@@ -12,7 +12,7 @@ def main ():
     plt.title('Tamanho da celula x Velocidade de Propagacao')
     plt.ylim([0.0,3.0])
     plt.ylabel('v (m/s)')
-    plt.xlabel('L (um)')
+    plt.xlabel('h (um)')
     plt.grid()
     plt.legend(loc=0)
     plt.savefig("L-v.pdf")

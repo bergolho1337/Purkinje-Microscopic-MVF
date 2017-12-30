@@ -9,9 +9,6 @@ using namespace std;
 // Numero maximo de iteracoes de crescimento (Fibra do tipo 2)
 const int MAX_ITER = 2;
 
-// Tamanho do angulo de bifurcacao em radianos (Fibra do tipo 3)
-const double ANG = M_PI / 3.0;
-
 struct Point
 {
     int id;

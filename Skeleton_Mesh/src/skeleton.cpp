@@ -1,6 +1,9 @@
 #include "../include/skeleton.h"
 #include "../include/queue.h"
 
+// Tamanho do angulo de bifurcacao em radianos (Fibra do tipo 3)
+double ANG = M_PI / 3.0;
+
 int total_nodes;                                            // Numero total de nodos atualmente na arvore
 
 Skeleton* newSkeleton (int argc, char *argv[])
@@ -186,7 +189,7 @@ void buildSkeleton_K_Iter_Ang (Skeleton *sk)
     sk->elements.push_back(e1);
     Enqueue(&q,p2->id,d_ori);
 
-    for (int i = 0; i < MAX_ITER; i++)
+    for (int i = 0; i < MAX_ITER; i++, ang_rot *= 0.5)
     {
         int cont = q->in_the_queue;
         // Descomentar para diminuir o tamanho da fibra a cada iteracao de crescimento
