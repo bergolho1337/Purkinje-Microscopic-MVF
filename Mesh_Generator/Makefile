@@ -2,7 +2,8 @@ INCLUDE_DIR = include
 SOURCE_DIR = src
 OBJECT_DIR = obj
 CC = g++
-CFLAGS = -Wall -Wno-write-strings -std=c++11 -O2 -I$(INCLUDE_DIR)
+CFLAGS = -Wall -Wno-write-strings -std=c++11 -O2 -I$(INCLUDE_DIR) $(PFLAGS)
+PFLAGS = -DDIAMETER
 #CFLAGS = -Wall -Wno-write-strings -std=c++11 -O2 -I$(INCLUDE_DIR) -DDEBUG
 CC_SOURCES = $(wildcard src/*)
 STRING_OBJ_AUX = $(CC_SOURCES:.cpp=.o)

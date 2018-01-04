@@ -18,7 +18,7 @@ def plotDelay ():
 	pyplot.tick_params(labelsize=12)
 	pyplot.xlim([0,50])
 	pyplot.title("Tempo ativacao - Purkinje x Miocardio",size=15)
-	pyplot.xlabel("Tempo (ms)", size=15)
+	pyplot.xlabel("Tempo de ativacao (ms)", size=15)
 	pyplot.ylabel("Potencial transmembranico (mV)", size=15)
 	pyplot.legend(loc=0,prop={'size': 16})
 	pyplot.savefig("delay-Noble.png")

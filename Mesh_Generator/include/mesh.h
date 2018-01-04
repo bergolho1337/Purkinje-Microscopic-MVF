@@ -15,6 +15,12 @@ struct Mesh;
 struct Point;
 struct Element;
 
+// Porcentagem de reducao do diametro
+const double ALPHA = 0.2;      
+
+// Diametro inicial da celula de Purkinje 
+const double D = 0.003;                         
+
 // Tamanho de uma celula de Purkinje
 const double PIG_DX = 0.0068;	                      // T. Stankovičová, 2003 (cm) -- Pig Purkinje cell
 const double DOG_DX = 0.0164;                         // Michael F. Sheets (1983)   -- Dog Purkinje cell
@@ -31,6 +37,7 @@ const double TEST6_DX = 0.0200;
 struct Point
 {
     double x, y, z;                 // Coordenadas do ponto
+    double d;                    // Diametro 
 }typedef Point;
 
 struct Element
@@ -59,5 +66,5 @@ void writeLevelToFile (Mesh *mesh, Graph *g);
 void writeMeshInfo (Mesh *mesh);
 void printMeshInfo (Mesh *mesh);
 void changeExtension (char *filename);
-void DFS (Mesh *mesh, Node *u);
-void growSegment (Mesh *mesh, Node *u, Edge *v);
+void DFS (Mesh *mesh, Node *u, int lvl);
+void growSegment (Mesh *mesh, Node *u, Edge *v, double diam);

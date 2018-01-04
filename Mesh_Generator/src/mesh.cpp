@@ -75,27 +75,29 @@ void GraphToMesh (Mesh *mesh, Graph *g)
     mesh->map_graph_elem = (int*)calloc(N,sizeof(int));
     // Construir o nodo 0 primeiro
     Node *ptr = g->listNodes;
-    Point point; point.x = ptr->x; point.y = ptr->y; point.z = ptr->z;
+    Point point; point.x = ptr->x; point.y = ptr->y; point.z = ptr->z; point.d = D;
     mesh->points.push_back(point);
     // Busca em profundidade
-    DFS(mesh,ptr);
+    DFS(mesh,ptr,0);
 }
 
 // Busca em profundidade
-void DFS (Mesh *mesh, Node *u)
+void DFS (Mesh *mesh, Node *u, int lvl)
 {
+    double d = D - ALPHA*D*lvl;
+    //printf("Node %d || Level %d || Diameter %lf\n",u->id,lvl,d);
     Edge *v = u->edges;
     while (v != NULL)
     {
-        growSegment(mesh,u,v);
-        DFS(mesh,v->dest);
+        growSegment(mesh,u,v,d);
+        DFS(mesh,v->dest,lvl+1);
         v = v->next;
     }
     mesh->nPoints = mesh->points.size();
     mesh->nElem = mesh->elements.size();
 }
 
-void growSegment (Mesh *mesh, Node *u, Edge *v)
+void growSegment (Mesh *mesh, Node *u, Edge *v, double diam)
 {
     double d_ori[3], d[3];
     double w = v->w;
@@ -109,7 +111,7 @@ void growSegment (Mesh *mesh, Node *u, Edge *v)
     {
         double x, y, z;
         x = d[0] + d_ori[0]*mesh->h*k; y = d[1] + d_ori[1]*mesh->h*k; z = d[2] + d_ori[2]*mesh->h*k;
-        Point point; point.x = x; point.y = y; point.z = z;
+        Point point; point.x = x; point.y = y; point.z = z; point.d = diam;
         mesh->points.push_back(point);
         Element elem; elem.left = id_source; elem.right = mesh->points.size()-1;
         mesh->elements.push_back(elem);
@@ -164,7 +166,15 @@ void writeMeshToFile (Mesh *mesh, char *filename)
         if (!file) printf("[-] ERROR! Opening file '%s'\n",filename);
         fprintf(file,"%d %d %lf\n",mesh->nElem,mesh->nPoints,mesh->h);
         for (int i = 0; i < mesh->nPoints; i++)
+        {
+            // Malha com a informacao adicional do diametro nos pontos
+            #ifdef DIAMETER
+            fprintf(file,"%lf %lf %lf %lf\n",mesh->points[i].x,mesh->points[i].y,mesh->points[i].z,mesh->points[i].d);
+            // Malha padrao so com a informacao das coordenadas dos pontos
+            #else
             fprintf(file,"%lf %lf %lf\n",mesh->points[i].x,mesh->points[i].y,mesh->points[i].z);
+            #endif
+        }
         for (int i = 0; i < mesh->nElem; i++)
             fprintf(file,"%d %d\n",mesh->elements[i].left,mesh->elements[i].right);
         fclose(file);
