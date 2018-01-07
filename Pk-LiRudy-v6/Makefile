@@ -2,8 +2,8 @@ INCLUDE_DIR = include -I/usr/local/include/eigen3
 SOURCE_DIR = src
 OBJECT_DIR = obj
 CC = g++
-#PROGRAM_FLAGS = -DPMJ -DVTK -DOUTPUT
-PROGRAM_FLAGS = -DPMJ -DOUTPUT
+#PROGRAM_FLAGS = -DPMJ -DVTK -DOUTPUT -DDIAMETER
+PROGRAM_FLAGS = -DPMJ -DOUTPUT -DDIAMETER
 #PROGRAM_FLAGS = 
 CFLAGS = -Wall -Wno-write-strings -std=c++11 -fopenmp -O2 -I$(INCLUDE_DIR) $(PROGRAM_FLAGS)
 CC_SOURCES = $(wildcard src/*)

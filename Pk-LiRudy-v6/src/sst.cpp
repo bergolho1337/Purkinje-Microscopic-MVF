@@ -28,9 +28,13 @@ void SteadyState::solve ()
     int np = g->getTotalNodes();
     // Build the matrix
     SpMat A(np,np);
+    #ifdef DIAMETER
+    setMatrix2(A);
+    #else
     setMatrix(A);
+    #endif
     SparseLU<SpMat> sparseSolver(A);
-    
+
     // Declare RHS and the solution vector
     VectorXd b(np);
     VectorXd x(np);
@@ -144,11 +148,6 @@ void SteadyState::setMatrix (SpMat &a)
     double C = (BETA*Cm) / (dt);
     double D = (BETA*Cm*alfa) / (dt);
     double E = (BETA*Cm*dx*dx) / (dt);
-    
-    //double delta = (BETA*Cm*alfa) / dt;
-    //double gamma = RPMJ*SIGMA*d1;
-    //double eta = (BETA*Cm*dx*dx*d1*RPMJ) / (dt);
-    //double phi = (BETA*Cm*dx*dx) / (dt);
 
     // Non-zero coefficients
     vector<T> coeff;
@@ -210,6 +209,92 @@ void SteadyState::setMatrix (SpMat &a)
                         double value = -A / C;
                         sum += A;
                         coeff.push_back(T(u,v,value));
+                    }
+                    ptrl = ptrl->next;
+                }
+                sum /= C;
+                coeff.push_back(T(u,u,sum));
+            }  
+        }
+        ptr = ptr->next;
+    }
+    a.setFromTriplets(coeff.begin(),coeff.end());
+    a.makeCompressed();
+}
+
+void SteadyState::setMatrix2 (SpMat &a)
+{
+    // Compute the coefficients values
+    double B = (SIGMA) / (dx*dx);
+    double C = (BETA*Cm) / (dt);
+    double D = (BETA*Cm*alfa) / (dt);
+    
+    // Non-zero coefficients
+    vector<T> coeff;
+
+    Node *ptr = g->getListNodes();
+    while (ptr != NULL)
+    {
+        int u = ptr->id;
+        int type = ptr->type;
+        double d_u = ptr->d;
+        Edge *ptrl = ptr->edges;
+        
+        // PMJ
+        if (type == 1)
+        {
+            double value = -1.0 / D;
+            while (ptrl != NULL)
+            {
+                int v = ptrl->dest->id;
+                coeff.push_back(T(u,v,value));
+                ptrl = ptrl->next;
+            }
+            value = (1.0 + D) / D;
+            coeff.push_back(T(u,u,value)); 
+        }
+        // Purkinje cell
+        else
+        {
+            bool isPMJ = isConnToPMJ(ptr->edges);
+            //Not link to a PMJ, so normal edge with a Purkinje cell
+            if (isPMJ == false)
+            {
+                double E = (BETA*Cm*d_u*d_u*dx*dx) / (dt);
+                double sum = 1.0;
+                while (ptrl != NULL)
+                {
+                    int v = ptrl->dest->id;
+                    double d_v = ptrl->dest->d;
+                    double value = (SIGMA*d_v*d_v) / E;
+                    coeff.push_back(T(u,v,-value));
+                    sum += value;
+                    ptrl = ptrl->next;
+                }
+                coeff.push_back(T(u,u,sum));
+            }
+            // Is a special link to a Purkinje cell - PMJ
+            else
+            {
+                double sum = C;
+                while (ptrl != NULL)
+                {
+                    int v = ptrl->dest->id;
+                    double d_v = ptrl->dest->d;
+                    // Purkinje cell - Purkinje cell
+                    if (ptrl->dest->type == 0)
+                    {
+                        double value = -B / C;
+                        sum += B;
+                        coeff.push_back(T(u,v,value));
+                    }
+                    // Purkinje cell - PMJ
+                    else
+                    {
+                        double A = (4.0) / (RPMJ*M_PI*d_v*d_v*dx);
+                        double value = A / C;
+                        sum += A;
+                        coeff.push_back(T(u,v,-value));
                     }
                     ptrl = ptrl->next;
                 }

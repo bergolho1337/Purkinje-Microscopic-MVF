@@ -99,6 +99,7 @@ private:
     void setPlot ();
     void setTerm ();
     void setMatrix (SpMat &a);
+    void setMatrix2 (SpMat &a);
     void assembleLoadVector (VectorXd &b);
     void moveVstar (const VectorXd vm);
     bool isConnToPMJ (Edge *e);

@@ -11,8 +11,12 @@ Graph::Graph (string filename, double &dx)
     // Read vertices
     for (int i = 0; i < V; i++)
     {
-        double p[3];
+        double p[4];
+        #ifdef DIAMETER
+        in >> p[0] >> p[1] >> p[2] >> p[3];
+        #else
         in >> p[0] >> p[1] >> p[2];
+        #endif
         insertNodeGraph(0,p);
     }
     // Read edges
@@ -47,6 +51,19 @@ Node::Node (int id, int type, double x, double y, double z)
     this->edges = NULL;
 }
 
+Node::Node (int id, int type, double x, double y, double z, double d)
+{
+    this->type = type;
+    this->id = id;
+    this->x = x;
+    this->y = y;
+    this->z = z;
+    this->d = d;
+    this->num_edges = 0;
+    this->next = NULL;
+    this->edges = NULL;
+}
+
 Edge::Edge (int id, double w, Node *dest)
 {
 	this->id = id;
@@ -66,7 +83,11 @@ void Graph::initGraph ()
 void Graph::insertNodeGraph (int type, double p[])
 {
     Node *ptr = listNodes;
+    #ifdef DIAMETER
+    Node *ptrNew = new Node(total_nodes++,type,p[0],p[1],p[2],p[3]);
+    #else
     Node *ptrNew = new Node(total_nodes++,type,p[0],p[1],p[2]);
+    #endif
     // First node
     if (ptr == NULL)
         listNodes = ptrNew;
@@ -125,6 +146,10 @@ void Graph::calcPosition (Node *p1, Node *p2, double p[])
     double norm = calcNorm(p1->x,p1->y,p1->z,p2->x,p2->y,p2->z);
     p[0] = (p1->x - p2->x)/norm; p[1] = (p1->y - p2->y)/norm; p[2] = (p1->z - p2->z)/norm;
     p[0] = p1->x + size*p[0]; p[1] = p1->y + size*p[1]; p[2] = p1->z + size*p[2];
+
+    #ifdef DIAMETER
+    p[3] = p2->d;
+    #endif
 }
 
 void Graph::insertPMJ ()
@@ -132,7 +157,7 @@ void Graph::insertPMJ ()
     Node *ptr = listNodes;
     while (ptr != NULL)
     {
-        double p[3];
+        double p[4];
         // Node is a leaf, not the root and of type Purkinje cell
         if (ptr->type == 0 && ptr->num_edges == 1 && ptr->id != 0)
         {
@@ -204,7 +229,12 @@ void Graph::print ()
 	printf("======================= PRINTING GRAPH ================================\n");
 	while (ptr != NULL)
 	{
-	    printf("|| %d (%d) (%.4lf %.4lf %.4lf) %d ||",ptr->id,ptr->type,ptr->x,ptr->y,ptr->z,ptr->num_edges);
+	    #ifdef DIAMETER
+	    printf("|| %d (%d) (%.4lf %.4lf %.4lf) [%.4lf] %d ||",ptr->id,ptr->type,ptr->x,ptr->y,ptr->z,ptr->d,ptr->num_edges);
+		#else
+        printf("|| %d (%d) (%.4lf %.4lf %.4lf) %d ||",ptr->id,ptr->type,ptr->x,ptr->y,ptr->z,ptr->num_edges);
+		#endif
+
 		ptrl = ptr->edges;
 		while (ptrl != NULL)
 		{

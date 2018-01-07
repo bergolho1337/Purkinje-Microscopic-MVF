@@ -39,11 +39,13 @@ class Node
 {
 public:
     Node (int id, int type, double x, double y, double z);
+	Node (int id, int type, double x, double y, double z, double d);
 
 public:
 	int type;				// 0 = Purkinje cell || 1 = PMJ
 	int id;					// Identificador do nodo
 	double x, y, z;			// Coordenadas (x,y,z)
+	double d;				// Diametro da celula
 	int num_edges;			// Contador do número de arestas
 	Node *next;				// Ponteiro para o próximo nó na lista de nós
 	Edge *edges;			// Ponteiro para a lista de arestas
