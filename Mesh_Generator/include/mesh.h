@@ -19,7 +19,7 @@ struct Element;
 const double ALPHA = 0.2;      
 
 // Diametro inicial da celula de Purkinje 
-const double D = 0.003;                         
+const double D = 0.004;                         
 
 // Tamanho de uma celula de Purkinje
 const double PIG_DX = 0.0068;	                      // T. Stankovičová, 2003 (cm) -- Pig Purkinje cell
