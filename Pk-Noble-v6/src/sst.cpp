@@ -203,8 +203,6 @@ void SteadyState::setMatrix2 (SpMat &a)
 {
     // Compute the coefficients values
     double B = (SIGMA) / (dx*dx);
-    double C = (BETA*Cm) / (dt);
-    double D = (BETA*Cm*alfa) / (dt);
     
     // Non-zero coefficients
     vector<T> coeff;
@@ -215,11 +213,13 @@ void SteadyState::setMatrix2 (SpMat &a)
         int u = ptr->id;
         int type = ptr->type;
         double d_u = ptr->d;
+        BETA = 4.0 / d_u * 1.0e-04;
         Edge *ptrl = ptr->edges;
         
         // PMJ
         if (type == 1)
         {
+            double D = (BETA*Cm*alfa) / (dt);
             double value = -1.0 / D;
             while (ptrl != NULL)
             {
@@ -253,6 +253,7 @@ void SteadyState::setMatrix2 (SpMat &a)
             // Is a special link to a Purkinje cell - PMJ
             else
             {
+                double C = (BETA*Cm) / (dt);
                 double sum = C;
                 while (ptrl != NULL)
                 {

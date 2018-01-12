@@ -31,13 +31,13 @@ if [ $1 == "--sst" ]; then
     for alpha in "${ALPHA[@]}"; do
         for d1 in "${D1[@]}"; do
             echo "------------------------------------------------------"
-            #./purkinje -t 0.01 2000 Meshes/Exp-5/pk1-teta0.1.msh SteadyState/Exp-5/pk1-cjmp-teta0.1-a$alpha-d$d1 Plot/Exp-5/pk1.plt $alpha $d1
+            ./purkinje -t 0.01 2000 Meshes/Exp-5/pk1-teta0.1.msh SteadyState/Exp-5/pk1-cjmp-teta0.1-a$alpha-d$d1 Plot/Exp-5/pk1.plt $alpha $d1
             echo "------------------------------------------------------"
-            #./purkinje -t 0.01 2000 Meshes/Exp-5/pk2-teta0.1.msh SteadyState/Exp-5/pk2-cjmp-teta0.1-a$alpha-d$d1 Plot/Exp-5/pk2.plt $alpha $d1
+            ./purkinje -t 0.01 2000 Meshes/Exp-5/pk2-teta0.1.msh SteadyState/Exp-5/pk2-cjmp-teta0.1-a$alpha-d$d1 Plot/Exp-5/pk2.plt $alpha $d1
             echo "------------------------------------------------------"
-            #./purkinje -t 0.01 2000 Meshes/Exp-5/pk3-teta0.1.msh SteadyState/Exp-5/pk3-cjmp-teta0.1-a$alpha-d$d1 Plot/Exp-5/pk3.plt $alpha $d1
+            ./purkinje -t 0.01 2000 Meshes/Exp-5/pk3-teta0.1.msh SteadyState/Exp-5/pk3-cjmp-teta0.1-a$alpha-d$d1 Plot/Exp-5/pk3.plt $alpha $d1
             echo "------------------------------------------------------"
-            #./purkinje -t 0.01 2000 Meshes/Exp-5/pk4-teta0.1.msh SteadyState/Exp-5/pk4-cjmp-teta0.1-a$alpha-d$d1 Plot/Exp-5/pk4.plt $alpha $d1
+            ./purkinje -t 0.01 2000 Meshes/Exp-5/pk4-teta0.1.msh SteadyState/Exp-5/pk4-cjmp-teta0.1-a$alpha-d$d1 Plot/Exp-5/pk4.plt $alpha $d1
             echo "------------------------------------------------------"
         done
     done
@@ -62,13 +62,13 @@ if [ $1 == "--sst" ]; then
     for alpha in "${ALPHA[@]}"; do
         for d1 in "${D1[@]}"; do
             echo "------------------------------------------------------"
-            #./purkinje -t 0.01 2000 Meshes/Exp-5/pk1-teta0.2.msh SteadyState/Exp-5/pk1-cjmp-teta0.2-a$alpha-d$d1 Plot/Exp-5/pk1.plt $alpha $d1
+            ./purkinje -t 0.01 2000 Meshes/Exp-5/pk1-teta0.2.msh SteadyState/Exp-5/pk1-cjmp-teta0.2-a$alpha-d$d1 Plot/Exp-5/pk1.plt $alpha $d1
             echo "------------------------------------------------------"
-            #./purkinje -t 0.01 2000 Meshes/Exp-5/pk2-teta0.2.msh SteadyState/Exp-5/pk2-cjmp-teta0.2-a$alpha-d$d1 Plot/Exp-5/pk2.plt $alpha $d1
+            ./purkinje -t 0.01 2000 Meshes/Exp-5/pk2-teta0.2.msh SteadyState/Exp-5/pk2-cjmp-teta0.2-a$alpha-d$d1 Plot/Exp-5/pk2.plt $alpha $d1
             echo "------------------------------------------------------"
-            #./purkinje -t 0.01 2000 Meshes/Exp-5/pk3-teta0.2.msh SteadyState/Exp-5/pk3-cjmp-teta0.2-a$alpha-d$d1 Plot/Exp-5/pk3.plt $alpha $d1
+            ./purkinje -t 0.01 2000 Meshes/Exp-5/pk3-teta0.2.msh SteadyState/Exp-5/pk3-cjmp-teta0.2-a$alpha-d$d1 Plot/Exp-5/pk3.plt $alpha $d1
             echo "------------------------------------------------------"
-            #./purkinje -t 0.01 2000 Meshes/Exp-5/pk4-teta0.2.msh SteadyState/Exp-5/pk4-cjmp-teta0.2-a$alpha-d$d1 Plot/Exp-5/pk4.plt $alpha $d1
+            ./purkinje -t 0.01 2000 Meshes/Exp-5/pk4-teta0.2.msh SteadyState/Exp-5/pk4-cjmp-teta0.2-a$alpha-d$d1 Plot/Exp-5/pk4.plt $alpha $d1
             echo "------------------------------------------------------"
         done
     done
@@ -81,33 +81,33 @@ elif [ $1 == "--solver" ]; then
     for alpha in "${ALPHA[@]}"; do
         for d1 in "${D1[@]}"; do
             echo "------------------------------------------------------"
-            #mkdir -p Results/Exp-5/cJMP/pk1-cjmp-teta0.1-a$alpha-d$d1/Graphics
-            #./purkinje -s 0.01 500 Meshes/Exp-5/pk1-teta0.1.msh SteadyState/Exp-5/pk1-cjmp-teta0.1-a$alpha-d$d1 Plot/Exp-5/pk1.plt $alpha $d1
-            #make plot
-            #mv Output/*.pdf Results/Exp-5/cJMP/pk1-cjmp-teta0.1-a$alpha-d$d1/Graphics
-            #mv Output/*.txt Results/Exp-5/cJMP/pk1-cjmp-teta0.1-a$alpha-d$d1 
-            #make clcResults
+            mkdir -p Results/Exp-5/cJMP/pk1-cjmp-teta0.1-a$alpha-d$d1/Graphics
+            ./purkinje -s 0.01 500 Meshes/Exp-5/pk1-teta0.1.msh SteadyState/Exp-5/pk1-cjmp-teta0.1-a$alpha-d$d1 Plot/Exp-5/pk1.plt $alpha $d1
+            make plot
+            mv Output/*.pdf Results/Exp-5/cJMP/pk1-cjmp-teta0.1-a$alpha-d$d1/Graphics
+            mv Output/*.txt Results/Exp-5/cJMP/pk1-cjmp-teta0.1-a$alpha-d$d1 
+            make clcResults
             echo "------------------------------------------------------"
-            #mkdir -p Results/Exp-5/cJMP/pk2-cjmp-teta0.1-a$alpha-d$d1/Graphics
-            #./purkinje -s 0.01 500 Meshes/Exp-5/pk2-teta0.1.msh SteadyState/Exp-5/pk2-cjmp-teta0.1-a$alpha-d$d1 Plot/Exp-5/pk2.plt $alpha $d1
-            #make plot
-            #mv Output/*.pdf Results/Exp-5/cJMP/pk2-cjmp-teta0.1-a$alpha-d$d1/Graphics
-            #mv Output/*.txt Results/Exp-5/cJMP/pk2-cjmp-teta0.1-a$alpha-d$d1 
-            #make clcResults
+            mkdir -p Results/Exp-5/cJMP/pk2-cjmp-teta0.1-a$alpha-d$d1/Graphics
+            ./purkinje -s 0.01 500 Meshes/Exp-5/pk2-teta0.1.msh SteadyState/Exp-5/pk2-cjmp-teta0.1-a$alpha-d$d1 Plot/Exp-5/pk2.plt $alpha $d1
+            make plot
+            mv Output/*.pdf Results/Exp-5/cJMP/pk2-cjmp-teta0.1-a$alpha-d$d1/Graphics
+            mv Output/*.txt Results/Exp-5/cJMP/pk2-cjmp-teta0.1-a$alpha-d$d1 
+            make clcResults
             echo "------------------------------------------------------"
-            #mkdir -p Results/Exp-5/cJMP/pk3-cjmp-teta0.1-a$alpha-d$d1/Graphics
-            #./purkinje -s 0.01 500 Meshes/Exp-5/pk3-teta0.1.msh SteadyState/Exp-5/pk3-cjmp-teta0.1-a$alpha-d$d1 Plot/Exp-5/pk3.plt $alpha $d1
-            #make plot
-            #mv Output/*.pdf Results/Exp-5/cJMP/pk3-cjmp-teta0.1-a$alpha-d$d1/Graphics
-            #mv Output/*.txt Results/Exp-5/cJMP/pk3-cjmp-teta0.1-a$alpha-d$d1 
-            #make clcResults
+            mkdir -p Results/Exp-5/cJMP/pk3-cjmp-teta0.1-a$alpha-d$d1/Graphics
+            ./purkinje -s 0.01 500 Meshes/Exp-5/pk3-teta0.1.msh SteadyState/Exp-5/pk3-cjmp-teta0.1-a$alpha-d$d1 Plot/Exp-5/pk3.plt $alpha $d1
+            make plot
+            mv Output/*.pdf Results/Exp-5/cJMP/pk3-cjmp-teta0.1-a$alpha-d$d1/Graphics
+            mv Output/*.txt Results/Exp-5/cJMP/pk3-cjmp-teta0.1-a$alpha-d$d1 
+            make clcResults
             echo "------------------------------------------------------"
-            #mkdir -p Results/Exp-5/cJMP/pk4-cjmp-teta0.1-a$alpha-d$d1/Graphics
-            #./purkinje -s 0.01 500 Meshes/Exp-5/pk4-teta0.1.msh SteadyState/Exp-5/pk4-cjmp-teta0.1-a$alpha-d$d1 Plot/Exp-5/pk4.plt $alpha $d1
-            #make plot
-            #mv Output/*.pdf Results/Exp-5/cJMP/pk4-cjmp-teta0.1-a$alpha-d$d1/Graphics
-            #mv Output/*.txt Results/Exp-5/cJMP/pk4-cjmp-teta0.1-a$alpha-d$d1 
-            #make clcResults
+            mkdir -p Results/Exp-5/cJMP/pk4-cjmp-teta0.1-a$alpha-d$d1/Graphics
+            ./purkinje -s 0.01 500 Meshes/Exp-5/pk4-teta0.1.msh SteadyState/Exp-5/pk4-cjmp-teta0.1-a$alpha-d$d1 Plot/Exp-5/pk4.plt $alpha $d1
+            make plot
+            mv Output/*.pdf Results/Exp-5/cJMP/pk4-cjmp-teta0.1-a$alpha-d$d1/Graphics
+            mv Output/*.txt Results/Exp-5/cJMP/pk4-cjmp-teta0.1-a$alpha-d$d1 
+            make clcResults
             echo "------------------------------------------------------"
         done
     done
@@ -151,33 +151,33 @@ elif [ $1 == "--solver" ]; then
     for alpha in "${ALPHA[@]}"; do
         for d1 in "${D1[@]}"; do
             echo "------------------------------------------------------"
-            #mkdir -p Results/Exp-5/cJMP/pk1-cjmp-teta0.2-a$alpha-d$d1/Graphics
-            #./purkinje -s 0.01 500 Meshes/Exp-5/pk1-teta0.2.msh SteadyState/Exp-5/pk1-cjmp-teta0.2-a$alpha-d$d1 Plot/Exp-5/pk1.plt $alpha $d1
-            #make plot
-            #mv Output/*.pdf Results/Exp-5/cJMP/pk1-cjmp-teta0.2-a$alpha-d$d1/Graphics
-            #mv Output/*.txt Results/Exp-5/cJMP/pk1-cjmp-teta0.2-a$alpha-d$d1 
-            #make clcResults
+            mkdir -p Results/Exp-5/cJMP/pk1-cjmp-teta0.2-a$alpha-d$d1/Graphics
+            ./purkinje -s 0.01 500 Meshes/Exp-5/pk1-teta0.2.msh SteadyState/Exp-5/pk1-cjmp-teta0.2-a$alpha-d$d1 Plot/Exp-5/pk1.plt $alpha $d1
+            make plot
+            mv Output/*.pdf Results/Exp-5/cJMP/pk1-cjmp-teta0.2-a$alpha-d$d1/Graphics
+            mv Output/*.txt Results/Exp-5/cJMP/pk1-cjmp-teta0.2-a$alpha-d$d1 
+            make clcResults
             echo "------------------------------------------------------"
-            #mkdir -p Results/Exp-5/cJMP/pk2-cjmp-teta0.2-a$alpha-d$d1/Graphics
-            #./purkinje -s 0.01 500 Meshes/Exp-5/pk2-teta0.2.msh SteadyState/Exp-5/pk2-cjmp-teta0.2-a$alpha-d$d1 Plot/Exp-5/pk2.plt $alpha $d1
-            #make plot
-            #mv Output/*.pdf Results/Exp-5/cJMP/pk2-cjmp-teta0.2-a$alpha-d$d1/Graphics
-            #mv Output/*.txt Results/Exp-5/cJMP/pk2-cjmp-teta0.2-a$alpha-d$d1 
-            #make clcResults
+            mkdir -p Results/Exp-5/cJMP/pk2-cjmp-teta0.2-a$alpha-d$d1/Graphics
+            ./purkinje -s 0.01 500 Meshes/Exp-5/pk2-teta0.2.msh SteadyState/Exp-5/pk2-cjmp-teta0.2-a$alpha-d$d1 Plot/Exp-5/pk2.plt $alpha $d1
+            make plot
+            mv Output/*.pdf Results/Exp-5/cJMP/pk2-cjmp-teta0.2-a$alpha-d$d1/Graphics
+            mv Output/*.txt Results/Exp-5/cJMP/pk2-cjmp-teta0.2-a$alpha-d$d1 
+            make clcResults
             echo "------------------------------------------------------"
-            #mkdir -p Results/Exp-5/cJMP/pk3-cjmp-teta0.2-a$alpha-d$d1/Graphics
-            #./purkinje -s 0.01 500 Meshes/Exp-5/pk3-teta0.2.msh SteadyState/Exp-5/pk3-cjmp-teta0.2-a$alpha-d$d1 Plot/Exp-5/pk3.plt $alpha $d1
-            #make plot
-            #mv Output/*.pdf Results/Exp-5/cJMP/pk3-cjmp-teta0.2-a$alpha-d$d1/Graphics
-            #mv Output/*.txt Results/Exp-5/cJMP/pk3-cjmp-teta0.2-a$alpha-d$d1 
-            #make clcResults
+            mkdir -p Results/Exp-5/cJMP/pk3-cjmp-teta0.2-a$alpha-d$d1/Graphics
+            ./purkinje -s 0.01 500 Meshes/Exp-5/pk3-teta0.2.msh SteadyState/Exp-5/pk3-cjmp-teta0.2-a$alpha-d$d1 Plot/Exp-5/pk3.plt $alpha $d1
+            make plot
+            mv Output/*.pdf Results/Exp-5/cJMP/pk3-cjmp-teta0.2-a$alpha-d$d1/Graphics
+            mv Output/*.txt Results/Exp-5/cJMP/pk3-cjmp-teta0.2-a$alpha-d$d1 
+            make clcResults
             echo "------------------------------------------------------"
-            #mkdir -p Results/Exp-5/cJMP/pk4-cjmp-teta0.2-a$alpha-d$d1/Graphics
-            #./purkinje -s 0.01 500 Meshes/Exp-5/pk4-teta0.2.msh SteadyState/Exp-5/pk4-cjmp-teta0.2-a$alpha-d$d1 Plot/Exp-5/pk4.plt $alpha $d1
-            #make plot
-            #mv Output/*.pdf Results/Exp-5/cJMP/pk4-cjmp-teta0.2-a$alpha-d$d1/Graphics
-            #mv Output/*.txt Results/Exp-5/cJMP/pk4-cjmp-teta0.2-a$alpha-d$d1 
-            #make clcResults
+            mkdir -p Results/Exp-5/cJMP/pk4-cjmp-teta0.2-a$alpha-d$d1/Graphics
+            ./purkinje -s 0.01 500 Meshes/Exp-5/pk4-teta0.2.msh SteadyState/Exp-5/pk4-cjmp-teta0.2-a$alpha-d$d1 Plot/Exp-5/pk4.plt $alpha $d1
+            make plot
+            mv Output/*.pdf Results/Exp-5/cJMP/pk4-cjmp-teta0.2-a$alpha-d$d1/Graphics
+            mv Output/*.txt Results/Exp-5/cJMP/pk4-cjmp-teta0.2-a$alpha-d$d1 
+            make clcResults
             echo "------------------------------------------------------"
         done
     done
