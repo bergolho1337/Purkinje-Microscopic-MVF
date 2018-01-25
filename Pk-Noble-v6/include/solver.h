@@ -37,24 +37,25 @@ struct Derivative
 
 struct Velocity
 {
-  FILE *velocityFile;                         // Referencia para o arquivo aonde a velocidade sera gravada
-  int np;                                     // Numero de pontos em que a velocidade sera medida
-  int id_source;                              // Identificador do primeiro nodo (fonte)
-  int *ids;                                   // Identificador dos pontos em que a velocidade sera calculada (id[0] -> fonte) 
-  double t1;                                  // Vetor do tempo inicial do ponto de fonte
-  double *t2;                                 // Vetor de tempos finais dos pontos
+  FILE *velocityFile;                         // Reference to the file where the velocity will be stored
+  int np;                                     // Number of volumes that the velocity will be calculated
+  int id_source;                              // Identifier of the source volume
+  int *ids;                                   // Identifier of the sink points (ids[0] -> source) 
+  double t1;                                  // Time when the despolarization occur on the source volume 
+  double *t2;                                 // Time when the despolarization occur on the sink volumes
 }typedef Velocity;
 
-// Estrutura para o plot do grafico de um volume
+// Structure for the plot volumes
 struct Plot
 {
-  FILE **plotFile;                            // Referencia para os arquivos de plot
-  int np;                                     // Numero de pontos que serao plotados
-  int *ids;                                   // Identificador dos volumes que serao plotados
+  FILE **plotFile;                            // Reference to the file of the plot volume
+  int np;                                     // Number of plot volumes
+  int *ids;                                   // Identifier of the plot volume
 }typedef Plot;
 
 class Solver
 {
+    // Constants of the monodomain equation
     //static constexpr double BETA = 0.14;
     static constexpr double Cm = 1.2;
     static constexpr double SIGMA = 0.004;
@@ -70,9 +71,9 @@ public:
 private:
     Graph *g;                           // Graph representing the Purkinje network
     CVolume *vol;                       // Vector of control volumes
-    Derivative *dvdt;                   // Vetor das derivadas maximas de cada ponto da malha
-    Plot *plot;                         // Vetor com identificadores dos volumes do plot
-    Velocity *vel;                      // Vetor com as velocidade de propagacao dos volumes
+    Derivative *dvdt;                   // Vector with the maximum derivative for each volume
+    Plot *plot;                         // Vector with the plot ids
+    Velocity *vel;                      // Vector with the propagation velocity of the plot ids
     Func *func;                         // Vector of function of the celullar model
     int M;                              // Number of timesteps in time
     double dt;                          // Size timestep in time

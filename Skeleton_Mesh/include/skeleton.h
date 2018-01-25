@@ -6,8 +6,11 @@
 
 using namespace std;
 
-// Numero maximo de iteracoes de crescimento (Fibra do tipo 2)
+// Maximum number of growing iterations
 const int MAX_ITER = 2;
+
+// Size of the bifurcation angle
+const double ANG = M_PI / 3.0;
 
 struct Point
 {
@@ -25,12 +28,12 @@ struct Element
 
 struct Skeleton
 {
-    int type;                   // Tipo de estrutura
-    int biff;                   // Numero de bifurcacoes saindo de uma fibra
-    double fib_size;            // Tamanho da fibra
-    vector<Point> points;       // Vetor de pontos
-    vector<Element> elements;   // Vetor de elementos
-    char filename[200];         // Nome do arquivo de saida
+    int type;                   // Type of network
+    int biff;                   // Number of fiber leaving a bifurcation
+    double fib_size;            // Size of a fiber
+    vector<Point> points;       // Vector with the points of the network
+    vector<Element> elements;   // Vector with the links between the points
+    char filename[200];         // Output filename
 }typedef Skeleton;
 
 Skeleton* newSkeleton (int argc, char *argv[]);

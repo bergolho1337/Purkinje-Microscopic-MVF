@@ -26,6 +26,7 @@ void SteadyState::solve ()
 {
     FILE *sstFile = fopen(steady_filename.c_str(),"w+");
     int np = g->getTotalNodes();
+
     // Build the matrix
     SpMat A(np,np);
     #ifdef DIAMETER
@@ -45,6 +46,7 @@ void SteadyState::solve ()
     fflush(stdout);
     #endif
 
+    // Time loop
     for (int i = 0; i < M; i++)
     {
         double t = i*dt;
@@ -67,6 +69,7 @@ void SteadyState::solve ()
         nextTimestep();
     }
     fclose(sstFile);
+
     #ifdef OUTPUT
     printf("ok\n");
     #endif
@@ -117,6 +120,7 @@ void SteadyState::print ()
     printf("------------------------------------\n");
 }
 
+// Build the coefficient matrix considering cells with the same diameter
 void SteadyState::setMatrix (SpMat &a)
 {
     // Compute the coefficients values
@@ -199,6 +203,7 @@ void SteadyState::setMatrix (SpMat &a)
     a.makeCompressed();
 }
 
+// Build the coefficient matrix considering cells with a different diameter
 void SteadyState::setMatrix2 (SpMat &a)
 {
     // Compute the coefficients values
@@ -393,7 +398,7 @@ void SteadyState::writeVTKFile (int iter)
     np = g->getTotalNodes();
     ne = g->getTotalEdges();
 
-    // Escrever o potencial transmembranico
+    // Write the transmembrane potential
     sprintf(filename,"VTK/sol%d.vtk",iter);
     file = fopen(filename,"w+");
     fprintf(file,"# vtk DataFile Version 3.0\n");

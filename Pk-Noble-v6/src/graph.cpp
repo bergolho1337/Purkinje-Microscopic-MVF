@@ -99,7 +99,6 @@ void Graph::insertNodeGraph (int type, double p[])
     }
 }
 
-// Insere uma aresta no grafo
 void Graph::insertEdgeGraph (int id_1, int id_2)
 {
 	Node *ptr1, *ptr2;

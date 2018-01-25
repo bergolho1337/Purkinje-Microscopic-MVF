@@ -2,9 +2,10 @@
 
 /* ====================================================================================================== */
 
+// Define the stimulus current
 double I_Stim__Nob (int point, double t)
 {
-    // Somente os 5 primeiros pontos ficam como celulas de estimulo
+    // The first 5 volumes will generate a stimulus current
     if (point <= 5)
     {
         double min_time, max_time;
@@ -12,7 +13,7 @@ double I_Stim__Nob (int point, double t)
         {
             min_time = k*cycle_length;
             max_time = k*cycle_length + 2.0;
-            // Somente nesse periodo de tempo que o estimulo ira ocorrer
+            // The stimulus will be sustained only between this period of time
             if (t >= min_time && t < max_time)
                 return v_stim__Nob;
         }
@@ -27,18 +28,18 @@ double I_Leak__Nob (double t, double vm, double m, double h, double n)
 	return ((g_L*(vm-E_L)));
 }
 
-// Oscilacoes ainda presentes podem ser eliminadas somando um termo 1.0e+02
+// Oscillations can be eliminated by adding 1.0e+02
 double g_K2__Nob (double t, double vm, double m, double h, double n)
 {
     return ((1.2*pow(n,4.0e+00)));
-	//return ((1.2e+03*pow(y[3],4.0e+00))+1.0e-01);          // Sem oscilacoes
+	//return ((1.2e+03*pow(y[3],4.0e+00))+1.0e-01);          // Without oscillations
 }
 
-// Trocar o primeiro coeficiente de 1.2e+03 para 1.3e+03 tambem tira o caracter auto-oscilatorio
+// Change the first coefficient to 1.2e+03 to 1.3e+03 can also eliminate the oscillations
 double g_K1__Nob (double t, double vm, double m, double h, double n)
 {
 	//return (((1.2*exp((((-vm)-9.0e+01)/5.0e+01)))+(1.5e-02*exp(((vm+9.0e+01)/6.0e+01)))));
-    return (((1.3*exp((((-vm)-9.0e+01)/5.0e+01)))+(1.5e-02*exp(((vm+9.0e+01)/6.0e+01)))));    // Sem oscilacoes
+    return (((1.3*exp((((-vm)-9.0e+01)/5.0e+01)))+(1.5e-02*exp(((vm+9.0e+01)/6.0e+01)))));    // Without oscillations
 }
 
 double I_K__Nob (double t, double vm, double m, double h, double n)
@@ -51,16 +52,16 @@ double g_Na__Nob (double t, double vm, double m, double h, double n)
     return ((pow(m,3.0e+00)*h*g_Na_max));
 }
 
-// Mudando o coeficiente de 1.4e+02 para 1.225e+02 pode-se eliminar o comportamento auto-oscilatorio
+// Change the coeffcient to 1.4e+02 to 1.225e+02 can also eliminate the oscillations
 double I_Na__Nob (double t, double vm, double m, double h, double n)
 {
     return ((g_Na__Nob(t,vm,m,h,n)+1.4e-01)*(vm-E_Na));
 }
 
-// Corrente do sodio sem auto-oscilacoes
+// Sodium current without oscillations
 double I_Na_NoOscilation__Nob (double t, double vm, double m, double h, double n)
 {
-    return ((g_Na__Nob(t,vm,m,h,n)+1.220e-01)*(vm-E_Na));      // Sem oscilacoes
+    return ((g_Na__Nob(t,vm,m,h,n)+1.220e-01)*(vm-E_Na));      // Without oscillations
 }
 
 double dvdt__Nob (int type, int point, double t, double y[])

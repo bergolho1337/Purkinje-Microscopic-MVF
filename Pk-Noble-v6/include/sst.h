@@ -31,6 +31,7 @@ struct Volume
 
 class SteadyState
 {
+    // Constants of the monodomain equation
     //static constexpr double BETA = 0.14;
     static constexpr double Cm = 1.2;
     static constexpr double SIGMA = 0.004;

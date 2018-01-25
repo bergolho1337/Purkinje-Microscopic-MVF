@@ -1,10 +1,8 @@
 #include "../include/skeleton.h"
 #include "../include/queue.h"
 
-// Tamanho do angulo de bifurcacao em radianos (Fibra do tipo 3)
-double ANG = M_PI / 3.0;
-
-int total_nodes;                                            // Numero total de nodos atualmente na arvore
+// Total number of nodes currently on the queue
+int total_nodes;                                            
 
 Skeleton* newSkeleton (int argc, char *argv[])
 {
@@ -98,7 +96,7 @@ void buildSkeleton_K (Skeleton *sk)
     }
 }
 
-// Gera uma fibra do tipo 2 - Crescimento iterativo para qualquer numero de bifurcacao
+// Type 2 Fiber - Iterative growth with K-bifurcations
 void buildSkeleton_K_Iter (Skeleton *sk)
 {
     int id, k;
@@ -169,7 +167,7 @@ void buildSkeleton_K_Iter (Skeleton *sk)
     }    
 }
 
-// Gera uma fibra do tipo 3 - Crescimento iterativo e com controle de angulo
+// Type 3 Fiber - Iterative growth with angle control
 void buildSkeleton_K_Iter_Ang (Skeleton *sk)
 {
     int id;
@@ -192,7 +190,7 @@ void buildSkeleton_K_Iter_Ang (Skeleton *sk)
     for (int i = 0; i < MAX_ITER; i++, ang_rot *= 0.5)
     {
         int cont = q->in_the_queue;
-        // Descomentar para diminuir o tamanho da fibra a cada iteracao de crescimento
+        // Uncomment to reduce the size of the fiber at each growth iteration
         //sk->fib_size *= 0.6;
         //printQueue(q);
         while (cont > 0)

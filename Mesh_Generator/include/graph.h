@@ -12,42 +12,40 @@ struct Node;
 
 // =============================================================================================================
 // =============================================================================================================
-// Estrutura de uma aresta no grafo
+// Structure of an Edge
 struct Edge
 {
-	int id;				// Identificador do no destino
-	double w;		    // Tamanho da aresta, distancia euclidiana
-	Edge *next;			// Ponteiro para a proxima aresta
-	Node *dest;			// Ponteiro para o no destino
+	int id;				// Identifier of the destination Node
+	double w;		    // Size of the Edge, Euclidean distance
+	Edge *next;			// Pointer to the next Edge
+	Node *dest;			// Pointer to the destination Node
 }typedef Edge;
 
-// Funcoes de Edge
 Edge* newEdge (int id, double w, Node *dest);
 // =============================================================================================================
 // =============================================================================================================
-// Estrutura de nó do grafo
+// Structure of a Node
 struct Node
 {
-	int id;					// Identificador do nodo
-	double x, y, z;			// Coordenadas (x,y,z)
-	int num_edges;			// Contador do número de arestas
-	Node *next;				// Ponteiro para o próximo nó na lista de nós
-	Edge *edges;			// Ponteiro para a lista de arestas
+	int id;					// Identifier of the Node
+	double x, y, z;			// Coordinates (x,y,z)
+	int num_edges;			// Number of edges of the Node
+	Node *next;				// Pointer to the next Node
+	Edge *edges;			// Pointer to the list of Edge
 }typedef Node;
 // =============================================================================================================
-// Funcoes de Node
 Node* newNode (int id, double x, double y, double z);
 // =============================================================================================================
-// Estrutura do grafo
+// Structure of the Graph
 struct Graph
 {
-	Node *listNodes;			// Ponteiro para a lista de nós
-	Node *lastNode;				// Ponteiro para último nó da lista de nós
-	int total_nodes;			// Contador de nós
-	int total_edges;			// Contador de arestas
+	Node *listNodes;			// Pointer to the list of Node
+	Node *lastNode;				// Pointer to the last Node of the list
+	int total_nodes;			// Total number of Nodes
+	int total_edges;			// Total number of Edges
 }typedef Graph;
 
-// Funcoes do grafo
+// Graph functions
 void initGraph (Graph **g);
 Graph* readPurkinjeNetworkFromFile (char *filename);
 Node* searchNode (Graph *g, int id);
@@ -57,7 +55,7 @@ map<int,int> BFS (Graph *g, int s);
 void printGraph (Graph *g);
 // =============================================================================================================
 // =============================================================================================================
-// Funcoes auxiliares
+// Auxiliary functions
 double calcNorm (double x1, double y1, double z1, double x2, double y2, double z2);
 void error (char *msg);
 // =============================================================================================================

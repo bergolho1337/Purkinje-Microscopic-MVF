@@ -9,24 +9,24 @@
 using namespace std;
 
 // =============================================================================================================
-// Estrutura de um Node da fila
+// Structure from a QNode of the queue
 struct QNode
 {
-	QNode *next;				// Ponteiro para o proximo elemento da fila
-	QNode *prev;				// Ponteiro para o elemento anterior da fila
-	int id;					    // Indice do nodo em crescimento da arvore
-    double d_ori[3];            // Vetor da direcao original de crescimento
+	QNode *next;				// Pointer to the next element
+	QNode *prev;				// Pointer to the previous element
+	int id;					    // Identifier of the node
+    double d_ori[3];            // Growth direction vector
 }typedef QNode;
 
 QNode* newQNode (QNode *next, QNode *prev, int id, double d_ori[]);
 // =============================================================================================================
 // =============================================================================================================
-// Estrutura da fila
+// Structure of the Queue
 struct Queue
 {
-	QNode *head;				// Ponteiro para a cabeca da fila
-	QNode *last;				// Ponteiro para o ultimo da fila
-	int in_the_queue;			// Contador de nos em crescimento na fila
+	QNode *head;				// Pointer to the first of the queue
+	QNode *last;				// Pointer to the last of the queue
+	int in_the_queue;			// Number of nodes currently on the queue
 }typedef Queue; 
 
 Queue* newQueue ();

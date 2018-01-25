@@ -15,17 +15,17 @@ struct Mesh;
 struct Point;
 struct Element;
 
-// Porcentagem de reducao do diametro
-const double ALPHA = 0.2;      
+// Ratio of reduction of the diameter at each growing iteration
+const double ALPHA = 0.3;      
 
-// Diametro inicial da celula de Purkinje 
+// Initial diameter of the Purkinje cells
 const double D = 0.004;                         
 
-// Tamanho de uma celula de Purkinje
+// Length of Purkinje cells
 const double PIG_DX = 0.0068;	                      // T. Stankovičová, 2003 (cm) -- Pig Purkinje cell
 const double DOG_DX = 0.0164;                         // Michael F. Sheets (1983)   -- Dog Purkinje cell
-const double ALIEN_DX = 0.01;                         // Teste -- Alien Purkinje cell
-const double ORC_DX = 0.02;				              // Teste 2 -- Orc Purinje cell
+const double ALIEN_DX = 0.01;                         // Test 1 -- Alien Purkinje cell
+const double ORC_DX = 0.02;				              // Test 2 -- Orc Purinje cell
 
 const double TEST1_DX = 0.0075;
 const double TEST2_DX = 0.0100;
@@ -36,24 +36,24 @@ const double TEST6_DX = 0.0200;
 
 struct Point
 {
-    double x, y, z;                 // Coordenadas do ponto
-    double d;                    // Diametro 
+    double x, y, z;                 // Coordinates
+    double d;                       // Diameter
 }typedef Point;
 
 struct Element
 {
-    int left;                       // Identificador do ponto a esquerda do elemento
-    int right;                      // Identificador do ponto a direita do elemento
+    int left;                       // Identifier of the left end Node
+    int right;                      // Identifier of the right end Node
 }typedef Element;
 
 struct Mesh
 {
-    int nElem;                      // Numero de elementos
-    int nPoints;                    // Numero de pontos
-    double h;                       // Distancia entre dois pontos
-    int *map_graph_elem;            // Mapeamento dos pontos (grafo -> elemento)
-    vector<Point> points;           // Vetor de pontos
-    vector<Element> elements;       // Vetor de elementos
+    int nElem;                      // Number of elements
+    int nPoints;                    // Number of points
+    double h;                       // Distance between to points
+    int *map_graph_elem;            // Point mapping (graph -> element)
+    vector<Point> points;           // Vector of points
+    vector<Element> elements;       // Vector of elements
 }typedef Mesh;
 
 Mesh* newMesh (int argc, char *argv[]);

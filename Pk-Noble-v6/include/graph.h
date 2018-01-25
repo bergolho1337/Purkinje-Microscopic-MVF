@@ -19,22 +19,22 @@ class Node;
 
 // =============================================================================================================
 // =============================================================================================================
-// Estrutura de uma aresta no grafo
+// Structure for an Edge of the graph
 class Edge
 {
 public:
     Edge (int id, double w, Node *dest);
 
 public:
-	int id;				// Identificador do no destino
-	double w;		    // Tamanho da aresta, distancia euclidiana
-	Edge *next;			// Ponteiro para a proxima aresta
-	Node *dest;			// Ponteiro para o no destino
+	int id;				// Identifier of the destination node
+	double w;		    // Size of the edge, euclidean distance
+	Edge *next;			// Pointer to the next Edge
+	Node *dest;			// Pointer to the destination Node
 };
 
 // =============================================================================================================
 // =============================================================================================================
-// Estrutura de nó do grafo
+// Strucuture for a Node of the graph
 class Node
 {
 public:
@@ -43,16 +43,16 @@ public:
 
 public:
 	int type;				// 0 = Purkinje cell || 1 = PMJ
-	int id;					// Identificador do nodo
-	double x, y, z;			// Coordenadas (x,y,z)
-	double d;				// Diametro da celula
-	int num_edges;			// Contador do número de arestas
-	Node *next;				// Ponteiro para o próximo nó na lista de nós
-	Edge *edges;			// Ponteiro para a lista de arestas
+	int id;					// Identifier of the Node 
+	double x, y, z;			// Coordinates (x,y,z)
+	double d;				// Diameter of the cell
+	int num_edges;			// Number of edges
+	Node *next;				// Pointer to the next Node
+	Edge *edges;			// Pointer to the list of Edges
 };
 // =============================================================================================================
 // =============================================================================================================
-// Estrutura do grafo
+// Structure of the Graph
 class Graph
 {
 public:
@@ -69,13 +69,13 @@ public:
 	int* getTerm () { return term; }
 	int getNTerm() { return nterm; }
 private:
-	Node *listNodes;			// Ponteiro para a lista de nós
-	Node *lastNode;				// Ponteiro para último nó da lista de nós
-	int total_nodes;			// Contador de nós
-	int total_edges;			// Contador de arestas
-	int nterm;
+	Node *listNodes;			// Pointer to the lists of Nodes
+	Node *lastNode;				// Pointer to the last Node of the list
+	int total_nodes;			// Total number of Nodes
+	int total_edges;			// Total number of Edges
+	int nterm;					// Number of terminals
 	double *dist;				// Distance from the source node to all the others
-	int *term;
+	int *term;					// Pointer to the terminals 
 
     void initGraph ();
     void insertNodeGraph (int type, double p[]);
@@ -87,20 +87,6 @@ private:
 
 };
 
-// Funcoes do grafo
-/*
-void initGraph (Graph **g);
-Graph* readPurkinjeNetworkFromFile (char *filename, double &dx);
-Node* searchNode (Graph *g, int id);
-void insertNodeGraph (Graph *g, int type, double p[]);
-void insertEdgeGraph (Graph **g, int id_1, int id_2);
-void insertPMJ (Graph *g);
-void printGraph (Graph *g);
-bool isConnectToPMJ (Edge *ptrl);
-void freeGraph (Graph *g);
-void freeNodes (Node *listNodes);
-void freeEdges (Edge *listEdges);
-*/
 // =============================================================================================================
 // =============================================================================================================
 // Funcoes auxiliares

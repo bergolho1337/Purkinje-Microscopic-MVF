@@ -32,12 +32,13 @@ struct Volume
 
 class SteadyState
 {
+    // Constants of the monodomain equation
     //static constexpr double BETA = 0.14;
     static constexpr double Cm = 1.2;
-    static constexpr double SIGMA = 0.0019;	// default 0.004
-    static constexpr double h2 = 0.25;          // default 0.25
+    static constexpr double SIGMA = 0.0019;	    
+    static constexpr double h2 = 0.25;          
     static constexpr double d2 = 0.002;
-    static constexpr double RPMJ = 11000.0;     // default 11000
+    static constexpr double RPMJ = 11000.0;     
     static constexpr int NSC = 5;               // Number of stimulus cells
 public:
     SteadyState (int argc, char *argv[]);

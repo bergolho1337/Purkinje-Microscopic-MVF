@@ -49,43 +49,43 @@ void Solver::solve ()
     VectorXd b(np);
     VectorXd x(np);
     
-    // Iterar o metodo a cada passo de tempo
+    // Time loop
     for (int i = 0; i < M; i++)
     {
         double t = i*dt;
 
-        // Imprime o progresso da solucao
+        // Print the progress of the solution
         #ifdef OUTPUT
         printProgress(i,M);
         #endif
 
-        // Escrever o arquivo de plot
+        // Write the solution data to a file
         writePlotData(t);
 
-        // Escreve no .vtk
+        // Write the solution to .vtk file
         #ifdef VTK
         if (i % 10 == 0) writeVTKFile(i);
         #endif
 
-        // Resolver a EDP (parte difusiva)
+        // Solve the PDE (diffusion phase)
         assembleLoadVector(b);
         x = sparseSolver.solve(b);
         moveVstar(x);
 
-        // Resolver as EDOs (parte reativa)
+        // Solve the ODEs (reaction phase)
         solveODE(t);
 
-        // Calcular o valor da derivada maxima de cada ponto
+        // Calculate the maximum derivative for each volume
         calcMaxDerivative(t);
 
-        // Passa para a proxima iteracao
+        // Jump to the next iteration
         nextTimestep();
     }
     #ifdef OUTPUT
     printf("ok\n");
     #endif
 
-    // Calcular a velocidade de propagacao nos pontos pre-definidos
+    // Calculate the propagation velocity for the plot ids
     calcVelocity();
 }
 
@@ -133,7 +133,7 @@ void Solver::setFunctions ()
 
 void Solver::setTypeCell ()
 {
-    // Alocar e inicializar o vetor 'ids' com os volumes a serem plotados a partir do arquivo de entrada .plt
+    // Allocate and initialize the vector 'ids' with the volumes to be plotted from the input file .plt
     plot = (Plot*)malloc(sizeof(Plot));
     FILE *pltFile = fopen(plot_filename.c_str(),"r");
 
@@ -152,10 +152,10 @@ void Solver::setInitCondFromFile ()
     if (!sstFile) error("Could not open SST file");
     int neq = num_eq;
     int np = g->getTotalNodes();
-    // Loop de pontos
+    // Iterate over all the points
     for (int i = 0; i < np; i++)
     {
-        // Loop das equacoes do sistema de EDO's
+        // Iterate over all the ODEs equations
         for (int j = 0; j < neq; j++)
             if (!fscanf(sstFile,"%lf",&vol[i].yOld[j])) error("Reading SST file.");
     }
@@ -414,7 +414,7 @@ void Solver::writeVTKFile (int iter)
     np = g->getTotalNodes();
     ne = g->getTotalEdges();
 
-    // Escrever o potencial transmembranico
+    // Write the transmembrane potential
     sprintf(filename,"VTK/sol%d.vtk",iter);
     file = fopen(filename,"w+");
     fprintf(file,"# vtk DataFile Version 3.0\n");
@@ -468,7 +468,7 @@ void Solver::calcMaxDerivative (double t)
     for (int i = 0; i < np; i++)
     {
         double diff = vol[i].yNew[0] - vol[i].yOld[0];
-        // Considerar apos o primeiro estimulo
+        // Considering the calculus after the first stimulus
         if (diff > dvdt[i].value && t > 0.0 && t < 250.0)
         {
             dvdt[i].value = diff;
@@ -489,13 +489,13 @@ void Solver::calcVelocity ()
     g->dijkstra(0);
     for (int i = 0; i < np; i++)
     {    
-        // Computar a distancia entre a fonte 
+        // Compute the distance from the source
         g->dijkstra(vel->ids[i]);
         double *dist = g->getDist();
         double t = dvdt[vel->ids[i]].t - dvdt[vel->ids[i] - OFFSET].t;
         double velocity = dist[vel->ids[i] - OFFSET] / t;
 
-        // Checar se eh maior que a tolerancia
+        // Check if the value is beyond the tolerance
 	    if (t < 0 || fabs(dvdt[vel->ids[i]].value - dvdt[vel->ids[i] - OFFSET].value) > 16.0)
             velocity = 0.0;
         fprintf(vel->velocityFile,"\n\n[!] Propagation velocity! Id = %d\n",vel->ids[i]);
@@ -513,7 +513,7 @@ void Solver::calcVelocity ()
     }
     for (int i = 0; i < nterm; i++)
     { 
-        // Calcular o delay entre o terminal e 10 volumes para tras dele
+        // Calculate the delay between the terminal and 10 volumes behind it
         printf("Delay between %d and %d\n",term[i],term[i]-10);
         fprintf(dFile,"%.10lf\n",dvdt[term[i]].t-dvdt[term[i]-10].t);
     }

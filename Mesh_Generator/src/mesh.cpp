@@ -19,7 +19,7 @@ Mesh* newMesh (int argc, char *argv[])
     return mesh;
 }
 
-// Descobre qual o tipo de celula e inicializa o tamanho da discretizacao espacial
+// Return the length of cell based on name of cell given by the input
 double setTypeCell (char cName[])
 {
     size_t found;
@@ -58,7 +58,7 @@ double setTypeCell (char cName[])
     return 0;
 }
 
-// Calcula o vetor direcao indo vertice 1 -> 2, e retorna o unitario
+// Calculate the direction vector from node 1->2 and return its unitary vector
 void calcDirection (double d_ori[], Node *n1, Node *n2)
 {
     double norm;
@@ -67,8 +67,7 @@ void calcDirection (double d_ori[], Node *n1, Node *n2)
     for (int i = 0; i < 3; i++) d_ori[i] /= norm;
 }
 
-// Constroi uma malha de elementos finitos partir de um grafo gerado a partir de um .vtk
-// map_graph_elem -> Mapeamento que relaciona os id's do grafo com os id's dos nodos da malha
+// Map the ids from the graph to the ids of mesh 
 void GraphToMesh (Mesh *mesh, Graph *g)
 {
     int N = g->total_nodes;
@@ -81,7 +80,7 @@ void GraphToMesh (Mesh *mesh, Graph *g)
     DFS(mesh,ptr,0);
 }
 
-// Busca em profundidade
+// Depth-First-Search
 void DFS (Mesh *mesh, Node *u, int lvl)
 {
     double d = D - ALPHA*D*lvl;
@@ -106,7 +105,7 @@ void growSegment (Mesh *mesh, Node *u, Edge *v, double diam)
     calcDirection(d_ori,u,v->dest);
     d[0] = u->x; d[1] = u->y; d[2] = u->z;
     printf("Node %d will grow %d points\n",u->id,nElem);
-    // Cresce a quantidade de elementos necessarios de tamanho 'h' para dar o tamanho do segmento
+    // Grow the number of elements of size 'h' until reach the size of fiber
     for (int k = 1; k <= nElem; k++)
     {
         double x, y, z;
@@ -117,11 +116,11 @@ void growSegment (Mesh *mesh, Node *u, Edge *v, double diam)
         mesh->elements.push_back(elem);
         id_source = mesh->points.size()-1;
     }
-    // Salva o id de origem do ultimo nodo adicionado, para caso ele gere filhos
+    // Save the of the last inserted node. In case this node generate offsprings
     mesh->map_graph_elem[v->id] = id_source;
 }   
 
-// Imprime informacoes sobre a malha em um arquivo
+// Print information about the mesh to a file
 void writeMeshInfo (Mesh *mesh)
 {
     FILE *outFile = fopen("infoMesh.txt","w+");
@@ -139,7 +138,7 @@ void writeMeshInfo (Mesh *mesh)
     fclose(outFile);
 }
 
-// Imprime informacoes sobre a malha
+// Print information about the mesh to the standart output
 void printMeshInfo (Mesh *mesh)
 {
     printf("---------------------------- MESH INFO --------------------------------------------\n");
@@ -155,7 +154,7 @@ void printMeshInfo (Mesh *mesh)
     printf("-----------------------------------------------------------------------------------\n");
 }
 
-// Escrever a malha em um arquivo
+// Write the mesh to a file (.msh)
 void writeMeshToFile (Mesh *mesh, char *filename)
 {
     if (mesh != NULL)
@@ -181,7 +180,7 @@ void writeMeshToFile (Mesh *mesh, char *filename)
     }   
 }
 
-// Escrever a malha em um arquivo .vtk
+// Write the mesh to a file (.vtk)
 void writeMeshToVTK (Mesh *mesh, const char *filename)
 {
     if (mesh != NULL)
@@ -201,7 +200,7 @@ void writeMeshToVTK (Mesh *mesh, const char *filename)
     }   
 }
 
-// Muda a extensao do arquivo original para .txt
+// Change the extension of a file
 void changeExtension (char *filename)
 {
     int N = strlen(filename);
@@ -211,7 +210,7 @@ void changeExtension (char *filename)
     printf("[!] Mesh file will be saved in :> %s\n",filename);
 }
 
-// Template paa funcao de ordenacao do 'map'
+// Template to the sort function of the 'map' structure
 template <typename T1, typename T2>
 struct less_second
 {
@@ -222,24 +221,22 @@ struct less_second
     }
 };
 
-// Roda uma BFS e escreve os niveis da arvore
-// Primeiro descobre os indices de cada nivel a partir do grafo do Skeleton
-// Depois usa o mapeamento grafo->malha para imprimir os indices de cada vertice, porem relacionado na malha
+// Run a Breath-First-Seach and write the levels of the network
 void writeLevelToFile (Mesh *mesh, Graph *g)
 {
     FILE *lvlFile = fopen("level.txt","w+");
     map<int,int> dist = BFS(g,0);
-    // Copia o 'map' para um 'vector'
+    // Copy the map to a vector
     vector< pair<int,int> > levels(dist.begin(),dist.end());
-    // Ordenar por nivel
+    // Sort by level
     sort(levels.begin(),levels.end(),less_second<int,int>());
-    // Imprimir os niveis
+    // Print the level
     int maxLevel = levels[levels.size()-1].second;
     for (int level = 0; level <= maxLevel; level++)
     {
         for (unsigned int j = 0; j < levels.size(); j++)
         {
-            // Escreve o identificador do vertice na malha de elementos finitos
+            // Print the identifier of the mesh
             if (level == levels[j].second)
                 fprintf(lvlFile,"%d ",mesh->map_graph_elem[levels[j].first]);
         }

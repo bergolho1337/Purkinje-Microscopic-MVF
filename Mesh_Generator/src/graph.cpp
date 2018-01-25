@@ -1,6 +1,6 @@
 #include "../include/graph.h"
 
-// Inicializa os atributos do grafo
+// Initialize the parameters from the graph
 void initGraph (Graph **g)
 {
     (*g)->total_nodes = 0;
@@ -9,14 +9,14 @@ void initGraph (Graph **g)
     (*g)->lastNode = NULL;
 }
 
-// Le um arquivo .vtk contendo a rede de Purkinje e transforma para uma estrutura de grafo
+// Read a .vtk file and convert it to a graph structure
 Graph* readPurkinjeNetworkFromFile (char *filename)
 {
     FILE *inFile = fopen(filename,"r");
     if (inFile == NULL) error("Cannot open VTK file!");
     Graph *g = (Graph*)malloc(sizeof(Graph));
     initGraph(&g);
-    // Ler os nodos
+    // Read nodes
     int N;
     char str[100];
     while (fscanf(inFile,"%s",str) != EOF)
@@ -29,7 +29,7 @@ Graph* readPurkinjeNetworkFromFile (char *filename)
         if (!fscanf(inFile,"%lf %lf %lf",&p[0],&p[1],&p[2])) error("Reading file");
         insertNodeGraph(&g,p);
     }
-    // Ler as arestas
+    // Read edges
     int A, trash;
     while (fscanf(inFile,"%s",str) != EOF)
         if (strcmp(str,"LINES") == 0) break;
@@ -45,7 +45,7 @@ Graph* readPurkinjeNetworkFromFile (char *filename)
     return g;
 }
 
-// Construtor de um nodo
+// Node constructor
 Node* newNode (int id, double x, double y, double z)
 {
     Node *node = (Node*)malloc(sizeof(Node));
@@ -59,7 +59,7 @@ Node* newNode (int id, double x, double y, double z)
     return node;
 }
 
-// Cosntrutor de uma aresta
+// Edge constructor
 Edge* newEdge (int id, double w, Node *dest)
 {
 	Edge *edge = (Edge*)malloc(sizeof(Edge));
@@ -71,15 +71,15 @@ Edge* newEdge (int id, double w, Node *dest)
 }
 
 
-// Insere um nodo com coordenadas (px,py,pz) no grafo
+// Insert a Node to graph given its position (px,py,pz)
 Node* insertNodeGraph (Graph **g, double p[])
 {
     Node *ptr = (*g)->listNodes;
     Node *ptrNew = newNode((*g)->total_nodes++,p[0],p[1],p[2]);
-    // Primeiro nodo do grafo
+    // First node of the list
     if (ptr == NULL)
         (*g)->listNodes = ptrNew;
-    // Percorrer a lista de nodos
+    // Iterate over the list and insert to the last
     else
     {
         while (ptr->next != NULL)
@@ -89,13 +89,13 @@ Node* insertNodeGraph (Graph **g, double p[])
     return ptrNew;
 }
 
-// Insere uma aresta no grafo
+// Insert an edge to the graph given the identifiers of both points
 void insertEdgeGraph (Graph **g, int id_1, int id_2)
 {
 	Node *ptr1, *ptr2;
 	Edge *edge;
 	double norm;
-	// Checar se a aresta eh invalida
+	// Check if the edge is invalid
 	if (id_1 == id_2) return;
 
 	ptr1 = searchNode(*g,id_1);
@@ -103,10 +103,10 @@ void insertEdgeGraph (Graph **g, int id_1, int id_2)
 	
     norm = calcNorm(ptr1->x,ptr1->y,ptr1->z,ptr2->x,ptr2->y,ptr2->z);
     edge = newEdge(id_2,norm,ptr2);
-    // Primeira aresta
+    // First edge
     if (ptr1->edges == NULL)
         ptr1->edges = edge;
-    // Percorrer ate o final 
+    // Iterate over the list and insert to the last 
     else
     {
         Edge *ptrl = ptr1->edges;
@@ -114,13 +114,13 @@ void insertEdgeGraph (Graph **g, int id_1, int id_2)
             ptrl = ptrl->next;
         ptrl->next = edge;
     }
-    // Incrementar o contador de arestas do Node origem
+    // Increment the number of edges of origin Node
     ptr1->num_edges++;
-    // Incrementar o numero total de arestas no grafo
+    // Increment the total number of edges from the graph
     (*g)->total_edges++;
 }
 
-// Busca por um Node no grafo
+// Search for a Node given an identifier
 Node* searchNode (Graph *g, int id)
 {
 	Node *ptr = g->listNodes;
@@ -142,7 +142,7 @@ void error (char *msg)
     exit(-1);   
 }
 
-// Calcula a norma euclidiana entre dois pontos
+// Euclidean norm
 double calcNorm (double x1, double y1, double z1, double x2, double y2, double z2)
 {
     return sqrt(pow((x1-x2),2) + pow((y1-y2),2) + pow((z1-z2),2));
@@ -170,7 +170,7 @@ void printGraph (Graph *g)
 	printf("=======================================================================\n");
 }
 
-// Busca em largura
+// Bread-First-Search
 map<int,int> BFS (Graph *g, int s)
 {
     Node *ptr;
@@ -178,11 +178,11 @@ map<int,int> BFS (Graph *g, int s)
     map<int,int> dist;
     queue<int> q;
 
-    // Inicializa as variaveis
+    // Inicialization variables
     dist[0] = 0;
     q.push(0);
 
-    // Rodar BFS
+    // Run BFS
     while (!q.empty())
     {
         int u = q.front(); q.pop();

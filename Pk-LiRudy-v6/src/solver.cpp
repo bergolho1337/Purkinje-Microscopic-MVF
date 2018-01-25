@@ -79,43 +79,42 @@ void Solver::solve ()
     VectorXd b(np);
     VectorXd x(np);
     
-    // Iterar o metodo a cada passo de tempo
+    // Time loop
     for (int i = 0; i < M; i++)
     {
         double t = i*dt;
 
-        // Imprime o progresso da solucao
         #ifdef OUTPUT
         printProgress(i,M);
         #endif
 
-        // Escrever o arquivo de plot
+        // Write the plot output 
         writePlotData(t);
 
-        // Escreve no .vtk
+        // Write the output to a .vtk
         #ifdef VTK
         if (i % 10 == 0) writeVTKFile(i);
         #endif
 
-        // Resolver a EDP (parte difusiva)
+        // Solve the PDE (diffusion)
         assembleLoadVector(b);
         x = sparseSolver.solve(b);
         moveVstar(x);
 
-        // Resolver as EDOs (parte reativa)
+        // Solve the ODEs (reaction)
         solveODE(t);
 
-        // Calcular o valor da derivada maxima de cada ponto
+        // Calculate the maximum derivative for each volume
         calcMaxDerivative(t);
 
-        // Passa para a proxima iteracao
+        // Jump to the next iteration
         nextTimestep();
     }
     #ifdef OUTPUT
     printf("ok\n");
     #endif
 
-    // Calcular a velocidade de propagacao nos pontos pre-definidos
+    // Calculate the propagation velocity
     calcVelocity();
 }
 
@@ -146,7 +145,7 @@ void Solver::setControlVolumes ()
 
 void Solver::setTypeCell ()
 {
-    // Alocar e inicializar o vetor 'ids' com os volumes a serem plotados a partir do arquivo de entrada .plt
+    // Allocate and initialize the 'ids' vector with plot points from the input file .plt
     plot = (Plot*)malloc(sizeof(Plot));
     FILE *pltFile = fopen(plot_filename.c_str(),"r");
 
@@ -165,7 +164,7 @@ void Solver::setInitCondFromFile ()
     if (!sstFile) error("Could not open SST file");
     int np = g->getTotalNodes();
     
-    // Loop de pontos
+    // Point loop
     for (int i = 0; i < np; i++)
     {
         if (!fscanf(sstFile,"%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",\
@@ -457,7 +456,7 @@ void Solver::writeVTKFile (int iter)
     np = g->getTotalNodes();
     ne = g->getTotalEdges();
 
-    // Escrever o potencial transmembranico
+    // Write the transmembrane potential
     sprintf(filename,"VTK/sol%d.vtk",iter);
     file = fopen(filename,"w+");
     fprintf(file,"# vtk DataFile Version 3.0\n");
@@ -511,7 +510,7 @@ void Solver::calcMaxDerivative (double t)
     for (int i = 0; i < np; i++)
     {
         double diff = vol[i].cell->v - vol[i].vOld;
-        // Considerar o primeiro estimulo
+        // Consider only the first stimulus
         if (diff > dvdt[i].value && t > 0.0)
         {
             dvdt[i].value = diff;
@@ -530,13 +529,12 @@ void Solver::calcVelocity ()
     int *term = g->getTerm();
     for (int i = 0; i < np; i++)
     {
-        // Calcular a velocidade instantanea. Usar 10 volumes para tras do volume de referencia
         g->dijkstra(vel->ids[i]);
         double *dist = g->getDist();
         double t = dvdt[vel->ids[i]].t - dvdt[vel->ids[i] - OFFSET].t;
         double velocity = dist[vel->ids[i] - OFFSET] / t;
 
-        // Checar se eh maior que a tolerancia
+        // Check if the value is over the tolerance
 	    if (t < 0 || fabs(dvdt[vel->ids[i]].value - dvdt[vel->ids[i] - OFFSET].value) > 16.0)
             velocity = 0.0;
         fprintf(vel->velocityFile,"\n\n[!] Propagation velocity! Id = %d\n",vel->ids[i]);

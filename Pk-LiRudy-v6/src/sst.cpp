@@ -1,7 +1,7 @@
 #include "../include/sst.h"
 
 // Number of threads to solve the system of ODEs
-static constexpr int nthreads = 4;
+static constexpr int nthreads = 2;
 
 SteadyState::SteadyState (int argc, char *argv[])
 {
@@ -440,7 +440,7 @@ void SteadyState::writeVTKFile (int iter)
     np = g->getTotalNodes();
     ne = g->getTotalEdges();
 
-    // Escrever o potencial transmembranico
+    // Write the transmembrane potential
     sprintf(filename,"VTK/sol%d.vtk",iter);
     file = fopen(filename,"w+");
     fprintf(file,"# vtk DataFile Version 3.0\n");

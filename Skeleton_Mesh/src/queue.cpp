@@ -1,6 +1,6 @@
 #include "../include/queue.h"
 
-// Construtor da fila
+// Queue constructor
 Queue* newQueue ()
 {
 	Queue *queue = (Queue*)malloc(sizeof(Queue));
@@ -10,7 +10,7 @@ Queue* newQueue ()
 	return queue;
 }
 
-// Construtor de um QNode da fila
+// QNode constructor
 QNode* newQNode (QNode *next, QNode *prev, int id, double d_ori[])
 {
 	QNode *qNode = (QNode*)malloc(sizeof(QNode));
@@ -21,17 +21,16 @@ QNode* newQNode (QNode *next, QNode *prev, int id, double d_ori[])
 	return qNode;
 }
 
-// Funcao de enfileirar
 void Enqueue (Queue **q, int id, double d_ori[])
 {
-	// Fila vazia
+	// Empty queue
 	if ((*q)->head == NULL)
 	{
 		QNode *qNode = newQNode(NULL,NULL,id,d_ori);
 		(*q)->head = qNode;
 		(*q)->last = qNode;
 	}
-	// Tem alguem na fila
+	// Someone is already on the queue
 	else
 	{
 		QNode *qNode, *aux;
@@ -43,7 +42,6 @@ void Enqueue (Queue **q, int id, double d_ori[])
 	(*q)->in_the_queue++;
 }
 
-// Funcao de desinfileirar
 QNode* Dequeue (Queue **q)
 {
 	QNode *ptr = (*q)->head;
@@ -66,7 +64,7 @@ bool isEmpty (Queue *q)
 	return (q->in_the_queue == 0) ? true : false;
 }
 
-// Imprime os elementos na fila
+// Print the queue elements
 void printQueue (Queue *q)
 {
 	QNode *qNode = q->head;

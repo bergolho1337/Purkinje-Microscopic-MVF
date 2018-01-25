@@ -1,13 +1,13 @@
 /*
-========= METODO DOS VOLUMES FINITOS ----- EQUACAO DO MONODOMINIO (CABO) =====================================
-  Problema: resolver a equacao do cabo utilizando a equacao do monodominio aplicando o MVF
+========= FINITE VOLUME METHOD ----- MONODOMAIN EQUATION (CABLE) =============================================
+  Problem: solve the cable equation using the monodomain equation applied to the FVM
     { BETA*Cm*V_t = SIGMA*V_xx
-    { V'(0,t) = V'(1,t) = I_PMJ           Condicao de Neumann nao-homogenea nos PMJ
+    { V'(0,t) = V'(1,t) = I_PMJ           Non-homogeneus Neumann condition at the terminal volumes
     { V(x,0) = V_inf
 ***********************************************************************************************************
-    BETA = Razao entre area superficial por volume da celula (cm^-1)
-    Cm = Capacitancia da membrana celular (uF/cm^2)
-    SIGMA = Condutividade da membrana celular (mS/cm^2) -- Toda fibra possui o mesmo SIGMA
+    BETA = Ratio surface-area per volume of the cell (cm^-1)
+    Cm = Membrane capacitance of the celullar membrane (uF/cm^2)
+    SIGMA = Conductivity of the celullar membrane (mS/cm^2) -- All the fiber has the same conductivity
 ***********************************************************************************************************
 ==============================================================================================================
 */
