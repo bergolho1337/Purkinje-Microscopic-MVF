@@ -1,32 +1,5 @@
 
 
-
-  
-
-# Skeleton_Mesh
-
-  
-
-```sh
-$ make
-$ ./skeletonMesh <xMax> <biff> <type> <out_VTK_file>
-```
-
-  - Pode-se utilizar também o shell script generateSkeleton.sh e definir os parâmetros neste arquivo.
-  - Dessa forma o script pode gerar um conjunto de malhas indo de [MIN_MESH,MAX_MESH] para cada tamanho de fibra dentro do intervalo [MIN_SIZE,MAX_SIZE]. 
-
-# Mesh_Generator
-
-  - Constrói a malha de volumes de controle a partir de uma malha vinda do Skeleton_Mesh.
-  - Para usar basta passar como argumento para o programa o arquivo gerado pelo Skeleton_Mesh e definir o nome para o arquivo de saída, lembrando que o mesmo deve estar com a extensão '.msh'.
-  - Deve-se também definir qual será o tamanho das células. Essa informação é definida no arquivo 'mesh.h'.
-  - Também existe a opção de se utilizar o shell script 'generateMeshes.sh' para gerar um conjunto de malhas indo de [MIN_MESH,MAX_MESH]. 
-
-```sh
-$ make
-$ ./meshGenerator <in_VTK_file> <out_MSH_file>
-```
-
 # Sst-Neumann
 
   - Constrói um arquivo contendo a solução estacionária para uma determinada malha gerada a partir do Mesh_Generator.
