@@ -2,7 +2,7 @@
 
 Solve the monodomain equation using Finite Volume Method. 
 
-![Monodomain equation](http://www.sciweavers.org/tex2img.php?eq=%5Cbeta%20C_m%20%5Cfrac%7B%5Cpartial%20V_m%7D%7B%5Cpartial%20t%7D%20%3D%20%5Csigma_x%20%5Cfrac%7B%5Cpartial%5E2%20V_m%7D%7B%5Cpartial%20x%5E2%7D%0A&bc=White&fc=Black&im=jpg&fs=12&ff=arev&edit=0)
+![Monodomain equation](img/monodomain.jpg)
 
 The project is divided in 4 parts.
 
