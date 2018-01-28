@@ -40,7 +40,7 @@ def main ():
     plt.ylabel('v (m/s)')
     plt.xlabel('d (um)')
     plt.grid()
-    plt.legend(loc=0)
+    plt.legend(loc=0,fontsize=15)
     plt.savefig("analiticalVelocity.pdf")
     print("[+] Figure save at 'analiticalVelocity.pdf'")
 

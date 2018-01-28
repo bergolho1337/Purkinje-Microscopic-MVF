@@ -1,0 +1,65 @@
+Terminal node 0
+Terminal node 608
+[!] Solving transient problem ... 
+[!] Progress
+ok==================================================================================================>] 99 %
+[!] Running Dijkstra ... ok
+[!] Running Dijkstra ... ok
+Delay between 608 and 598
+==========================================================
+[!] Time elapsed = 92.8394749165 seconds
+==========================================================
+rm -f VTK/*.vtk
+rm -f Output/*.dat Output/*.txt Output/*.pdf
+Terminal node 0
+Terminal node 608
+[!] Solving transient problem ... 
+[!] Progress
+ok==================================================================================================>] 99 %
+[!] Running Dijkstra ... ok
+[!] Running Dijkstra ... ok
+Delay between 608 and 598
+==========================================================
+[!] Time elapsed = 94.2728669643 seconds
+==========================================================
+rm -f VTK/*.vtk
+rm -f Output/*.dat Output/*.txt Output/*.pdf
+Terminal node 0
+Terminal node 608
+[!] Solving transient problem ... 
+[!] Progress
+ok==================================================================================================>] 99 %
+[!] Running Dijkstra ... ok
+[!] Running Dijkstra ... ok
+Delay between 608 and 598
+==========================================================
+[!] Time elapsed = 94.3934519291 seconds
+==========================================================
+rm -f VTK/*.vtk
+rm -f Output/*.dat Output/*.txt Output/*.pdf
+Terminal node 0
+Terminal node 608
+[!] Solving transient problem ... 
+[!] Progress
+ok==================================================================================================>] 99 %
+[!] Running Dijkstra ... ok
+[!] Running Dijkstra ... ok
+Delay between 608 and 598
+==========================================================
+[!] Time elapsed = 94.3353860378 seconds
+==========================================================
+rm -f VTK/*.vtk
+rm -f Output/*.dat Output/*.txt Output/*.pdf
+Terminal node 0
+Terminal node 608
+[!] Solving transient problem ... 
+[!] Progress
+ok==================================================================================================>] 99 %
+[!] Running Dijkstra ... ok
+[!] Running Dijkstra ... ok
+Delay between 608 and 598
+==========================================================
+[!] Time elapsed = 95.1332128048 seconds
+==========================================================
+rm -f VTK/*.vtk
+rm -f Output/*.dat Output/*.txt Output/*.pdf
