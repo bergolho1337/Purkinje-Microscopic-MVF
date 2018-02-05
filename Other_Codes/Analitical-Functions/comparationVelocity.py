@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
 # ------------------------------------------------------------------------------------------------------------------------------------
 # Program that compares the analitical solution of the propagation velocity with an aproximation solution from a model
 # The analitical solution is calculated using the calibrated parameter (c)
@@ -38,11 +40,11 @@ def aproximationPlot ():
 def main ():
     analiticalPlot()
     aproximationPlot()
-    plt.title('Velocidade Propagacao - Analitico x Aproximacao')
+    plt.title(u'Velocidade Propagação - Analítico x Aproximação',size=16)
     plt.ylabel('v (m/s)')
     plt.xlabel('d (um)')
     plt.grid()
-    plt.legend(loc=0)
+    plt.legend(loc=0,fontsize=15)
     plt.savefig("comparison.pdf")
     print("[+] Figure save at 'comparison.pdf'")
 

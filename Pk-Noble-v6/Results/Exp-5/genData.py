@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
 import os
 import numpy as np
 import fnmatch
@@ -34,10 +36,12 @@ for mesh in arr:
         # Plot the data
         pyplot.plot(data[:,0],data[:,1],label=str(perc[j]),linewidth=2,marker='o')
         j = j + 1
+    my_xticks = [0,1,2,3]
+    pyplot.xticks(my_xticks)
     pyplot.ylim([0,50])
-    pyplot.xlabel("# Nivel",fontsize=15)
-    pyplot.ylabel("Tempo ativacao (ms)",fontsize=15)
-    pyplot.title('Tempo ativacao x Nivel - Noble - '+str(mesh),fontsize=15)
+    pyplot.xlabel(u"# Nível",fontsize=15)
+    pyplot.ylabel(u"Tempo ativação (ms)",fontsize=15)
+    pyplot.title(u'Tempo ativação x Nível - (Noble)',fontsize=15)
     pyplot.legend(loc=0,fontsize=14)
     pyplot.grid()
     pyplot.savefig("lvl-at-"+str(mesh)+"-Noble.pdf")

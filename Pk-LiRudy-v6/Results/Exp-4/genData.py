@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
 import os
 import numpy as np
 import fnmatch
@@ -22,10 +24,12 @@ for mesh in arr:
     #pyplot.clf()
     pyplot.plot(data[:,0],data[:,1],label=str(mesh),linewidth=2,marker='o')
 
+my_xticks = [0,1,2,3]
+pyplot.xticks(my_xticks)
 pyplot.ylim([0,25])
-pyplot.xlabel("# bifurcacoes",fontsize=15)
-pyplot.ylabel("Tempo ativacao (ms)",fontsize=15)
-pyplot.title('Tempo ativacao x Numero de bifurcacoes - LiRudy',fontsize=15)
+pyplot.xlabel(u"# bifurcações",fontsize=15)
+pyplot.ylabel(u"Tempo ativação (ms)",fontsize=15)
+pyplot.title(u'Tempo ativação x Número de bifurcações - (LiRudy)',fontsize=15)
 pyplot.legend(loc=0,fontsize=14)
 pyplot.grid()
 pyplot.savefig("biff-at-LiRudy.pdf")

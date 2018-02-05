@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
 # ------------------------------------------------------------------------------------------------------------------------------------
 # Program that compares the analitical solution of the activation time with an aproximation solution from a model
 # The analitical solution is calculated using the calibrated parameter (c)
@@ -35,30 +37,30 @@ def analiticalPlot ():
     colorLines = ["black","red","blue","darkgreen","darkmagenta"]
     for s in S:
         t = time(s,c,lamb(Rm,Rc,D),tau(Rm,Cm))
-        plt.plot(D,t,label=str(int(s))+" mm",color=colorLines[i],linewidth=2.0)
+        plt.plot(D,t,label=str(int(s/10))+" cm",color=colorLines[i],linewidth=2.0)
         i = i + 1
 
 def aproximationPlot ():
     colorLines = ["black","red","blue","darkgreen","darkmagenta"]
     data = np.genfromtxt(open("1cm.dat","r"))
-    plt.plot(data[:,0],data[:,1],"--",label="10 mm",color=colorLines[0],linewidth=2.0)
+    plt.plot(data[:,0],data[:,1],"--",label="1 cm",color=colorLines[0],linewidth=2.0)
     data = np.genfromtxt(open("2cm.dat","r"))
-    plt.plot(data[:,0],data[:,1],"--",label="20 mm",color=colorLines[1],linewidth=2.0)
+    plt.plot(data[:,0],data[:,1],"--",label="2 cm",color=colorLines[1],linewidth=2.0)
     data = np.genfromtxt(open("3cm.dat","r"))
-    plt.plot(data[:,0],data[:,1],"--",label="30 mm",color=colorLines[2],linewidth=2.0)
+    plt.plot(data[:,0],data[:,1],"--",label="3 cm",color=colorLines[2],linewidth=2.0)
     data = np.genfromtxt(open("4cm.dat","r"))
-    plt.plot(data[:,0],data[:,1],"--",label="40 mm",color=colorLines[3],linewidth=2.0)
+    plt.plot(data[:,0],data[:,1],"--",label="4 cm",color=colorLines[3],linewidth=2.0)
     data = np.genfromtxt(open("5cm.dat","r"))
-    plt.plot(data[:,0],data[:,1],"--",label="50 mm",color=colorLines[4],linewidth=2.0)
+    plt.plot(data[:,0],data[:,1],"--",label="5 cm",color=colorLines[4],linewidth=2.0)
 
 def main ():
     analiticalPlot()
     aproximationPlot()
-    plt.title('Tempo de Ativacao - Analitico x Aproximacao')
+    plt.title(u'Tempo de Ativação - Analítico x Aproximação')
     plt.ylabel('t (ms)')
     plt.xlabel('d (um)')
     plt.grid()
-    plt.legend(loc=0,prop={'size': 9})
+    plt.legend(loc=0,fontsize=13,ncol=2)
     plt.savefig("comp_time.pdf")
     print("[+] Figure save at 'comp_time.pdf'")
 
