@@ -58,7 +58,7 @@ class Solver
     // Constants of the monodomain equation
     //static constexpr double BETA = 0.14;
     static constexpr double Cm = 1.2;
-    static constexpr double SIGMA = 0.004;
+    //static constexpr double SIGMA = 0.004;
     static constexpr double h2 = 0.25;
     static constexpr double d2 = 0.002;
     static constexpr double RPMJ = 11000.0;
@@ -86,6 +86,7 @@ private:
     double alfa;                        // Parameter: R_pmj * Vol_pmj
     double d1;                          // Parameter: d1
     double BETA;                        // Surface / Volume ratio
+    double SIGMA;                       // Conductivity Gap + Citoplasm
 
     void setSensibilityParam (int argc, char *argv[]);
     void setTypeCell ();  
