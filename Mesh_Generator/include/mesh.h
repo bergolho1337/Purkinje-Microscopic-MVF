@@ -16,10 +16,10 @@ struct Point;
 struct Element;
 
 // Ratio of reduction of the diameter at each growing iteration
-const double ALPHA = 0.3;      
+const double DELTA = 0.7;      
 
 // Initial diameter of the Purkinje cells
-const double D = 0.004;                         
+const double D = 0.0055;                         
 
 // Length of Purkinje cells
 const double PIG_DX = 0.0068;	                      // T. Stankovičová, 2003 (cm) -- Pig Purkinje cell

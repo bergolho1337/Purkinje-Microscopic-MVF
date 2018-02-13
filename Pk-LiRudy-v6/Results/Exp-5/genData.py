@@ -17,7 +17,7 @@ def getFolders (mesh,teta):
 
 arr = ["sJMP", "cJMP"]
 teta = ["-teta0.1-", "-teta0.15-", "-teta0.2-"]
-perc = ["10 %", "15 %", "20 %"]
+perc = ["90 %", "80 %", "70 %"]
 for mesh in arr:
     pyplot.clf()
     j = 0

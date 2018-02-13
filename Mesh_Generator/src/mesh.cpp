@@ -83,7 +83,8 @@ void GraphToMesh (Mesh *mesh, Graph *g)
 // Depth-First-Search
 void DFS (Mesh *mesh, Node *u, int lvl)
 {
-    double d = D - ALPHA*D*lvl;
+    // Diameter decrease rule
+    double d = D*pow(DELTA,lvl);
     //printf("Node %d || Level %d || Diameter %lf\n",u->id,lvl,d);
     Edge *v = u->edges;
     while (v != NULL)

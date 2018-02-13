@@ -31,22 +31,27 @@ def analiticalPlot ():
 	
 	D = np.linspace(10,50,500)
 	v = vel(c,lamb(Rm,Rc,D),tau(Rm,Cm))
-	plt.plot(D,v,label="analit",color="darkblue",linewidth=2.0)
+	plt.plot(D,v,label="Analit",color="darkblue",linewidth=2.0)
 
 def aproximationPlot ():
     data = np.genfromtxt(open("d1-v_Noble.dat","r"))
-    plt.plot(data[:,0],data[:,1],"--",label="aprox",color="darkgreen",linewidth=2.0)
+    plt.plot(data[:,0],data[:,1],"--",label="Noble",color="darkgreen",linewidth=2.0)
+
+def aproximationPlot2 ():
+    data = np.genfromtxt(open("d1-v_Lirudy.dat","r"))
+    plt.plot(data[:,0],data[:,1],"--",label="Li e Rudy",color="darkred",linewidth=2.0)
 
 def main ():
-    analiticalPlot()
-    aproximationPlot()
-    plt.title(u'Velocidade Propagação - Analítico x Aproximação',size=16)
-    plt.ylabel('v (m/s)')
-    plt.xlabel('d (um)')
-    plt.grid()
-    plt.legend(loc=0,fontsize=15)
-    plt.savefig("comparison.pdf")
-    print("[+] Figure save at 'comparison.pdf'")
+	analiticalPlot()
+	aproximationPlot()
+	aproximationPlot2()
+	plt.title(u'Velocidade Propagação - Analítico x Numérico',size=16)
+	plt.ylabel('v (m/s)')
+	plt.xlabel('d (um)')
+	plt.grid()
+	plt.legend(loc=0,fontsize=15)
+	plt.savefig("comparison6.pdf")
+	print("[+] Figure save at 'comparison.pdf'")
 
 if __name__ == "__main__":
 	main()

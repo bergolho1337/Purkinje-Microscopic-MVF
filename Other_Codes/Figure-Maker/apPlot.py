@@ -26,7 +26,7 @@ def plotDelay ():
 	#pyplot.savefig("delay-Noble.eps",format="eps",dpi=1000)
 
 def plotAP ():
-	filename = "lirudy-2000ms.dat"
+	filename = "noble-2000ms.dat"
 	data = genfromtxt(filename)
 	pyplot.plot(data[:,0], data[:,1], label = "Vm", linestyle ="-", color="k", linewidth=2)
 	#pyplot.tick_params(
@@ -35,14 +35,18 @@ def plotAP ():
 	#			    bottom='off',      # ticks along the bottom edge are off
 	#			    top='off',         # ticks along the top edge are off
 	#			    labelbottom='off') # labels along the bottom edge are off
-	pyplot.yticks(size=15)
+	pyplot.yticks(size=12)
+	pyplot.xticks(size=12)
 	pyplot.xlim([0,2000])
 	pyplot.ylim([-90,50])
-	pyplot.title(u'Potencial de Ação - Li e Rudy (2011)',size=22)
-	pyplot.xlabel("Tempo (ms)", size=18)
-	pyplot.ylabel(u'Potencial Transmembrânico (mV)', size=18)
-	pyplot.legend()
-	pyplot.savefig("AP_3.pdf")
+	#pyplot.title(u'Potencial de Ação - Li e Rudy (2011)',size=22)
+	pyplot.title(u'Action Potential - Noble (1962)',size=22)
+	#pyplot.xlabel("Tempo (ms)", size=18)
+	pyplot.xlabel("Time (ms)", size=18)
+	#pyplot.ylabel(u'Potencial Transmembrânico (mV)', size=18)
+	pyplot.ylabel(u'Transmembrane Potential (mV)', size=18)
+	pyplot.legend(loc=0,fontsize=15)
+	pyplot.savefig("ap-noble-EN.pdf")
 
 def main ():    	
 	#plotDelay()
