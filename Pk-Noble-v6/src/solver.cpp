@@ -96,12 +96,20 @@ void Solver::setSensibilityParam (int argc, char *argv[])
     {
         alfa = 1.375;
         d1 = 0.002;
+        SIGMA = 0.004;
+    }
+    else if (argc-1 == 8)
+    {
+        alfa = atof(argv[7]);
+        d1 = atof(argv[8]);
+        SIGMA = 0.004;
     }
     // User-defined
     else
     {
         alfa = atof(argv[7]);
         d1 = atof(argv[8]);
+        SIGMA = atof(argv[9]);
     }
     BETA = 4.0 / d1 * 1.0e-04;
 }
