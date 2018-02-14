@@ -55,12 +55,13 @@ def main ():
 	analiticalPlot()
 	aproximationPlot()
 	aproximationPlot2()
-	plt.title(u'Velocidade de Propagação - Analítico x Numérico')
+	#plt.title(u'Velocidade de Propagação - Analítico x Numérico')
+	plt.title(u'Propagation Velocity - Analitical x Numeric')
 	plt.ylabel('v (m/s)',size=15)
 	plt.xlabel(r"$\sigma$ (mS/cm)",size=15)
 	plt.grid()
 	plt.legend(loc=0,fontsize=15)
-	plt.savefig("comparison2.pdf")
+	plt.savefig("comparison-EN.pdf")
 	print("[+] Figure save at 'comparison.pdf'")
 
 if __name__ == "__main__":

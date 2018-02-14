@@ -35,14 +35,17 @@ def analiticalPlot ():
 	plt.plot(D,v,label="analit",color="darkblue",linewidth=2.0)
 
 def main ():
-    analiticalPlot()
-    plt.title(u'Velocidade Propagação - Solução Analítica',size=18)
-    plt.ylabel('v (m/s)')
-    plt.xlabel('d (um)')
-    plt.grid()
-    plt.legend(loc=0,fontsize=15)
-    plt.savefig("analiticalVelocity.pdf")
-    print("[+] Figure save at 'analiticalVelocity.pdf'")
+	analiticalPlot()
+	#plt.title(u'Velocidade Propagação - Solução Analítica',size=18)
+	plt.title(u'Propagation Velocity - Analitical Solution',size=18)
+	#plt.yticks(size=15)
+	#plt.xticks(size=15)
+	plt.ylabel('v (m/s)',size=15)
+	plt.xlabel(r'd ($\mu m$)',size=15)
+	plt.grid()
+	plt.legend(loc=0,fontsize=15)
+	plt.savefig("analiticalVelocity-EN.pdf")
+	print("[+] Figure save at 'analiticalVelocity.pdf'")
 
 if __name__ == "__main__":
 	main()

@@ -56,12 +56,13 @@ def aproximationPlot ():
 def main ():
     analiticalPlot()
     aproximationPlot()
-    plt.title(u'Tempo de Ativação - Analítico x Aproximação')
-    plt.ylabel('t (ms)')
-    plt.xlabel('d (um)')
+    #plt.title(u'Tempo de Ativação - Analítico x Aproximação')
+    plt.title(u'Activation Time - Analitical x Numeric')
+    plt.ylabel('t (ms)',size=15)
+    plt.xlabel(r'd ($\mu$m)',size=15)
     plt.grid()
     plt.legend(loc=0,fontsize=13,ncol=2)
-    plt.savefig("comp_time.pdf")
+    plt.savefig("comp-time-EN.pdf")
     print("[+] Figure save at 'comp_time.pdf'")
 
 if __name__ == "__main__":

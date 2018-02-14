@@ -8,20 +8,24 @@ from matplotlib import pyplot
 from pylab import genfromtxt
 
 def plotDelay ():
-	pk_filename = "data232-Noble-2.dat"		
-	mio_filename = "data242-Noble-2.dat"
+	pk_filename = "data232-LiRudy-2.dat"		
+	mio_filename = "data242-LiRudy-2.dat"
 	mat0 = genfromtxt(pk_filename)
 	mat1 = genfromtxt(mio_filename)
 	pyplot.plot(mat0[:,0], mat0[:,1], label = "Purkinje", linestyle ="-", linewidth=2, color="black")
-	pyplot.plot(mat1[:,0], mat1[:,1], label = "Miocardio", linestyle ="--", linewidth=2, color="black")
+	#pyplot.plot(mat1[:,0], mat1[:,1], label = "Miocardio", linestyle ="--", linewidth=2, color="black")
+	pyplot.plot(mat1[:,0], mat1[:,1], label = "Myocardium", linestyle ="--", linewidth=2, color="black")
 	pyplot.grid()
 	pyplot.tick_params(labelsize=12)
 	pyplot.xlim([0,50])
-	pyplot.title("Tempo ativacao - Purkinje x Miocardio",size=15)
-	pyplot.xlabel("Tempo de ativacao (ms)", size=15)
-	pyplot.ylabel("Potencial transmembranico (mV)", size=15)
+	#pyplot.title("Tempo ativacao - Purkinje x Miocardio",size=15)
+	#pyplot.xlabel("Tempo de ativacao (ms)", size=15)
+	#pyplot.ylabel("Potencial transmembranico (mV)", size=15)
+	pyplot.title("Activation Time - Purkinje x Myocardium (LiRudy)",size=15)
+	pyplot.xlabel("Activation Time (ms)", size=15)
+	pyplot.ylabel("Transmembrane Potential (mV)", size=15)
 	pyplot.legend(loc=0,prop={'size': 16})
-	pyplot.savefig("delay-Noble.png")
+	pyplot.savefig("delay-LiRudy-block-EN.pdf")
 	#pyplot.savefig("delay-Noble.pdf")
 	#pyplot.savefig("delay-Noble.eps",format="eps",dpi=1000)
 
@@ -49,8 +53,8 @@ def plotAP ():
 	pyplot.savefig("ap-noble-EN.pdf")
 
 def main ():    	
-	#plotDelay()
-	plotAP()
+	plotDelay()
+	#plotAP()
 
 if __name__ == "__main__":
     main()
