@@ -7,6 +7,9 @@ import subprocess
 from matplotlib import pyplot
 
 arr = ["sJMP", "cJMP"]
+markers = ['o','^']
+colors = ["blue","orange"]
+j = 0
 for mesh in arr:
     folders = os.listdir(mesh)
     folders.sort()
@@ -22,18 +25,19 @@ for mesh in arr:
         i = i + 1
     # Plot the data
     #pyplot.clf()
-    pyplot.plot(data[:,0],data[:,1],label=str(mesh),linewidth=2,marker='o')
+    pyplot.plot(data[:,0],data[:,1],label=str(mesh),marker=markers[j],markersize=15,color=colors[j],linewidth=2)
+    j = j + 1
 
 my_xticks = [0,1,2,3]
 pyplot.xticks(my_xticks)
 pyplot.ylim([0,25])
-#pyplot.xlabel(u"# bifurcações",fontsize=15)
-#pyplot.ylabel(u"Tempo ativação (ms)",fontsize=15)
-#pyplot.title(u'Tempo ativação x Número de bifurcações - (LiRudy)',fontsize=15)
-pyplot.xlabel(u"# bifurcations",fontsize=15)
-pyplot.ylabel(u"Activation Time (ms)",fontsize=15)
-pyplot.title(u'Activation Time x Number of Bifurcations - (LiRudy)',fontsize=15)
+pyplot.xlabel(u"# bifurcações",fontsize=15)
+pyplot.ylabel(u"Tempo ativação (ms)",fontsize=15)
+pyplot.title(u'Tempo ativação x Número de bifurcações - (LiRudy)',fontsize=15)
+#pyplot.xlabel(u"# bifurcations",fontsize=15)
+#pyplot.ylabel(u"Activation Time (ms)",fontsize=15)
+#pyplot.title(u'Activation Time x Number of Bifurcations - (LiRudy)',fontsize=15)
 pyplot.legend(loc=0,fontsize=14)
 pyplot.grid()
-pyplot.savefig("biff-at-LiRudy-EN.pdf")
+pyplot.savefig("biff-at-LiRudy-revision.pdf")
 #pyplot.show()

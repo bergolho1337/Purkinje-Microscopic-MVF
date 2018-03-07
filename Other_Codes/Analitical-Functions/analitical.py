@@ -34,6 +34,11 @@ def analiticalPlot ():
 	v = vel(c,lamb(Rm,Rc,D),tau(Rm,Cm))
 	plt.plot(D,v,label="analit",color="darkblue",linewidth=2.0)
 
+	dist = 4.0
+	velo = 2.675
+	at = velo / dist
+	print at  
+
 def main ():
 	analiticalPlot()
 	#plt.title(u'Velocidade Propagação - Solução Analítica',size=18)
