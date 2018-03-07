@@ -495,11 +495,16 @@ void Solver::calcVelocity ()
     int *term = g->getTerm();
 
     g->dijkstra(0);
+    double *dist = g->getDist();
+    for (int i = 0; i < np; i++)
+    {
+        printf("Dist = %.10lf\n",dist[vel->ids[i]]);
+    }
     for (int i = 0; i < np; i++)
     {    
         // Compute the distance from the source
         g->dijkstra(vel->ids[i]);
-        double *dist = g->getDist();
+        dist = g->getDist();
         double t = dvdt[vel->ids[i]].t - dvdt[vel->ids[i] - OFFSET].t;
         double velocity = dist[vel->ids[i] - OFFSET] / t;
 

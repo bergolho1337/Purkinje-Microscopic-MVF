@@ -37,7 +37,11 @@ def analiticalPlot ():
 
 def aproximationPlot ():
     data = np.genfromtxt(open("sigma-v-Noble.dat","r"))
+<<<<<<< HEAD
     plt.plot(data[:,0],data[:,1],"--",marker='o',markersize=10,label="Noble",color="darkgreen",linewidth=2.0)
+=======
+    plt.plot(data[:,0],data[:,1],"--",marker='o',markersize=8,label="Noble",color="darkgreen",linewidth=2.0)
+>>>>>>> ca3daa60fe36eabfeb491f3c8aa7e1352aa6b0c0
 
 def aproximationPlot2 ():
     	Rm = 7.0 * 1.0e+03
@@ -55,8 +59,8 @@ def main ():
 	analiticalPlot()
 	aproximationPlot()
 	aproximationPlot2()
-	#plt.title(u'Velocidade de Propagação - Analítico x Numérico')
-	plt.title(u'Propagation Velocity - Analitical x Numeric')
+	plt.title(u'Velocidade de Propagação - Analítico x Numérico')
+	#plt.title(u'Propagation Velocity - Analitical x Numeric')
 	plt.ylabel('v (m/s)',size=15)
 	plt.xlabel(r"$\sigma$ (mS/cm)",size=15)
 	plt.grid()

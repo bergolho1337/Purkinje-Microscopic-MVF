@@ -29,6 +29,7 @@ def plotSolution (ids):
 		pyplot.ylabel("Transmembrane potential (mV)")
 		pyplot.ylim([-100,60])
 		pyplot.legend()
+		pyplot.savefig(input_filename.split(".")[0]+str(".png"))
 		pp.savefig()
 		pp.close()		
 		#pyplot.savefig(str("potential" + str(i) + ".png"))

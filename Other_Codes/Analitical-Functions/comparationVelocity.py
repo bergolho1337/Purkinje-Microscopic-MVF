@@ -45,11 +45,19 @@ def analiticalPlot2 ():
 
 def aproximationPlot ():
     data = np.genfromtxt(open("d1-v_Noble.dat","r"))
+<<<<<<< HEAD
     plt.plot(data[:,0],data[:,1],"--",marker='o',markersize=10,label="Noble",color="darkgreen",linewidth=2.0)
 
 def aproximationPlot2 ():
     data = np.genfromtxt(open("d1-v_Lirudy.dat","r"))
     plt.plot(data[:,0],data[:,1],"--",marker='^',markersize=10,label="Li e Rudy",color="darkred",linewidth=2.0)
+=======
+    plt.plot(data[:,0],data[:,1],"--",marker="o",label="Noble",color="darkgreen",linewidth=2.0)
+
+def aproximationPlot2 ():
+    data = np.genfromtxt(open("d1-v_Lirudy.dat","r"))
+    plt.plot(data[:,0],data[:,1],"--",marker="^",label="Li e Rudy",color="darkred",linewidth=2.0)
+>>>>>>> ca3daa60fe36eabfeb491f3c8aa7e1352aa6b0c0
 
 def main ():
 	#Rm = 7.0 * 1.0e+03

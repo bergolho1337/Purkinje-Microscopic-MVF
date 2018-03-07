@@ -35,6 +35,7 @@ def analiticalPlot ():
     D = np.linspace(10,50,500)            # (um)
     S = [10.0,20.0,30.0,40.0,50.0]        # (cm)
     colorLines = ["black","red","blue","darkgreen","darkmagenta"]
+    markers = ['o','s','^','*','v']
     for s in S:
         t = time(s,c,lamb(Rm,Rc,D),tau(Rm,Cm))
         plt.plot(D,t,label=str(int(s/10))+" cm",color=colorLines[i],linewidth=2.0)
@@ -43,6 +44,7 @@ def analiticalPlot ():
 def aproximationPlot ():
     colorLines = ["black","red","blue","darkgreen","darkmagenta"]
     data = np.genfromtxt(open("1cm.dat","r"))
+<<<<<<< HEAD
     plt.plot(data[:,0],data[:,1],"--",marker='o',markersize=10,label="1 cm",color=colorLines[0],linewidth=2.0)
     data = np.genfromtxt(open("2cm.dat","r"))
     plt.plot(data[:,0],data[:,1],"--",marker='s',markersize=10,label="2 cm",color=colorLines[1],linewidth=2.0)
@@ -52,6 +54,17 @@ def aproximationPlot ():
     plt.plot(data[:,0],data[:,1],"--",marker='>',markersize=10,label="4 cm",color=colorLines[3],linewidth=2.0)
     data = np.genfromtxt(open("5cm.dat","r"))
     plt.plot(data[:,0],data[:,1],"--",marker='v',markersize=10,label="5 cm",color=colorLines[4],linewidth=2.0)
+=======
+    plt.plot(data[:,0],data[:,1],"--",marker='o',label="1 cm",color=colorLines[0],linewidth=2.0)
+    data = np.genfromtxt(open("2cm.dat","r"))
+    plt.plot(data[:,0],data[:,1],"--",marker='s',label="2 cm",color=colorLines[1],linewidth=2.0)
+    data = np.genfromtxt(open("3cm.dat","r"))
+    plt.plot(data[:,0],data[:,1],"--",marker='^',label="3 cm",color=colorLines[2],linewidth=2.0)
+    data = np.genfromtxt(open("4cm.dat","r"))
+    plt.plot(data[:,0],data[:,1],"--",marker='>',label="4 cm",color=colorLines[3],linewidth=2.0)
+    data = np.genfromtxt(open("5cm.dat","r"))
+    plt.plot(data[:,0],data[:,1],"--",marker='v',label="5 cm",color=colorLines[4],linewidth=2.0)
+>>>>>>> ca3daa60fe36eabfeb491f3c8aa7e1352aa6b0c0
 
 def main ():
     analiticalPlot()

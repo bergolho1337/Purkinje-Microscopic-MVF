@@ -33,6 +33,7 @@ def getFolders (folders,alpha):
 
 arr = ["sJMP", "cJMP"]
 markers = ['o','^']
+colors = ["blue","orange"]
 j = 0
 for mesh in arr:
     folders = os.listdir(mesh)
@@ -49,7 +50,7 @@ for mesh in arr:
         i = i + 1
     # Plot the data
     #pyplot.clf()
-    pyplot.plot(data[:,0],data[:,1],label=str(mesh),marker=markers[j],markersize=12,linewidth=2)
+    pyplot.plot(data[:,0],data[:,1],label=str(mesh),marker=markers[j],markersize=15,color=colors[j],linewidth=2)
     j = j + 1
 
 my_xticks = [0,1,2,3]
