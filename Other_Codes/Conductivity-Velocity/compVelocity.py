@@ -37,7 +37,7 @@ def analiticalPlot ():
 
 def aproximationPlot ():
     data = np.genfromtxt(open("sigma-v-Noble.dat","r"))
-    plt.plot(data[:,0],data[:,1],"--",label="Noble",color="darkgreen",linewidth=2.0)
+    plt.plot(data[:,0],data[:,1],"--",marker='o',markersize=10,label="Noble",color="darkgreen",linewidth=2.0)
 
 def aproximationPlot2 ():
     	Rm = 7.0 * 1.0e+03
@@ -61,7 +61,7 @@ def main ():
 	plt.xlabel(r"$\sigma$ (mS/cm)",size=15)
 	plt.grid()
 	plt.legend(loc=0,fontsize=15)
-	plt.savefig("comparison-EN.pdf")
+	plt.savefig("comparison-revision.pdf")
 	print("[+] Figure save at 'comparison.pdf'")
 
 if __name__ == "__main__":

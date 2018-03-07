@@ -28,9 +28,11 @@ def getFolders (folders,alpha):
     return arr
 
 alpha = [0.1, 0.2, 0.3, 0.4, 0.5]
+markers = ['o','^','>','s','v']
 folders = os.listdir('2cm')
 folders.sort()
 
+j = 0
 # For each value of alpha
 for a in alpha:
     # Get the folders that use that alpha
@@ -52,8 +54,9 @@ for a in alpha:
     pyplot.xlabel("h ("+r'$\mu$ m'+")",fontsize=15)
     pyplot.ylabel("Atraso (ms)",fontsize=15)
     pyplot.title('Atraso x h - Noble',fontsize=15)
-    pyplot.plot(data[:,0],data[:,1],label=r'$\gamma$=' + str(a),linewidth=2)
+    pyplot.plot(data[:,0],data[:,1],label=r'$\gamma$=' + str(a),marker=markers[j],markersize=5,linewidth=2)
+    j = j + 1
 pyplot.legend(loc=0,fontsize=15)
 pyplot.grid()
-pyplot.savefig("alpha-h.pdf")
+pyplot.savefig("alpha-h-revision.pdf")
 #pyplot.show()

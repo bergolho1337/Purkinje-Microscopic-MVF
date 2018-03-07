@@ -43,26 +43,26 @@ def analiticalPlot ():
 def aproximationPlot ():
     colorLines = ["black","red","blue","darkgreen","darkmagenta"]
     data = np.genfromtxt(open("1cm.dat","r"))
-    plt.plot(data[:,0],data[:,1],"--",label="1 cm",color=colorLines[0],linewidth=2.0)
+    plt.plot(data[:,0],data[:,1],"--",marker='o',markersize=10,label="1 cm",color=colorLines[0],linewidth=2.0)
     data = np.genfromtxt(open("2cm.dat","r"))
-    plt.plot(data[:,0],data[:,1],"--",label="2 cm",color=colorLines[1],linewidth=2.0)
+    plt.plot(data[:,0],data[:,1],"--",marker='s',markersize=10,label="2 cm",color=colorLines[1],linewidth=2.0)
     data = np.genfromtxt(open("3cm.dat","r"))
-    plt.plot(data[:,0],data[:,1],"--",label="3 cm",color=colorLines[2],linewidth=2.0)
+    plt.plot(data[:,0],data[:,1],"--",marker='^',markersize=10,label="3 cm",color=colorLines[2],linewidth=2.0)
     data = np.genfromtxt(open("4cm.dat","r"))
-    plt.plot(data[:,0],data[:,1],"--",label="4 cm",color=colorLines[3],linewidth=2.0)
+    plt.plot(data[:,0],data[:,1],"--",marker='>',markersize=10,label="4 cm",color=colorLines[3],linewidth=2.0)
     data = np.genfromtxt(open("5cm.dat","r"))
-    plt.plot(data[:,0],data[:,1],"--",label="5 cm",color=colorLines[4],linewidth=2.0)
+    plt.plot(data[:,0],data[:,1],"--",marker='v',markersize=10,label="5 cm",color=colorLines[4],linewidth=2.0)
 
 def main ():
     analiticalPlot()
     aproximationPlot()
-    #plt.title(u'Tempo de Ativação - Analítico x Aproximação')
-    plt.title(u'Activation Time - Analitical x Numeric')
+    plt.title(u'Tempo de Ativação - Analítico x Aproximação')
+    #plt.title(u'Activation Time - Analitical x Numeric')
     plt.ylabel('t (ms)',size=15)
     plt.xlabel(r'd ($\mu$m)',size=15)
     plt.grid()
     plt.legend(loc=0,fontsize=13,ncol=2)
-    plt.savefig("comp-time-EN.pdf")
+    plt.savefig("comp-time-revision.pdf")
     print("[+] Figure save at 'comp_time.pdf'")
 
 if __name__ == "__main__":

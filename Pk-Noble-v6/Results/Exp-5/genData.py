@@ -18,6 +18,7 @@ def getFolders (mesh,teta):
 arr = ["sJMP", "cJMP"]
 teta = ["-teta0.1-", "-teta0.15-", "-teta0.2-"]
 perc = ["90 %", "80 %", "70 %"]
+markers = ['o','^','s']
 for mesh in arr:
     pyplot.clf()
     j = 0
@@ -34,18 +35,18 @@ for mesh in arr:
             i = i + 1
         
         # Plot the data
-        pyplot.plot(data[:,0],data[:,1],label=str(perc[j]),linewidth=2,marker='o')
+        pyplot.plot(data[:,0],data[:,1],label=str(perc[j]),marker=markers[j],markersize=10,linewidth=2)
         j = j + 1
     my_xticks = [0,1,2,3]
     pyplot.xticks(my_xticks)
     pyplot.ylim([0,50])
-    #pyplot.xlabel(u"# Nível",fontsize=15)
-    #pyplot.ylabel(u"Tempo ativação (ms)",fontsize=15)
-    #pyplot.title(u'Tempo ativação x Nível - (Noble)',fontsize=15)
-    pyplot.xlabel(u"# Bifurcations",fontsize=15)
-    pyplot.ylabel(u"Activation Time (ms)",fontsize=15)
-    pyplot.title(u'Activation Time x Level - (Noble)',fontsize=15)
+    pyplot.xlabel(u"Nível",fontsize=15)
+    pyplot.ylabel(u"Tempo ativação (ms)",fontsize=15)
+    pyplot.title(u'Tempo ativação x Nível - (Noble)',fontsize=15)
+    #pyplot.xlabel(u"# Bifurcations",fontsize=15)
+    #pyplot.ylabel(u"Activation Time (ms)",fontsize=15)
+    #pyplot.title(u'Activation Time x Level - (Noble)',fontsize=15)
     pyplot.legend(loc=0,fontsize=14)
     pyplot.grid()
-    pyplot.savefig("lvl-at-"+str(mesh)+"-Noble-EN.pdf")
+    pyplot.savefig("lvl-at-"+str(mesh)+"-Noble-revision.pdf")
     #pyplot.show()
