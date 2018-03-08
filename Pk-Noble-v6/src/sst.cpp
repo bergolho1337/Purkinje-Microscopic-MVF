@@ -1,7 +1,7 @@
 #include "../include/sst.h"
 
 // Number of threads to solve the system of ODEs
-static constexpr int nthreads = 2;
+static constexpr int nthreads = 4;
 
 SteadyState::SteadyState (int argc, char *argv[])
 {
